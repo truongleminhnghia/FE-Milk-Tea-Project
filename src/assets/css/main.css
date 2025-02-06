@@ -1,0 +1,22 @@
+.container {
+    width: 1252px;
+    margin: 0 auto;
+    max-width: calc(100% - 24px);
+}
+
+.content {
+    width: 100%;
+    padding: 65px 0;
+}
+
+.button {
+    width: 120px;
+    font-size: 18px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    font-weight: 700;
+}
+
+.button:hover {
+    opacity: 0.9 !important;
+}
