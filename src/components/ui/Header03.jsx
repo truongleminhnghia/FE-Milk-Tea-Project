@@ -1,7 +1,9 @@
 import React from 'react'
 import { Icon } from "@iconify/react";
 import { Input, Row } from 'antd';
+import { User } from "../../stores/storeTest/user"
 const Header03 = () => {
+    const user = User;
     return (
         <div
             className='flex items-center bg-white shadow-md py-3 px-3'>
@@ -31,16 +33,18 @@ const Header03 = () => {
                         icon="bxs:bell" />
                 </div>
 
-                {/* avatar */}
-                <div className='flex items-center cursor-pointer bg-slate-300 px-3 py-2 rounded-md hover:opacity-70'>
-                    <img
-                        className='block h-[40px] w-[40px] rounded-full mr-[8px]'
-                        src="/images/images/avatar-default.png" alt="avatar" />
-                    <p className='w-full'>
-                        <span className='block text-[16px] text-black font-bold uppercase hover:underline'>Minh Anh</span>
-                        <span className='block text-[14px] text-[#333] font-medium'>Admin</span>
-                    </p>
-                </div>
+                {user && (
+                    <div className='flex items-center cursor-pointer bg-slate-300 px-3 py-2 rounded-md hover:opacity-70'>
+                        <img
+                            className='block h-[40px] w-[40px] rounded-full mr-[8px]'
+                            src={user.avatar ? user.avatar : "/images/images/avatar-default.png"}
+                            alt="avatar" />
+                        <p className='w-full'>
+                            <span className='block text-[16px] text-black font-bold uppercase hover:underline'>{user.lastName}</span>
+                            <span className='block text-[14px] text-[#333] font-medium'>{user.roleName}</span>
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     )

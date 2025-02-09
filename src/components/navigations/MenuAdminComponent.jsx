@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MenuAdmin, MenuStaff } from '../../utils/menu/menu.navigation';
 import { Icon } from "@iconify/react";
 import { Link } from 'react-router-dom';
+import { User } from '../../stores/storeTest/user';
 
 const MenuAdminComponent = () => {
     const [activeIndex, setActiveIndex] = useState(0); // Mục menu được chọn
     const [openIndex, setOpenIndex] = useState(null); // Menu đang mở
-    const [isAdmin, setIsAdmin] = useState(true);
+    // const [isAdmin, setIsAdmin] = useState(true);
+    const currentUser = User;
 
-    const checkRole = (isAdmin) => (isAdmin ? MenuAdmin : MenuStaff);
+    const checkRole = (currentUser) => {
+        if (!currentUser || !currentUser.roleName) return MenuStaff; // Tránh lỗi khi user chưa có dữ liệu
+        return currentUser.roleName === "ROLE_ADMIN" ? MenuAdmin : MenuStaff;
+    };
 
     const handleItemClick = (index) => {
         setActiveIndex(index);
@@ -25,7 +30,7 @@ const MenuAdminComponent = () => {
         }
     };
 
-    const menuList = checkRole(isAdmin);
+    const menuList = checkRole(currentUser);
 
     return (
         <div className='w-full'>

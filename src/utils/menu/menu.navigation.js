@@ -86,7 +86,7 @@ export const MenuAdmin = [
     },
     {
         title: "Riviews & Ratings",
-        path: "recipes",
+        path: "feebback",
         icon: "mdi:cog"
     },
 ];
