@@ -1,9 +1,14 @@
 import React from 'react'
+import MenuAdminComponent from '../navigations/MenuAdminComponent'
+import Header03 from './Header03'
 
 const Header02 = () => {
   return (
-    <div>
-      header 01
+    <div
+      className='flex'
+      >
+      <MenuAdminComponent />
+      <Header03 />
     </div>
   )
 }
