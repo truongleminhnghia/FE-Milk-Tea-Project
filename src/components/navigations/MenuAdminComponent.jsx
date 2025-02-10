@@ -58,9 +58,9 @@ const MenuAdminComponent = () => {
                         {item.attribute && openIndex === index && (
                             <ul className="ml-6 border-l-2 border-gray-300 pl-4">
                                 {item.attribute.map((sub, subIndex) => (
-                                    <li key={sub.paht} className="py-2">
+                                    <li key={sub.path} className="py-2">
                                         <Link
-                                            to={sub.paht}
+                                            to={sub.path}
                                             className="text-gray-700 hover:text-blue-500"
                                         >
                                             {sub.subTitle}

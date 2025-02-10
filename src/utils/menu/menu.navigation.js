@@ -14,17 +14,17 @@ export const MenuAdmin = [
             {
                 index: 0,
                 subTitle: "List Product",
-                paht: "products",
+                path: "products",
             },
             {
                 index: 1,
                 subTitle: "Add New Product",
-                paht: "create-product",
+                path: "create-product",
             },
             {
                 index: 2,
                 subTitle: "Category",
-                paht: "category",
+                path: "category",
             },
         ]
     },
@@ -36,12 +36,12 @@ export const MenuAdmin = [
             {
                 index: 0,
                 subTitle: "New Order",
-                paht: "new-order",
+                path: "new-order",
             },
             {
                 index: 1,
                 subTitle: "List Order",
-                paht: "orders",
+                path: "orders",
             }
         ]
     },
@@ -53,12 +53,12 @@ export const MenuAdmin = [
             {
                 index: 0,
                 subTitle: "List Recipes",
-                paht: "recipes",
+                path: "recipes",
             },
             {
                 index: 1,
                 subTitle: "New Recipe",
-                paht: "create-recipe",
+                path: "create-recipe",
             }
         ]
     },
@@ -70,12 +70,12 @@ export const MenuAdmin = [
             {
                 index: 0,
                 subTitle: "List Users",
-                paht: "users",
+                path: "users",
             },
             {
                 index: 1,
                 subTitle: "New User",
-                paht: "create-user",
+                path: "create-user",
             }
         ]
     },
