@@ -13,6 +13,7 @@ import ListRecipes from "./pages/recipes/ListRecipes";
 import CreateNewRecipe from "./pages/recipes/CreateNewRecipe";
 import ListUsers from "./pages/users/ListUsers";
 import CreateNewUser from "./pages/users/CreateNewUser";
+import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/admin-page',
-    element: <Layout02 />,
+    element: (
+      <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
+        <Layout02 />
+      </ProtectedRoute>
+      ),
     children: [
       {
         path: 'dashboard',
@@ -67,11 +72,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'users',
-        element: <ListUsers/>
+        element: <ListUsers />
       },
       {
         path: 'create-user',
-        element: <CreateNewUser/>
+        element: <CreateNewUser />
       },
     ]
   }

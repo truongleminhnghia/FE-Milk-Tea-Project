@@ -1,10 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// const initialState = {
+//     user: {
+//         firstName: "John",
+//         lastName: "Doe",
+//         roleName: "ROLE_ADMIN",
+//         avatar: null
+//     }
+// };
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
         login: {
-            currentUser: null,
+            currentUser: {
+                firstName: "John",
+                lastName: "Doe",
+                roleName: "ROLE_ADMIN",
+                avatar: null
+            },
             token: null,
             isFetching: false,
             error: false
