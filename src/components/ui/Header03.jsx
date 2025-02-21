@@ -1,7 +1,13 @@
 import React from 'react'
 import { Icon } from "@iconify/react";
 import { Input, Row } from 'antd';
+import { useSelector, useDispatch } from "react-redux";
+import UserHook from '../../protectedRoute/hook/UserHook';
+import { selectUser } from "../../redux/features/authSlice";
+import DropdownMenuUserComponent from './Dropdown/DropdownMenuUserComponent';
 const Header03 = () => {
+    const isUser = false;
+    const currentUser = useSelector(selectUser);
     return (
         <div
             className='flex items-center bg-white shadow-md py-3 px-3'>
@@ -31,16 +37,9 @@ const Header03 = () => {
                         icon="bxs:bell" />
                 </div>
 
-                {/* avatar */}
-                <div className='flex items-center cursor-pointer bg-slate-300 px-3 py-2 rounded-md hover:opacity-70'>
-                    <img
-                        className='block h-[40px] w-[40px] rounded-full mr-[8px]'
-                        src="/images/images/avatar-default.png" alt="avatar" />
-                    <p className='w-full'>
-                        <span className='block text-[16px] text-black font-bold uppercase hover:underline'>Minh Anh</span>
-                        <span className='block text-[14px] text-[#333] font-medium'>Admin</span>
-                    </p>
-                </div>
+                {currentUser && (
+                    <DropdownMenuUserComponent isUser={isUser} currentUser={currentUser} />
+                )}
             </div>
         </div>
     )

@@ -1,18 +1,17 @@
-import { Children, useContext } from "react";
-import { useStateContext } from "../context/authencontext";
+
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "../redux/features/authSlice";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-    const currentUser = useSelector((state) => state.auth.login.currentUser);
-    const { user } = currentUser;
-
-    if (!user) {
+    const currentUser = useSelector(selectUser);
+    if (!currentUser) {
         return <Navigate to='/' />
     }
 
-    if (allowedRoles && !allowedRoles.includes(user.role)) {
-        return <Navigate to="/" />;
+    if (allowedRoles && !allowedRoles.includes(currentUser.roleName)) {
+        return <Navigate to="/login" />;
     }
     return children;
 }

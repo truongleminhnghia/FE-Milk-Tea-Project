@@ -1,20 +1,52 @@
 import React from 'react'
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { Login, Register } from '../../services/authenticate.service';
+import { useDispatch } from 'react-redux';
+import { toastConfig } from '../../utils/utils';
 
 const FormActionUserComponent = (props) => {
-    const isLogin = props.isLogin;
-    const onFinish = (values) => {
-        if (props.isLogin) {
-            Login(values);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isLogin } = props;
+
+    const onFinish = async (values) => {
+        if (isLogin) {
+            await LoginApi(values);
         } else {
-            Register(values);
+            await registerApi(values);
         }
     };
+
+    const LoginApi = async (values) => {
+        try {
+            const res = await Login(values, dispatch, navigate)
+            console.log("Login response: ", res)
+            if (!res) {
+                toastConfig("error", res.message);
+            }
+            toastConfig("success", "Đăng nhập thành công!")
+        } catch (error) {
+            toastConfig("error", error.message);
+        }
+    }
+
+    const registerApi = async (values) => {
+        try {
+            const res = await Re(values, navigate)
+            console.log("register", res);
+            if (!res) {
+                toastConfig("error", res.message);
+            }
+            toastConfig("success", "Đăng nhập thành công!")
+        } catch (error) {
+            toastConfig("error", error.message);
+        }
+    }
+
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        console.log("Failed:", errorInfo);
     };
     return (
         <div className='w-full' >
@@ -84,6 +116,10 @@ const FormActionUserComponent = (props) => {
                                     message: "Email không được bỏ trống",
                                     required: true,
                                 },
+                                {
+                                    type: "email",
+                                    message: "Email không hợp lệ",
+                                },
                             ]}
                             className='text-base text-[#333] font-normal'
                         >
@@ -98,6 +134,11 @@ const FormActionUserComponent = (props) => {
                                     message: "Mật khẩu không được bỏ trống",
                                     required: true,
                                 },
+                                // {
+                                //     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                //     message:
+                                //         "Mật khẩu phải dài ít nhất 8 ký tự và bao gồm ít nhất một chữ số và một chữ cái.",
+                                // },
                             ]}
                             className='text-base text-[#333] font-normal'
                         >

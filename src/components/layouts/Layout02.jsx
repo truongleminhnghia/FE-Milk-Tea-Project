@@ -10,7 +10,7 @@ const Layout02 = () => {
     return (
         <Row className="h-[100vh]">
             <Col span={4}
-                className='bg-white border-r-[2px] '
+                className='bg-white border-r-[2px]'
             >
                 <Link
                     to={"/dashboard"}
@@ -20,9 +20,7 @@ const Layout02 = () => {
                         src="/images/logo/logo.png"
                         alt="logo" />
                 </Link>
-                <div className='w-full border-[1px]'>
-                </div>
-                <SidebarComponent className='block w-ull' />
+                <SidebarComponent />
             </Col>
             <Col span={20}>
                 <Header03
