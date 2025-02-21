@@ -1,0 +1,41 @@
+[
+    {
+        "key": "dashboard",
+        "title": "Dashboard",
+        "icon": "mdi:package-variant-closed",
+        "children": null
+    },
+    {
+        "key": "new-order",
+        "title": "New Order",
+        "icon": "mdi:package-variant-closed"
+    },
+    {
+        "title": "Product",
+        "icon": "mdi:package-variant-closed",
+        "children": [
+            {
+                "key": "products",
+                "title": "List Product"
+            },
+            {
+                "key": "create-product",
+                "title": "Create Product"
+            }
+        ]
+    },
+    {
+        "title": "Order",
+        "icon": "mdi:package-variant-closed",
+        "children": [
+            {
+                "key": "orders",
+                "title": "List Orders"
+            },
+            {
+                "key": "new-order",
+                "title": "New Order"
+            }
+        ]
+    }
+]

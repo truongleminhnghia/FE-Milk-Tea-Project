@@ -1,11 +1,11 @@
 
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "../redux/features/authSlice";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-    const currentUser = useSelector((state) => state.auth.login?.currentUser);
-    const { user } = currentUser;
-
+    const currentUser = useSelector(selectUser);
     if (!currentUser) {
         return <Navigate to='/' />
     }
