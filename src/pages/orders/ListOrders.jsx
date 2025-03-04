@@ -2,7 +2,10 @@ import React from 'react'
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent'
 import { Input, Row, DatePicker, Dropdown, Button } from 'antd';
 import { Icon } from '@iconify/react';
-import TableComponent from '../../components/ui/Dropdown/TableComponent';
+import { formatCurrencyVND } from '../../utils/utils';
+import TableGenerComponent from '../../components/tables/TableGenerComponent';
+import { Link } from 'react-router-dom';
+import DataOrder from '../../stores/data/list-order.json'
 
 const ListOrders = () => {
   const onChange = (date, dateString) => {
@@ -18,6 +21,60 @@ const ListOrders = () => {
     { label: 'item 1', key: 'item-1' }, // remember to pass the key prop
     { label: 'item 2', key: 'item-2' },
   ];
+
+  const items2 = [
+    { label: 'item 1', key: 'item-1' }, // remember to pass the key prop
+    { label: 'item 2', key: 'item-2' },
+  ];
+  const columns = [
+    {
+      title: 'Code',
+      dataIndex: 'orderCode',
+      render: (orderCode) => <Link className='text-blue-700'>{orderCode}</Link>,
+      // sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: 'Action',
+      key: 'operation',
+      fixed: 'right',
+      width: 100,
+      render: () => <Link>action</Link>,
+    },
+    {
+      title: 'Date',
+      dataIndex: 'orderDate',
+    },
+    {
+      title: 'Status',
+      dataIndex: "orderStatus",
+      key: "orderStatus",
+      // render: (status) => <StatusComponent status={status} />,
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+    },
+    {
+      title: 'Total Price',
+      dataIndex: 'totlaPrice',
+      render: (totalPrice) => formatCurrencyVND(totalPrice),
+    },
+    {
+      title: 'Price Promotion',
+      dataIndex: 'priceAffterPromotion',
+      render: (priceAffterPromotion) => formatCurrencyVND(priceAffterPromotion),
+    },
+    {
+      title: 'Note ',
+      dataIndex: 'address',
+    },
+    {
+      title: 'RefCode ',
+      dataIndex: 'refCode',
+      render: (refCode) => <Link className='text-blue-700'>{refCode}</Link>
+    },
+  ];
+  const data = DataOrder.data;
 
   return (
     <>
@@ -41,7 +98,7 @@ const ListOrders = () => {
           <Dropdown
             className='flex w-[300px] h-full text-[#3C2F2F] text-base mr-3'
             menu={{
-              items,
+              items: items
             }}
           >
             <Input placeholder='All' suffix={<Icon icon="ep:arrow-down-bold" />} />
@@ -49,9 +106,8 @@ const ListOrders = () => {
           <Dropdown
             className='flex w-[300px] h-full text-[#3C2F2F] text-base mr-3'
             menu={{
-              items,
+              items: items2
             }}
-            icon={<Icon icon="ep:arrow-down-bold" />}
           >
             <Input placeholder='All' suffix={<Icon icon="ep:arrow-down-bold" />} />
           </Dropdown>
@@ -68,7 +124,7 @@ const ListOrders = () => {
         </div>
       </Row>
       <div className='bg-white rounded-lg mt-3'>
-        <TableComponent />
+        <TableGenerComponent data={data} columns={columns} />
       </div>
     </>
   )

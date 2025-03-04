@@ -2,9 +2,10 @@ import React from 'react'
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { Login, Register } from '../../services/authenticate.service';
+import { callBackApi, handlerLoginGoogle, Login, Register } from '../../services/authenticate.service';
 import { useDispatch } from 'react-redux';
-import { toastConfig } from '../../utils/utils';
+import { toastConfig, handleKeyDown } from '../../utils/utils';
+
 
 const FormActionUserComponent = (props) => {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const FormActionUserComponent = (props) => {
 
     const registerApi = async (values) => {
         try {
-            const res = await Re(values, navigate)
+            const res = await Register(values, navigate)
             console.log("register", res);
             if (!res) {
                 toastConfig("error", res.message);
@@ -44,6 +45,19 @@ const FormActionUserComponent = (props) => {
             toastConfig("error", error.message);
         }
     }
+
+    const loginWithGoogle = async () => {
+        try {
+            const res = await handlerLoginGoogle();
+            console.log("res: ", res);
+            if (res?.data) {
+                // Mở cửa sổ pop-up mới
+                window.location = res.data;
+            }
+        } catch (error) {
+            console.log("Error: ", error.message);
+        }
+    };
 
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
@@ -172,10 +186,15 @@ const FormActionUserComponent = (props) => {
                         <Row className='mt-[12px]'>
                             <Col
                                 span={10}
-                                className='flex gap-[10px] items-center justify-center bg-white rounded-sm shadow-md px[12px] py-[8px] cursor-pointer hover:opacity-[0.7]'
                             >
-                                <Icon icon="flat-color-icons:google" width="24" height="24" />
-                                <span className='text-[14px] font-normal leading-normal text-black'>Google</span>
+                                <div
+                                    onClick={loginWithGoogle}
+                                    onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
+                                    className='flex gap-[10px] items-center justify-center bg-white rounded-sm shadow-md px[12px] py-[8px] cursor-pointer hover:opacity-[0.7]'
+                                >
+                                    <Icon icon="flat-color-icons:google" width="24" height="24" />
+                                    <span className='text-[14px] font-normal leading-normal text-black'>Google</span>
+                                </div>
                             </Col>
                             <Col
                                 span={10}

@@ -3,7 +3,7 @@ import { EnumRoleName } from "../utils/enum.constant";
 import { login, logout } from "../redux/features/authSlice";
 import { store } from "../redux/store"; // Đường dẫn tùy vào cấu trúc dự án
 import { persistStore } from "redux-persist";
-import { LoginLocalApi, register } from "../apis/authenticate.api";
+import { LoginLocalApi, register, loginGoogle, callBack } from "../apis/authenticate.api";
 
 
 export const Login = async (user, dispatch, navigate) => {
@@ -77,3 +77,52 @@ export const logoutApi = () => async (dispatch) => {
     }
 };
 
+export const handlerLoginGoogle = async () => {
+    try {
+        const user = {
+            emai: "",
+            Password: "",
+        }
+        const res = await loginGoogle(user);
+        if (res.data && res.success) {
+            res.data;
+            console.log("res: ", res.data);
+            return res;
+        }
+        return null;
+    } catch (error) {
+        console.log("Error: ", error.message);
+    }
+}
+
+export const callBackApi = async (params, dispatch, navigate) => {
+    try {
+        const res = await callBack(params);
+        if (res?.data && res?.success) {
+            localStorage.setItem("access_token", res.data.token);
+            dispatch(login(res.data.accountResponse))
+            switch (res.data.accountResponse.roleName) {
+                case "ROLE_ADMIN":
+                    navigate("/admin-page");
+                    break;
+                case "ROLE_MANAGER":
+                    navigate("/admin-page");
+                    break;
+                case "ROLE_CUSTOMER":
+                    navigate("/");
+                    break;
+                case "ROLE_STAFF":
+                    navigate("/admin-page");
+                    break;
+                default:
+                    break;
+            }
+            return res;
+        } else {
+            console.error("Login failed: ", res.message);
+            return null;
+        }
+    } catch (error) {
+        console.log("Error: ", error.message);
+    }
+}

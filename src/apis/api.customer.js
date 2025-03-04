@@ -1,7 +1,8 @@
 import axios from "axios";
 
 //const baseURL = import.meta.env.VITE_BECKEND_URL;
-const baseURL = "https://be-milk-tea-project.onrender.com/api/v1/"
+// const baseURL = "https://be-milk-tea-project.onrender.com/api/v1/"
+const baseURL = "https://localhost:7190/api/v1/"
 const config = {
   baseURL: baseURL,
   timeout: 3000000,
@@ -15,7 +16,7 @@ const instance = axios.create(config);
 
 instance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("access_token")?.replaceAll('"', "");
+    const token = localStorage.getItem("access_token")?.replaceAll('"', "");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
@@ -31,14 +32,17 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
-    return response?.data ? response.data : response;
+    if (response?.data) {
+      console.log("response", response)
+      return response.data;
+    }
   },
   (error) => {
-    console.error("Error in response interceptor:", error);
-    if (error.response) {
+    console.error("Error in response interceptor:", error.response);
+    if (error?.response?.data) {
       return Promise.reject(error.response.data);
     }
-    return Promise.reject(error);
+    // return Promise.reject(error?.response?.data);
   }
 );
 

@@ -15,6 +15,8 @@ import ListUsers from "./pages/users/ListUsers";
 import CreateNewUser from "./pages/users/CreateNewUser";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import { EnumRoleName } from "./utils/enum.constant";
+import GoogleCallbackComponent from "./components/callBack/GoogleCallbackComponent";
+import ListCategory from "./pages/categories/ListCategory";
 
 const router = createBrowserRouter([
   {
@@ -36,12 +38,14 @@ const router = createBrowserRouter([
     ]
   },
   {
+    path: '/auths/callback',
+    element: <GoogleCallbackComponent />
+  },
+  {
     path: '/admin-page',
     element: (
-      <ProtectedRoute allowedRoles={["ROLE_ADMIN"]}>
-        <Layout02 />
-      </ProtectedRoute>
-      ),
+      <Layout02 />
+    ),
     children: [
       {
         path: 'dashboard',
@@ -50,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: 'products',
         element: <ListProducts />
+      },
+      {
+        path: 'categories',
+        element: <ListCategory />
       },
       {
         path: 'create-product',

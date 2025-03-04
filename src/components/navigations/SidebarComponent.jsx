@@ -19,6 +19,7 @@ const items = [
         icon: <SettingOutlined />,
         label: "Sản phẩm",
         children: [
+            { key: "categories", label: "Danh mục sản phẩm" },
             { key: "products", label: "Danh sách sản phẩm" },
             { key: "new-product", label: "Tạo mới sản phẩm" },
         ],

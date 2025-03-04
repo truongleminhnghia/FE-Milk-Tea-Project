@@ -17,7 +17,7 @@ const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
     try {
       const res = await dispatch(logoutApi()); // Gọi thunk action
       if (!res) {
-        toastConfig("error", res.message);
+        toastConfig("error", res?.message);
       } 
       toastConfig("success", "Đăng xuất thành công!");
       navigate('/'); // Điều hướng sau khi đăng xuất
