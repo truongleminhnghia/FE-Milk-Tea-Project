@@ -5,8 +5,8 @@ import LoginPage from "./pages/authentication/LoginPage";
 import RegisterPage from "./pages/authentication/RegisterPage";
 import Layout02 from "./components/layouts/Layout02";
 import Dashboard from "./pages/admin-pages/dashboard/Dashboard";
-import ListProducts from "./pages/products/ListProducts";
-import NewProduct from "./pages/products/NewProduct";
+import ListProduct from "./pages/products/ListProduct";
+import NewProduct from "./pages/admin-pages/products-admin/NewProduct";
 import ListOrders from "./pages/orders/ListOrders";
 import NewOrder from "./pages/orders/NewOrder";
 import ListRecipes from "./pages/recipes/ListRecipes";
@@ -17,6 +17,7 @@ import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import { EnumRoleName } from "./utils/enum.constant";
 import GoogleCallbackComponent from "./components/callBack/GoogleCallbackComponent";
 import ListCategory from "./pages/categories/ListCategory";
+import ListProductsAdmin from "./pages/admin-pages/products-admin/ListProductAdmin";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,11 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />
-      }
+      },
+      {
+        path: '/products',
+        element: <ListProduct />
+      },
     ]
   },
   {
@@ -52,12 +57,8 @@ const router = createBrowserRouter([
         element: <Dashboard />
       },
       {
-        path: 'products',
-        element: <ListProducts />
-      },
-      {
         path: 'categories',
-        element: <ListCategory />
+        element: <ListProductsAdmin />
       },
       {
         path: 'create-product',

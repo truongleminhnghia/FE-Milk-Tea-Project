@@ -15,7 +15,7 @@ const items = [
         label: "Đơn hàng mới",
     },
     {
-        key: "products",
+        key: "product",
         icon: <SettingOutlined />,
         label: "Sản phẩm",
         children: [
@@ -25,7 +25,7 @@ const items = [
         ],
     },
     {
-        key: "orders",
+        key: "order",
         icon: <SettingOutlined />,
         label: "Đơn hàng",
         children: [
@@ -34,7 +34,7 @@ const items = [
         ],
     },
     {
-        key: "users",
+        key: "user",
         icon: <SettingOutlined />,
         label: "Người dùng",
         children: [

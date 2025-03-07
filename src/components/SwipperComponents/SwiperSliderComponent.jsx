@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Image from '../../../public/images/images/image.png';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -14,6 +15,7 @@ const SwiperSliderComponent = () => {
             <Swiper
                 spaceBetween={30}
                 pagination={{
+                    el: ".custom-pagination",
                     clickable: true,
                 }}
                 autoplay={{
@@ -29,37 +31,48 @@ const SwiperSliderComponent = () => {
                 }}
                 loop={true}
                 modules={[Pagination, Navigation, Autoplay]}
-                className="relative"
+                className="relative !w-full h-[60vh]"
             >
-                <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
+                <SwiperSlide >
+                    <img
+                        className='!w-full h-full object-cover'
+                        src="../../../public/images/images/image.png"
+                        alt=""
+                    />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
+                    <img
+                        className='!w-full h-full object-cover'
+                        src="../../../public/images/images/image.png"
+                        alt=""
+                    />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
+                    <img
+                        className='!w-full h-full object-cover'
+                        src="../../../public/images/images/image.png"
+                        alt=""
+                    />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
+                    <img
+                        className='!w-full h-full object-cover'
+                        src="../../../public/images/images/image.png"
+                        alt=""
+                    />
                 </SwiperSlide>
-                <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="../../../public/images/logo/logo.png" alt="" />
-                </SwiperSlide>
+                <div className="custom-pagination text-center absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
+                </div>
             </Swiper>
-            <div className='absolute z-10 top-1/2 left-2 transform -translate-y-1/2'>
-                <Button
-                    className="prev-btn bg-black text-white p-2 rounded-full">
+            <div className="absolute z-10 top-[45%] w-full transform -translate-y-1/2 flex justify-between px-4">
+                <Button className="prev-btn bg-white text-black text-[18px] px-3 py-2 rounded-full">
                     ❮
                 </Button>
-                <Button
-                    className="next-btn bg-black text-white p-2 rounded-full">
+                <Button className="next-btn bg-white text-black text-[18px] px-3 py-2 rounded-full">
                     ❯
                 </Button>
             </div>
+
         </>
     );
 }
