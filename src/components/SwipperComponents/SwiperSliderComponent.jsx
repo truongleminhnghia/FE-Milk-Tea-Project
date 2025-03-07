@@ -36,28 +36,28 @@ const SwiperSliderComponent = () => {
                 <SwiperSlide >
                     <img
                         className='!w-full h-full object-cover'
-                        src="../../../public/images/images/image.png"
+                        src="/images/images/image.png"
                         alt=""
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img
                         className='!w-full h-full object-cover'
-                        src="../../../public/images/images/image.png"
+                        src="/images/images/image.png"
                         alt=""
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img
                         className='!w-full h-full object-cover'
-                        src="../../../public/images/images/image.png"
+                        src="/images/images/image.png"
                         alt=""
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img
                         className='!w-full h-full object-cover'
-                        src="../../../public/images/images/image.png"
+                        src="/images/images/image.png"
                         alt=""
                     />
                 </SwiperSlide>

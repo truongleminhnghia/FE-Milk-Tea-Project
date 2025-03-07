@@ -8,7 +8,7 @@ const CardProductComponent = ({ isNew, isSale }) => {
             <div className="relative group">
                 <img
                     className="w-full h-[220px] object-cover transition-opacity duration-300 group-hover:opacity-80"
-                    src="../../../public/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp"
+                    src="/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp"
                     alt="ingredientName"
                 />
                 {isNew && (

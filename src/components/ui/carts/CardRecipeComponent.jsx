@@ -6,7 +6,7 @@ const CardRecipeComponent = () => {
         <div className='max-w-[340px] bg-white rounded-lg drop-shadow-md'>
             <img
                 className='w-full h-[150px] rounded-tl-[8px] rounded-tr-[8px] object-cover'
-                src="../../public/images/recipes/image.png" alt="" />
+                src="/images/recipes/image.png" alt="" />
             <div className='mt-2 px-2'>
                 <h3 className='text-base font-medium text-black line-clamp-2'>Công thức pha chế trà Lê hồng đào</h3>
                 <p className='text-sm text-[#747373] font-normal mt-2'>Ngày tạo: <span>01-01-2025</span></p>

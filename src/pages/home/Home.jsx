@@ -91,7 +91,7 @@ const Home = () => {
             <Col span={7}>
               <img
                 className=' w-full h-auto object-cover rounded-lg hover:scale-105'
-                src="../../../public/images/baners/image.png" alt="" />
+                src="/images/baners/image.png" alt="" />
             </Col>
             <Col span={16}>
               <Swiper
@@ -141,7 +141,7 @@ const Home = () => {
       </section>
       <div className='content'>
         <Row className='container'>
-          <img src="../../public/images/baners/section_hot_banner.webp" alt="" />
+          <img src="/images/baners/section_hot_banner.webp" alt="" />
         </Row>
       </div>
       <section className='content bg-[#EF2A39]'>
