@@ -1,0 +1,342 @@
+[
+    {
+        "id": "08dd5b9f-4ea3-4105-8679-3e96dc57a133",
+        "ingredientCode": "P98571401",
+        "supplier": "no new",
+        "ingredientName": "new",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:36:33.339333",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7f98-4fab-8f99-12b5dbe58238",
+        "ingredientCode": "P57760704",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:27.018043",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7f9b-465b-82c4-62e2db5b1e9f",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7f98-4fab-8f99-12b5dbe58238"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7f1a-49a6-8802-bf33b8e2b59e",
+        "ingredientCode": "P13237023",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:26.183281",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7f1d-43be-84bf-b3ec1de0f048",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7f1a-49a6-8802-bf33b8e2b59e"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7ead-475d-8045-1763616de7c5",
+        "ingredientCode": "P33473265",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:25.47522",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7eaf-4d60-88f7-675e4a103824",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7ead-475d-8045-1763616de7c5"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7df2-4216-8bb7-0a40553ed976",
+        "ingredientCode": "P37252815",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:24.248199",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7df3-4b52-8846-c00ab764d56e",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7df2-4216-8bb7-0a40553ed976"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7d92-4f33-8f99-173f7d48a4c5",
+        "ingredientCode": "P10316696",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:23.623694",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7d95-441b-8464-1c191bf64c54",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7d92-4f33-8f99-173f7d48a4c5"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7d38-4578-8f4e-f2429380590a",
+        "ingredientCode": "P70452101",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:23.02987",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7d39-4f85-8af6-421890ac1550",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7d38-4578-8f4e-f2429380590a"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7c6d-4cbc-8b83-6c7bb24a2a75",
+        "ingredientCode": "P83214502",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:21.703137",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7c6f-475a-863c-349a712a11b8",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7c6d-4cbc-8b83-6c7bb24a2a75"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7bfe-4642-8ebc-335bf736347f",
+        "ingredientCode": "P25233456",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:20.972847",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7c00-4088-83e7-3ccb64e9cace",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7bfe-4642-8ebc-335bf736347f"
+            }
+        ]
+    },
+    {
+        "id": "08dd5b9c-7b8b-4502-8fff-6730f9de0fd7",
+        "ingredientCode": "P40274227",
+        "supplier": "no new",
+        "ingredientName": "string",
+        "description": "string",
+        "foodSafetyCertification": "string",
+        "expiredDate": "2025-03-20T00:00:00",
+        "ingredientStatus": "ACTIVE",
+        "weightPerBag": 0.1,
+        "quantityPerCarton": 0,
+        "unit": "string",
+        "priceOrigin": 120,
+        "pricePromotion": 0,
+        "category": {
+            "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+            "categoryName": "Bộ sưu tập công thức trà sữa",
+            "createAt": "2025-03-04T19:41:06.288269",
+            "categoryStatus": "ACTIVE",
+            "categoryType": "CATEGORY_RECIPE"
+        },
+        "isSale": false,
+        "rate": 0,
+        "createAt": "2025-03-05T11:16:20.218316",
+        "updateAt": "0001-01-01T00:00:00",
+        "ingredientType": "Bot",
+        "images": [
+            {
+                "id": "08dd5b9c-7b8d-40e0-89c3-421b22eb6d6c",
+                "imageUrl": "string",
+                "ingredientId": "08dd5b9c-7b8b-4502-8fff-6730f9de0fd7"
+            }
+        ]
+    }
+]

@@ -11,7 +11,7 @@ const Layout01 = () => {
             <TopHeader />
             <Header01 />
             <NavigationComponent />
-            <main>
+            <main className='bg-[#edf2f5]'>
                 <Outlet />
             </main>
             <Footer />

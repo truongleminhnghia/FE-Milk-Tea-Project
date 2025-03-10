@@ -58,6 +58,10 @@ const router = createBrowserRouter([
       },
       {
         path: 'categories',
+        element: <ListCategory />
+      },
+      {
+        path: 'products',
         element: <ListProductsAdmin />
       },
       {

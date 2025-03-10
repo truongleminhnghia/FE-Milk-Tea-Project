@@ -40,7 +40,7 @@ const NavigationComponent = () => {
     ];
 
     return (
-        <nav className="bg-[#EF2A39] text-white">
+        <nav className="bg-[#29aae1] text-white">
             <div className="container mx-auto relative">
                 <ul className="flex space-x-6 py-3 uppercase text-base">
                     {menu.map((item, index) => (

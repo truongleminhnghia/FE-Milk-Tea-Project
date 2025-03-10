@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import để điều hướng
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 
@@ -21,7 +21,7 @@ const items = [
         children: [
             { key: "categories", label: "Danh mục sản phẩm" },
             { key: "products", label: "Danh sách sản phẩm" },
-            { key: "new-product", label: "Tạo mới sản phẩm" },
+            { key: "create-product", label: "Tạo mới sản phẩm" },
         ],
     },
     {
@@ -34,35 +34,40 @@ const items = [
         ],
     },
     {
-        key: "user",
+        key: "/user",
         icon: <SettingOutlined />,
         label: "Người dùng",
         children: [
             { key: "users", label: "Tất cả" },
-            { key: "", label: "Người dùng mới" },
+            { key: "new-user", label: "Người dùng mới" },
         ],
     },
 ];
 
 const SidebarComponent = () => {
-    const navigate = useNavigate(); // Hook điều hướng
-    const [selectedKey, setSelectedKey] = useState("dashboard"); // Mặc định chọn Dashboard
-    const [stateOpenKeys, setStateOpenKeys] = useState([]); // Danh sách menu mở
+    const location = useLocation();
+    const navigate = useNavigate();
 
-    // Xử lý sự kiện khi chọn menu
+    // Lấy `selectedKey` từ URL
+    const [selectedKey, setSelectedKey] = useState(location.pathname);
+    const [stateOpenKeys, setStateOpenKeys] = useState([]);
+
+    // Khi reload trang, cập nhật `selectedKey` và mở menu cha tương ứng
+    useEffect(() => {
+        setSelectedKey(location.pathname);
+
+        // Tìm menu cha chứa đường dẫn hiện tại
+        const parentItem = items.find(item => item.children?.some(child => child.key === location.pathname));
+
+        if (parentItem) {
+            setStateOpenKeys([parentItem.key]); // Mở menu cha
+        }
+    }, [location.pathname]);
+
+    // Xử lý chọn menu
     const onSelect = ({ key }) => {
         setSelectedKey(key);
-        navigate(key); // Điều hướng trang
-
-        // Kiểm tra xem có phải menu cha không
-        const parentItem = items.find(item => item.key === key);
-
-        if (parentItem?.children?.length > 0) {
-            const firstChildKey = parentItem.children[0].key; // Lấy phần tử con đầu tiên
-            setSelectedKey(firstChildKey);
-            setStateOpenKeys([key]); // Mở menu cha
-            navigate(firstChildKey);
-        }
+        navigate(key);
     };
 
     // Xử lý mở menu cha
@@ -78,6 +83,7 @@ const SidebarComponent = () => {
             onSelect={onSelect}
             onOpenChange={onOpenChange}
             items={items}
+            style={{ fontFamily: "inherit" }}
         />
     );
 };
