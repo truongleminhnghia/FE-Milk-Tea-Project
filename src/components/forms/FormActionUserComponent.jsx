@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -51,13 +51,62 @@ const FormActionUserComponent = (props) => {
             const res = await handlerLoginGoogle();
             console.log("res: ", res);
             if (res?.data) {
-                // Mở cửa sổ pop-up mới
-                window.location = res.data;
+                const width = 500;
+                const height = 600;
+                const left = (window.innerWidth - width) / 2;
+                const top = (window.innerHeight - height) / 2;
+
+                window.open(
+                    res.data,
+                    "_blank",
+                    `width=${width},height=${height},top=${top},left=${left},resizable=no,scrollbars=no,status=no`
+                );
             }
         } catch (error) {
             console.log("Error: ", error.message);
         }
     };
+
+    useEffect(() => {
+        const receiveMessage = async (event) => {
+            if (event?.data?.success) {
+                console.log("Navigating to:", event);
+                // toastConfig("success", "Đăng nhập Google thành công!");
+                const params = {
+                    code: event?.data?.code,
+                    type_login: "LOGIN_GOOGLE",
+                };
+                const res = await callBackApi(params, dispatch)
+                if (res?.data || res?.success) {
+                    console.log("call", res)
+                    switch (res?.data?.accountResponse?.roleName) {
+                        case "ROLE_ADMIN":
+                            navigate("/admin-page");
+                            break;
+                        case "ROLE_MANAGER":
+                            navigate("/admin-page");
+                            break;
+                        case "ROLE_CUSTOMER":
+                            navigate("/");
+                            break;
+                        case "ROLE_STAFF":
+                            navigate("/admin-page");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } else {
+                toastConfig("error", event.data?.message || "Đăng nhập Google thất bại");
+            }
+        };
+
+        window.addEventListener("message", receiveMessage);
+        return () => {
+            window.removeEventListener("message", receiveMessage);
+        };
+    }, []);
+
 
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);

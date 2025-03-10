@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../redux/features/authSlice";
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
+const ProtectedRoute = ({ element, allowedRoles }) => {
     const currentUser = useSelector(selectUser);
     if (!currentUser) {
         return <Navigate to='/' />
@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     if (allowedRoles && !allowedRoles.includes(currentUser.roleName)) {
         return <Navigate to="/login" />;
     }
-    return children;
+    return <>{element}</>;
 }
 
 export default ProtectedRoute;

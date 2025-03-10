@@ -95,32 +95,13 @@ export const handlerLoginGoogle = async () => {
     }
 }
 
-export const callBackApi = async (params, dispatch, navigate) => {
+export const callBackApi = async (params, dispatch) => {
     try {
         const res = await callBack(params);
-        if (res?.data && res?.success) {
+        if (res?.data || res?.success) {
             localStorage.setItem("access_token", res.data.token);
             dispatch(login(res.data.accountResponse))
-            switch (res.data.accountResponse.roleName) {
-                case "ROLE_ADMIN":
-                    navigate("/admin-page");
-                    break;
-                case "ROLE_MANAGER":
-                    navigate("/admin-page");
-                    break;
-                case "ROLE_CUSTOMER":
-                    navigate("/");
-                    break;
-                case "ROLE_STAFF":
-                    navigate("/admin-page");
-                    break;
-                default:
-                    break;
-            }
             return res;
-        } else {
-            console.error("Login failed: ", res.message);
-            return null;
         }
     } catch (error) {
         console.log("Error: ", error.message);

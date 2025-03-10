@@ -26,7 +26,7 @@ export const loginGoogle = async (model) => {
 
 export const callBack = async (params) => {
     const res = await ApiCustomer.get('/auths/callback', { params });
-    if (res?.data && res?.message) {
+    if (res?.data) {
         return res;
     }
 }

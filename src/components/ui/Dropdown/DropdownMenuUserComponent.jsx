@@ -38,10 +38,10 @@ const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
       <div className='flex items-center gap-2 text-xs text-white font-semibold cursor-pointer'>
         <img
           className='block h-[40px] w-[40px] rounded-full mr-[8px]'
-          src={currentUser.avatar ? currentUser.avatar : "/images/images/avatar-default.png"}
+          src={currentUser.imageUrl ? currentUser.imageUrl : "/images/images/avatar-default.png"}
           alt="avatar" />
         <p className='w-full'>
-          <span className='block text-[16px] text-black font-bold uppercase hover:underline'>{currentUser.lastName}</span>
+          <span className='block text-[16px] text-black font-bold uppercase hover:underline'>{currentUser.lastName || currentUser.firstName}</span>
           {!isUser && (
             <span className='block text-[14px] text-[#333] font-medium'>{currentUser.roleName}</span>
           )}

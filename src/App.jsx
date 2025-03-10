@@ -29,6 +29,10 @@ const router = createBrowserRouter([
     element: <RegisterPage />
   },
   {
+    path: '/auths/callback',
+    element: <GoogleCallbackComponent />
+  },
+  {
     path: '/',
     element: <Layout01 />,
     children: [
@@ -43,15 +47,15 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/auths/callback',
-    element: <GoogleCallbackComponent />
-  },
-  {
     path: '/admin-page',
     element: (
-      <Layout02 />
+      <ProtectedRoute element={<Layout02 />} allowedRoles={["ROLE_ADMIN"]} />
     ),
     children: [
+      {
+        path: '/admin-page',
+        element: <Dashboard />
+      },
       {
         path: 'dashboard',
         element: <Dashboard />
