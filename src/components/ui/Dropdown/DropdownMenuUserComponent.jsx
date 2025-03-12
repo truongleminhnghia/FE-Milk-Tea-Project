@@ -1,24 +1,22 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import UserHook from '../../../protectedRoute/hook/UserHook'
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutApi } from '../../../services/authenticate.service';
 import { toastConfig, handleKeyDown } from '../../../utils/utils';
-
 
 const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onEnterPress = () => {
     console.log("Enter key detected in input field!");
-};
+  };
 
   const handleLogout = async () => {
     try {
       const res = await dispatch(logoutApi()); // Gọi thunk action
       if (!res) {
         toastConfig("error", res?.message);
-      } 
+      }
       toastConfig("success", "Đăng xuất thành công!");
       navigate('/'); // Điều hướng sau khi đăng xuất
     } catch (error) {
@@ -47,37 +45,32 @@ const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
           )}
         </p>
       </div>
-      <div className='absolute overflow-hidden hidden  z-[999999] bg-white w-[150px] group-hover:flex shadow-md rounded top-[40px] -ml-3'>
-        <ul
-          className='w-full'
-        >
-          <li
-            className='py-2 px-2 hover:bg-gray-300'
-          >
+      <div className='absolute overflow-hidden hidden z-[999999] bg-white w-[150px] group-hover:flex shadow-md rounded top-[40px] -ml-3'>
+        <ul className='w-full'>
+          <li className='py-2 px-2 hover:bg-gray-300'>
             <Link
-              className='text-base text-black hover:text-white'
-            >Hồ sơ của bạn</Link>
+              to={`/customer/profile/${currentUser.id}`}
+              className='cursor-pointer text-base text-black hover:text-white'
+            >
+              Hồ sơ của bạn
+            </Link>
           </li>
-          <li
-            className='py-2 px-2 hover:bg-gray-300'
-          >
-            <Link
-              className='text-base text-black hover:text-white'
-            >Đơn mua</Link>
+          <li className='py-2 px-2 hover:bg-gray-300'>
+            <Link to="/orders" className='text-base text-black hover:text-white'>Đơn mua</Link>
           </li>
-          <li
-            className='py-2 px-2 hover:bg-gray-300'
-          >
+          <li className='py-2 px-2 hover:bg-gray-300'>
             <p
               className='cursor-pointer text-base text-black hover:text-white'
               onClick={handleLogout}
               onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
-            >Đăng xuất</p>
+            >
+              Đăng xuất
+            </p>
           </li>
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DropdownMenuUserComponent
+export default DropdownMenuUserComponent;

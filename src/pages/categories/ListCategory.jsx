@@ -59,7 +59,7 @@ const ListCategory = () => {
             };
             const res = await getByListSerivce(param);
             if (res?.data) {
-                setCategories(res?.data);
+                setCategories(res?.data.data);
                 setParams((prev) => ({
                     ...prev,
                     paging: {

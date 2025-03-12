@@ -13,18 +13,12 @@ import { Button, Col, Input, Row, Space } from 'antd';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import CardRecipeComponent from '../../components/ui/carts/CardRecipeComponent';
 import NavigationComponent from '../../components/ui/NavigationComponent';
+import ListPrdocut from "../../stores/data/list-product.json"
 
 const Home = () => {
   const navigate = useNavigate();
   const dispath = useDispatch();
   useEffect(() => {
-    // const params = new URLSearchParams(window.location.search);
-    // const code = params.get("code");
-
-    // console.log("code: ", code);
-    
-
-    // callBackLoginGoogle();
   }, []);
   return (
     <div>
@@ -48,27 +42,11 @@ const Home = () => {
             modules={[Pagination, Navigation, Autoplay]}
             className="h-[310px]"
           >
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CardProductComponent />
-            </SwiperSlide>
+            {ListPrdocut.map((item, index) => (
+              <SwiperSlide key={item.id}>
+                <CardProductComponent item={item} isNew={true} />
+              </SwiperSlide>
+            ))}
           </Swiper>
           <Button className='rounded-3xl border-[#EF2A39] text-[#EF2A39] text-sm left-[50%] translate-x-[-50%] hover:!bg-[#EF2A39] hover:!text-white hover:!border-none'>
             Xem tất cả
@@ -103,27 +81,11 @@ const Home = () => {
                 modules={[Pagination, Navigation, Autoplay]}
                 className="h-[310px]"
               >
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProductComponent isNew={true} />
-                </SwiperSlide>
+                {ListPrdocut.map((item, index) => (
+                  <SwiperSlide key={item.id}>
+                    <CardProductComponent item={item} isNew={true} />
+                  </SwiperSlide>
+                ))}
               </Swiper>
               <Button className='rounded-3xl border-[#EF2A39] text-[#EF2A39] text-sm left-[50%] translate-x-[-50%] hover:!bg-[#EF2A39] hover:!text-white hover:!border-none'>
                 Xem tất cả
@@ -162,27 +124,11 @@ const Home = () => {
               modules={[Pagination, Navigation, Autoplay]}
               className="h-[310px]"
             >
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
+              {ListPrdocut.map((item, index) => (
+                <SwiperSlide key={item.id}>
+                  <CardProductComponent item={item} isNew={true} />
+                </SwiperSlide>
+              ))}
             </Swiper>
           </Row>
           <Row>
@@ -200,27 +146,11 @@ const Home = () => {
               modules={[Pagination, Navigation, Autoplay]}
               className="h-[310px]"
             >
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProductComponent isSale={true} />
-              </SwiperSlide>
+              {ListPrdocut.map((item, index) => (
+                <SwiperSlide key={item.id}>
+                  <CardProductComponent item={item} isNew={true} />
+                </SwiperSlide>
+              ))}
             </Swiper>
             <Button className='rounded-3xl border-[#EF2A39] text-[#EF2A39] text-sm left-[50%] translate-x-[-50%] hover:!bg-[#EF2A39] hover:!text-white hover:!border-none'>
               Xem tất cả

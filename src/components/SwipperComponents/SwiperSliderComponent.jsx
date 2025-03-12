@@ -1,13 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Image from '../../../public/images/images/image.png';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Button } from 'antd';
+import Slider from '../../stores/data/slide.json'
 const SwiperSliderComponent = () => {
     const swiperRef = useRef(null);
     return (
@@ -33,34 +32,15 @@ const SwiperSliderComponent = () => {
                 modules={[Pagination, Navigation, Autoplay]}
                 className="relative !w-full h-[60vh]"
             >
-                <SwiperSlide >
-                    <img
-                        className='!w-full h-full object-cover'
-                        src="/images/images/image.png"
-                        alt=""
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        className='!w-full h-full object-cover'
-                        src="/images/images/image.png"
-                        alt=""
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        className='!w-full h-full object-cover'
-                        src="/images/images/image.png"
-                        alt=""
-                    />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img
-                        className='!w-full h-full object-cover'
-                        src="/images/images/image.png"
-                        alt=""
-                    />
-                </SwiperSlide>
+                {Slider.map((item, index) => (
+                    <SwiperSlide key={item.key} >
+                        <img
+                            className='!w-full h-full object-cover'
+                            src={item.url}
+                            alt=""
+                        />
+                    </SwiperSlide>
+                ))}
                 <div className="custom-pagination text-center absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
                 </div>
             </Swiper>

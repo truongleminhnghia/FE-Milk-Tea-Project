@@ -1,45 +1,41 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, MailOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
+// import './SidebarComponent.css'; // Import the custom CSS file
 
 const items = [
     {
-        key: "dashboard",
+        key: "/admin-page/dashboard",
         icon: <MailOutlined />,
         label: "Dashboard",
     },
     {
-        key: "new-order",
+        key: "/admin-page/orders",
         icon: <AppstoreOutlined />,
-        label: "Đơn hàng mới",
+        label: "Đơn hàng",
+        children: [
+            { key: "/admin-page/orders/all", label: "Tất cả" },
+            { key: "/admin-page/orders/new", label: "Đơn hàng mới" },
+        ],
     },
     {
-        key: "product",
+        key: "/admin-page/products",
         icon: <SettingOutlined />,
         label: "Sản phẩm",
         children: [
-            { key: "categories", label: "Danh mục sản phẩm" },
-            { key: "products", label: "Danh sách sản phẩm" },
-            { key: "create-product", label: "Tạo mới sản phẩm" },
+            { key: "/admin-page/categories", label: "Danh mục sản phẩm" },
+            { key: "/admin-page/products", label: "Danh sách sản phẩm" },
+            { key: "/admin-page/create-product", label: "Tạo mới sản phẩm" },
         ],
     },
     {
-        key: "order",
-        icon: <SettingOutlined />,
-        label: "Đơn hàng",
-        children: [
-            { key: "orders", label: "Tất cả" },
-            { key: "new-order", label: "Đơn hàng mới" },
-        ],
-    },
-    {
-        key: "/user",
-        icon: <SettingOutlined />,
+        key: "/admin-page/users",
+        icon: <UserOutlined />,
         label: "Người dùng",
         children: [
-            { key: "users", label: "Tất cả" },
-            { key: "new-user", label: "Người dùng mới" },
+            { key: "/admin-page/users/all", label: "Tất cả" },
+            { key: "/admin-page/users/new", label: "Người dùng mới" },
         ],
     },
 ];
@@ -57,7 +53,7 @@ const SidebarComponent = () => {
         setSelectedKey(location.pathname);
 
         // Tìm menu cha chứa đường dẫn hiện tại
-        const parentItem = items.find(item => item.children?.some(child => child.key === location.pathname));
+        const parentItem = items.find(item => item.children?.some(child => location.pathname.startsWith(child.key)));
 
         if (parentItem) {
             setStateOpenKeys([parentItem.key]); // Mở menu cha
@@ -83,7 +79,7 @@ const SidebarComponent = () => {
             onSelect={onSelect}
             onOpenChange={onOpenChange}
             items={items}
-            style={{ fontFamily: "inherit" }}
+            className="custom-menu" // Apply custom class
         />
     );
 };

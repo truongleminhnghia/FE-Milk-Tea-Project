@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const NavigationComponent = () => {
     const location = useLocation();
     const [openDropdown, setOpenDropdown] = useState(null);
+    const dropdownRefs = useRef({});
 
     // Hàm kiểm tra active
     const isActive = (path) => location.pathname === path;
@@ -39,6 +40,14 @@ const NavigationComponent = () => {
         }
     ];
 
+    const handleMouseEnter = (title) => {
+        setOpenDropdown(title);
+    };
+
+    const handleMouseLeave = () => {
+        setOpenDropdown(null);
+    };
+
     return (
         <nav className="bg-[#29aae1] text-white">
             <div className="container mx-auto relative">
@@ -46,9 +55,10 @@ const NavigationComponent = () => {
                     {menu.map((item, index) => (
                         <li
                             key={index}
-                            className=""
-                            onMouseEnter={() => item.dropdown && setOpenDropdown(item.title)}
-                            onMouseLeave={() => setOpenDropdown(null)}
+                            className="relative"
+                            onMouseEnter={() => handleMouseEnter(item.title)}
+                            onMouseLeave={handleMouseLeave}
+                            ref={(el) => (dropdownRefs.current[item.title] = el)}
                         >
                             <span className={`cursor-pointer px-4 py-2 hover:text-gray-300 dropdown-parent
                                 ${isActive(item.path) ? "border-b-2 border-white" : ""}`
@@ -57,7 +67,7 @@ const NavigationComponent = () => {
                             </span>
 
                             {item.dropdown && openDropdown === item.title && (
-                                <ul className="absolute top-full left-0  bg-white text-black shadow-lg w-full z-50">
+                                <ul className="absolute top-full left-0 bg-white text-black shadow-lg w-full z-50">
                                     {item.dropdown.map((subItem, subIndex) => (
                                         <li key={subIndex} className="px-4 py-2 hover:bg-gray-200">
                                             <Link to={subItem.path}>{subItem.title}</Link>

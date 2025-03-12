@@ -1,0 +1,476 @@
+[
+    {
+        "Id": 1,
+        "IngredientCode": "P0123434",
+        "IngredientName": "Bột pha trà sữa thượng hạng",
+        "Supplier": "Thiên Hương",
+        "Description": "Bột pha trà sữa thượng hạng",
+        "FoodSafetyCertification": "",
+        "ExpiredDate": "2025-12-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.1,
+        "QuantityPerCarton": 10,
+        "Unit": "gam",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 1,
+            "CategoryName": "Bột pha trà sữa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": false,
+        "Rate": 0.0,
+        "CreateAt": "2025-03-010T00:00:00",
+        "UpdateAt": "2025-03-010T00:00:00",
+        "IngredientType": "bOT",
+        "Images": [
+            {
+                "Id": 1,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-010T00:00:00",
+                "UpdateAt": "2025-03-010T00:00:00"
+            },
+            {
+                "Id": 2,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-010T00:00:00",
+                "UpdateAt": "2025-03-010T00:00:00"
+            },
+            {
+                "Id": 3,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-010T00:00:00",
+                "UpdateAt": "2025-03-010T00:00:00"
+            },
+            {
+                "Id": 4,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-010T00:00:00",
+                "UpdateAt": "2025-03-010T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 1,
+                "IngredientId": 1,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 2,
+                "IngredientId": 1,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 3,
+                "IngredientId": 1,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            },
+            {
+                "Id": 4,
+                "IngredientId": 1,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 2,
+        "IngredientCode": "P0123456",
+        "IngredientName": "Trà xanh hảo hạng",
+        "Supplier": "Trà Việt",
+        "Description": "Trà xanh hảo hạng",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-01-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.2,
+        "QuantityPerCarton": 20,
+        "Unit": "gam",
+        "PriceOriginal": 150000,
+        "PricePromotion": 135000,
+        "Category": {
+            "Id": 2,
+            "CategoryName": "Trà xanh",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": false,
+        "Rate": 4.5,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "TRA",
+        "Images": [
+            {
+                "Id": 5,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 6,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 5,
+                "IngredientId": 2,
+                "Quantity": 200,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 6,
+                "IngredientId": 2,
+                "Quantity": 200,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 3,
+        "IngredientCode": "P0123457",
+        "IngredientName": "Sữa đặc có đường",
+        "Supplier": "Vinamilk",
+        "Description": "Sữa đặc có đường",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-02-28",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 12,
+        "Unit": "kg",
+        "PriceOriginal": 80000,
+        "PricePromotion": 72000,
+        "Category": {
+            "Id": 3,
+            "CategoryName": "Sữa đặc",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": false,
+        "Rate": 4.8,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA",
+        "Images": [
+            {
+                "Id": 7,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 8,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 7,
+                "IngredientId": 3,
+                "Quantity": 120,
+                "Type": "HỘP"
+            },
+            {
+                "Id": 8,
+                "IngredientId": 3,
+                "Quantity": 120,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 4,
+        "IngredientCode": "P0123458",
+        "IngredientName": "Trân châu đen",
+        "Supplier": "Trân Châu Việt",
+        "Description": "Trân châu đen",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-03-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 60000,
+        "PricePromotion": 54000,
+        "Category": {
+            "Id": 4,
+            "CategoryName": "Trân châu",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "TRAN_CHAU",
+        "Images": [
+            {
+                "Id": 9,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 10,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 9,
+                "IngredientId": 4,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 10,
+                "IngredientId": 4,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 5,
+        "IngredientCode": "P0123459",
+        "IngredientName": "Đường cát trắng",
+        "Supplier": "Đường Biên Hòa",
+        "Description": "Đường cát trắng",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-04-30",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 1.0,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 50000,
+        "PricePromotion": 45000,
+        "Category": {
+            "Id": 5,
+            "CategoryName": "Đường",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.6,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "DUONG",
+        "Images": [
+            {
+                "Id": 11,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 12,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 11,
+                "IngredientId": 5,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 12,
+                "IngredientId": 5,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 6,
+        "IngredientCode": "P0123460",
+        "IngredientName": "Bột cacao",
+        "Supplier": "Cacao Việt",
+        "Description": "Bột cacao nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-05-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 120000,
+        "PricePromotion": 108000,
+        "Category": {
+            "Id": 6,
+            "CategoryName": "Bột cacao",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.9,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "CACAO",
+        "Images": [
+            {
+                "Id": 13,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 14,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 13,
+                "IngredientId": 6,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 14,
+                "IngredientId": 6,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 7,
+        "IngredientCode": "P0123461",
+        "IngredientName": "Bột matcha",
+        "Supplier": "Matcha Nhật",
+        "Description": "Bột matcha nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-06-30",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.2,
+        "QuantityPerCarton": 20,
+        "Unit": "kg",
+        "PriceOriginal": 200000,
+        "PricePromotion": 180000,
+        "Category": {
+            "Id": 7,
+            "CategoryName": "Bột matcha",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.8,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "MATCHA",
+        "Images": [
+            {
+                "Id": 15,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 16,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 15,
+                "IngredientId": 7,
+                "Quantity": 200,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 16,
+                "IngredientId": 7,
+                "Quantity": 200,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 8,
+        "IngredientCode": "P0123462",
+        "IngredientName": "Bột sữa dừa",
+        "Supplier": "Dừa Việt",
+        "Description": "Bột sữa dừa nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-07-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 8,
+            "CategoryName": "Bột sữa dừa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA_DUA",
+        "Images": [
+            {
+                "Id": 17,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 18,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 17,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 18,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    }
+]

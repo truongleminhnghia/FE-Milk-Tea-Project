@@ -1,0 +1,71 @@
+{
+    "data": [
+        {
+            "title": "Trang chủ",
+            "path": "/",
+            "subMenu": null
+        },
+        {
+            "title": "Giới thiệu",
+            "path": "/gioi-thieu",
+            "subMenu": null
+        },
+        {
+            "title": "Nguyên liệu",
+            "path": "/nguyen-lieu",
+            "children": [
+                {
+                    "title": "Bột trả sữa",
+                    "path": "/nguyen-lieu",
+                    "key": "bot-tra-sua"
+                },
+                {
+                    "title": "Trà",
+                    "path": "/nguyen-lieu",
+                    "key": "tra"
+                },
+                {
+                    "title": "Sirup",
+                    "path": "/nguyen-lieu",
+                    "key": "sirup"
+                }
+            ]
+        },
+        {
+            "title": "Công thức",
+            "path": "/cong-thuc",
+            "children": [
+                {
+                    "title": "Công thức pha độc quyền",
+                    "path": "/cong-thuc",
+                    "key": "doc-quyen"
+                },
+                {
+                    "title": "Công thức mùa xuân",
+                    "path": "/cong-thuc",
+                    "key": "mua-xuan"
+                },
+                {
+                    "title": "Công thức mùa thu",
+                    "path": "/cong-thuc",
+                    "key": "mua-thua"
+                }
+            ]
+        },
+        {
+            "title": "Khuyến mãi",
+            "path": "/khuyen-mai",
+            "children": null
+        },
+        {
+            "title": "Tin tức",
+            "path": "/tin-tuc",
+            "children": null
+        },
+        {
+            "title": "Liên hệ",
+            "path": "/lien-he",
+            "children": null
+        }
+    ]
+}

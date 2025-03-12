@@ -18,6 +18,8 @@ import { EnumRoleName } from "./utils/enum.constant";
 import GoogleCallbackComponent from "./components/callBack/GoogleCallbackComponent";
 import ListCategory from "./pages/categories/ListCategory";
 import ListProductsAdmin from "./pages/admin-pages/products-admin/ListProductAdmin";
+import ViewAccount from "./pages/accounts/ViewAccount";
+import ViewDetail from "./pages/products/ViewDetail";
 
 const router = createBrowserRouter([
   {
@@ -41,9 +43,25 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: '/products',
+        path: '/nguyen-lieu',
         element: <ListProduct />
       },
+      {
+        path: '/nguyen-lieu/:id',
+        element: <ViewDetail />
+      }
+    ]
+  },
+  {
+    path: '/customer',
+    element: (
+      <ProtectedRoute element={<Layout01 />} allowedRoles={["ROLE_CUSTOMER"]} />
+    ),
+    children: [
+      {
+        path: 'profile/:id',
+        element: <ViewAccount />
+      }
     ]
   },
   {
