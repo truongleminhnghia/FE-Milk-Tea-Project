@@ -1,0 +1,182 @@
+[
+    {
+        "ingredientProductId": "23124323454",
+        "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133",
+        "totalPrice": 0,
+        "quantity": 2,
+        "productType": "BICH",
+        "ingredient": {
+            "id": "08dd5b9f-4ea3-4105-8679-3e96dc57a133",
+            "ingredientCode": "P98571401",
+            "supplier": "Thiên Hương",
+            "ingredientName": "Bột pha trà sữa thượng hạng",
+            "description": "Bột pha trà sữa thượng hạng",
+            "foodSafetyCertification": "",
+            "expiredDate": "2025-03-20T00:00:00",
+            "ingredientStatus": "ACTIVE",
+            "weightPerBag": 0.1,
+            "quantityPerCarton": 10,
+            "unit": "gam",
+            "priceOrigin": 100000,
+            "pricePromotion": 0,
+            "category": {
+                "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+                "categoryName": "Bộ sưu tập công thức trà sữa",
+                "createAt": "2025-03-04T19:41:06.288269",
+                "categoryStatus": "ACTIVE",
+                "categoryType": "CATEGORY_RECIPE"
+            },
+            "isSale": false,
+            "rate": 0,
+            "createAt": "2025-03-05T11:36:33.339333",
+            "updateAt": "0001-01-01T00:00:00",
+            "ingredientType": "Bot",
+            "images": [
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                }
+            ],
+            "quantity": [
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "quantity": 100,
+                    "type": "Bịch",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "quantity": 1000,
+                    "type": "Thùng",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                }
+            ]
+        }
+    },
+    {
+        "ingredientProductId": "23124323455",
+        "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57b144",
+        "totalPrice": 50000,
+        "quantity": 5,
+        "productType": "BICH",
+        "ingredient": {
+            "id": "08dd5b9f-4ea3-4105-8679-3e96dc57b144",
+            "ingredientCode": "P98571402",
+            "supplier": "Hà Linh",
+            "ingredientName": "Bột cacao nguyên chất",
+            "description": "Bột cacao nguyên chất từ thiên nhiên",
+            "foodSafetyCertification": "ISO 22000",
+            "expiredDate": "2025-06-15T00:00:00",
+            "ingredientStatus": "ACTIVE",
+            "weightPerBag": 0.2,
+            "quantityPerCarton": 5,
+            "unit": "gam",
+            "priceOrigin": 120000,
+            "pricePromotion": 10000,
+            "category": {
+                "id": "08dd5b19-d509-4234-8c4a-1129af5ddb5a",
+                "categoryName": "Bộ sưu tập công thức trà sữa",
+                "createAt": "2025-03-04T19:41:06.288269",
+                "categoryStatus": "ACTIVE",
+                "categoryType": "CATEGORY_RECIPE"
+            },
+            "isSale": false,
+            "rate": 0,
+            "createAt": "2025-03-05T11:36:33.339333",
+            "updateAt": "0001-01-01T00:00:00",
+            "ingredientType": "Bot",
+            "images": [
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "imageUrl": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "imageUrl": "/images/images/avatar-default.png",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                }
+            ],
+            "quantity": [
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
+                    "quantity": 100,
+                    "type": "Bịch",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                },
+                {
+                    "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
+                    "quantity": 1000,
+                    "type": "Thùng",
+                    "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
+                }
+            ]
+        }
+    }
+]

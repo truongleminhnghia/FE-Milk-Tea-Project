@@ -472,5 +472,229 @@
                 "Type": "THÙNG"
             }
         ]
+    },
+    {
+        "Id": 9,
+        "IngredientCode": "P0123462",
+        "IngredientName": "Bột sữa dừa",
+        "Supplier": "Dừa Việt",
+        "Description": "Bột sữa dừa nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-07-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 8,
+            "CategoryName": "Bột sữa dừa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA_DUA",
+        "Images": [
+            {
+                "Id": 17,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 18,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 17,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 18,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 10,
+        "IngredientCode": "P0123462",
+        "IngredientName": "Bột sữa dừa",
+        "Supplier": "Dừa Việt",
+        "Description": "Bột sữa dừa nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-07-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 8,
+            "CategoryName": "Bột sữa dừa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA_DUA",
+        "Images": [
+            {
+                "Id": 17,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 18,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 17,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 18,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 11,
+        "IngredientCode": "P0123462",
+        "IngredientName": "Bột sữa dừa",
+        "Supplier": "Dừa Việt",
+        "Description": "Bột sữa dừa nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-07-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 8,
+            "CategoryName": "Bột sữa dừa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA_DUA",
+        "Images": [
+            {
+                "Id": 17,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 18,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 17,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 18,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
+    },
+    {
+        "Id": 12,
+        "IngredientCode": "P0123462",
+        "IngredientName": "Bột sữa dừa",
+        "Supplier": "Dừa Việt",
+        "Description": "Bột sữa dừa nguyên chất",
+        "FoodSafetyCertification": "ISO 22000",
+        "ExpiredDate": "2026-07-31",
+        "IngredientStatus": "ACTIVE",
+        "WeightPerBag": 0.5,
+        "QuantityPerCarton": 10,
+        "Unit": "kg",
+        "PriceOriginal": 100000,
+        "PricePromotion": 90000,
+        "Category": {
+            "Id": 8,
+            "CategoryName": "Bột sữa dừa",
+            "CategoryStatus": "ACTIVE",
+            "CategoryType": "CATEGORY_PRODUCT"
+        },
+        "IsSale": true,
+        "Rate": 4.7,
+        "CreateAt": "2025-03-12T00:00:00",
+        "UpdateAt": "2025-03-12T00:00:00",
+        "IngredientType": "SUA_DUA",
+        "Images": [
+            {
+                "Id": 17,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            },
+            {
+                "Id": 18,
+                "ImageURL": "/images/images/hong_tra_thuong_hang-01_56e10c5ed0264d22a4857c17aee65546_master.webp",
+                "ImageStatus": "ACTIVE",
+                "CreateAt": "2025-03-12T00:00:00",
+                "UpdateAt": "2025-03-12T00:00:00"
+            }
+        ],
+        "IngredientQuantities": [
+            {
+                "Id": 17,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "BỊCH"
+            },
+            {
+                "Id": 18,
+                "IngredientId": 8,
+                "Quantity": 100,
+                "Type": "THÙNG"
+            }
+        ]
     }
 ]

@@ -20,6 +20,7 @@ import ListCategory from "./pages/categories/ListCategory";
 import ListProductsAdmin from "./pages/admin-pages/products-admin/ListProductAdmin";
 import ViewAccount from "./pages/accounts/ViewAccount";
 import ViewDetail from "./pages/products/ViewDetail";
+import ListCart from "./pages/carts/ListCart";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/nguyen-lieu/:id',
         element: <ViewDetail />
+      },
+      {
+        path: '/gio-hang',
+        element: <ListCart />
       }
     ]
   },
