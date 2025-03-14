@@ -1,10 +1,19 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CardProductComponent = ({ isNew, item }) => {
+    const navigate = useNavigate();
+      const gotToDetailIngredient = (item) => {
+        const id = item.id;
+        navigate(`/nguyen-lieu/${id}`);
+      }
     return (
-        <div className='relative overflow-hidden w-[240px] bg-white rounded-xl drop-shadow-md cursor-pointer'>
+        <div className='relative overflow-hidden w-[240px] bg-white rounded-xl drop-shadow-md cursor-pointer' 
+        onClick={() => gotToDetailIngredient(item)}
+        onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
+        >
             <div className="relative group">
                 <img
                     className="w-full h-[220px] object-cover transition-opacity duration-300 group-hover:opacity-80"

@@ -1,7 +1,7 @@
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent'
 import Ingredient from '../../stores/data/ingredient.json'
 import { Button, Col, Form, Input, Row, Space } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -11,12 +11,33 @@ import { FreeMode, Navigation, Thumbs, Pagination, Autoplay } from 'swiper/modul
 import { Icon } from '@iconify/react/dist/iconify.js';
 import ListPrdocut from "../../stores/data/list-product.json"
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
+import { useParams } from 'react-router-dom';
+import { getByIdService } from '../../services/product.service';
 
 const ViewDetail = () => {
+    const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(false)
+    const [data, setData] = useState({});
     const breadcrumbItems = [
         { title: 'Trang chủ', href: '/' },
         { title: 'Chi tiết' }
     ];
+
+    const fetchDetail = async (id) => {
+        try {
+            setIsLoading(true);
+            const res = await getByIdService(id);
+            if (res?.success || res?.data) {
+                setData(res.data)
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+    useEffect(() => {
+        fetchDetail(id)
+    }, [id]);
 
     const [form] = Form.useForm();
     const [selectedProductType, setSelectedProductType] = useState('');
@@ -79,7 +100,7 @@ const ViewDetail = () => {
                         modules={[Navigation, Thumbs, FreeMode, Autoplay, Pagination]}
                         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                     >
-                        {Ingredient.images.map((item, index) => (
+                        {data.images?.map((item, index) => (
                             <SwiperSlide key={item.id} className=''>
                                 <img className='rounded-lg object-cover h-full w-full' src={item?.imageUrl} alt="" />
                             </SwiperSlide>
@@ -95,7 +116,7 @@ const ViewDetail = () => {
                         modules={[FreeMode, Navigation, Thumbs]}
                         className='h-[90px] bg-slate-100 rounded-lg mt-2'
                     >
-                        {Ingredient.images.map((item, index) => (
+                        {data.images?.map((item, index) => (
                             <SwiperSlide
                                 key={item.id}
                                 className={`px-1 py-1 cursor-pointer ${activeIndex === index ? "border-2 border-blue-500 rounded-lg" : ""
@@ -137,15 +158,15 @@ const ViewDetail = () => {
                             </p>
                             <p className='mt-3 flex items-center'>
                                 <span className='text-black text-base font-normal'>Trạng thái: </span>
-                                <span className='text-green-500 bg-green-200 px-2 py-1 rounded-md text-base font-medium ml-3'>{Ingredient.ingredientStatus === 'ACTIVE' ? 'Còn hàng' : 'hết hàng'}</span>
+                                <span className='text-green-500 bg-green-200 px-2 py-1 rounded-md text-base font-medium ml-3'>{data.ingredientStatus === 'ACTIVE' ? 'Còn hàng' : 'hết hàng'}</span>
                             </p>
                             <p className='mt-3 flex items-center'>
                                 <span className=' text-black text-base font-normal'>Thương hiệu: </span>
-                                <span className='text-lg text-black font-medium ml-3'>{Ingredient.supplier}</span>
+                                <span className='text-lg text-black font-medium ml-3'>{data.supplier}</span>
                             </p>
                             <p className='mt-3 flex items-center'>
                                 <span className=' text-black text-base font-normal'>Mã sản phẩm: </span>
-                                <span className='text-lg text-black font-medium ml-3'>{Ingredient.ingredientCode}</span>
+                                <span className='text-lg text-black font-medium ml-3'>{data.ingredientCode}</span>
                             </p>
                         </div>
                         <Form
@@ -159,16 +180,16 @@ const ViewDetail = () => {
                                 rules={[{ required: true, message: 'Vui lòng chọn loại sản phẩm' }]}
                             >
                                 <div>
-                                    {Ingredient.quantity.map((item, index) => (
+                                    {data.ingredientQuantities?.map((item, index) => (
                                         <Button
                                             key={item.id}
-                                            className={`mr-2 ${selectedProductType === item.type ? 'bg-blue-500 text-white' : ''}`}
+                                            className={`mr-2 ${selectedProductType === item.productType ? 'bg-blue-500 text-white' : ''}`}
                                             onClick={() => {
-                                                setSelectedProductType(item.type);
-                                                form.setFieldsValue({ productType: item.type });
+                                                setSelectedProductType(item.productType);
+                                                form.setFieldsValue({ productType: item.productType });
                                             }}
                                         >
-                                            {item.type}
+                                            {item.productType}
                                         </Button>
                                     ))}
                                 </div>

@@ -21,6 +21,7 @@ import ListProductsAdmin from "./pages/admin-pages/products-admin/ListProductAdm
 import ViewAccount from "./pages/accounts/ViewAccount";
 import ViewDetail from "./pages/products/ViewDetail";
 import ListCart from "./pages/carts/ListCart";
+import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,11 @@ const router = createBrowserRouter([
       {
         path: 'products',
         element: <ListProductsAdmin />
+      },
+      
+      {
+        path: 'products/:id',
+        element: <ProductDetail />
       },
       {
         path: 'create-product',

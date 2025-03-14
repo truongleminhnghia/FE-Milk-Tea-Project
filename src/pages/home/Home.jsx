@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import SwiperSliderComponent from '../../components/SwipperComponents/SwiperSliderComponent'
-import { callBackApi } from '../../services/authenticate.service';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
@@ -12,12 +11,10 @@ import 'swiper/css/navigation';
 import { Button, Col, Input, Row, Space } from 'antd';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import CardRecipeComponent from '../../components/ui/carts/CardRecipeComponent';
-import NavigationComponent from '../../components/ui/NavigationComponent';
 import ListPrdocut from "../../stores/data/list-product.json"
 
 const Home = () => {
-  const navigate = useNavigate();
-  const dispath = useDispatch();
+  
   useEffect(() => {
   }, []);
   return (
