@@ -26,7 +26,7 @@ const Layout02 = () => {
                 <Header03
                     className='block w-ull' />
                 <main
-                    className='p-4 bg-[#e7e4e4be] h-[100vh]'
+                    className='p-4 bg-[#e7e4e4be]'
                 >
                     <Outlet />
                 </main>

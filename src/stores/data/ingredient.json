@@ -64,17 +64,17 @@
             "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
         }
     ],
-    "quantity": [
+    "ingredientQuantities": [
         {
             "id": "08dd5b9f-4ebc-49f4-831a-c3b20698988b",
             "quantity": 100,
-            "type": "Bịch",
+            "productType": "Bịch",
             "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
         },
         {
             "id": "08dd5b9f-4ebc-49f4-831a-1223114345",
             "quantity": 1000,
-            "type": "Thùng",
+            "productType": "Thùng",
             "ingredientId": "08dd5b9f-4ea3-4105-8679-3e96dc57a133"
         }
     ]

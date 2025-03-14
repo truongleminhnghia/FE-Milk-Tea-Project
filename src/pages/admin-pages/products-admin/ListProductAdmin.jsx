@@ -8,9 +8,10 @@ import { getByListSerivce } from '../../../services/product.service';
 import StatusAvitceComponent from '../../../components/ui/status/StatusActiveComponent';
 import { formatISODate } from '../../../utils/utils';
 import ButtonActionComponent from '../../../components/ui/actions/ButtonActionComponent';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ListProductsAdmin = () => {
+  const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
   const [products, setProducts] = useState([])
   const [params, setParams] = useState({
@@ -96,6 +97,13 @@ const ListProductsAdmin = () => {
     }));
   };
 
+  const handleView = (item) => {
+    console.log("item", item);
+    const id = item.id;
+    console.log("id", id);
+    navigate(`/admin-page/products/${id}`);
+  }
+
   useEffect(() => {
     fetchAllCatetegories(params);
   }, [JSON.stringify(params)]);
@@ -132,8 +140,8 @@ const ListProductsAdmin = () => {
       fixed: 'right',
       render: (item) => (
         <ButtonActionComponent
-        // record={item}
-        // onView={handleView}
+          record={item}
+          onView={handleView}
         // onUpdate={handleUpdate}
         // onDelete={handleDelete}
         />
