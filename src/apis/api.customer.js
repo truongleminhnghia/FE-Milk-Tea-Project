@@ -9,7 +9,6 @@ const config = {
   headers: {
     'Content-Type': 'application/json',
   },
-  //withCredentials: true,
 };
 
 const instance = axios.create(config);

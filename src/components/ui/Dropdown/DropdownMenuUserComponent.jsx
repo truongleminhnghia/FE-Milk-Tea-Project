@@ -10,6 +10,8 @@ const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
   const onEnterPress = () => {
     console.log("Enter key detected in input field!");
   };
+  
+  const id = currentUser.id;
 
   const handleLogout = async () => {
     try {
@@ -49,7 +51,7 @@ const DropdownMenuUserComponent = ({ isUser, currentUser }) => {
         <ul className='w-full'>
           <li className='py-2 px-2 hover:bg-gray-300'>
             <Link
-              to={`/customer/profile/${currentUser.id}`}
+              to={`/customer/profile/${id}`}
               className='cursor-pointer text-base text-black hover:text-white'
             >
               Hồ sơ của bạn

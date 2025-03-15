@@ -1,6 +1,6 @@
-import { create, getById, getAll, updateById, deleteById } from "../apis/product.api";
+import { create, getById, getAll, updateById, deleteById } from "../apis/user.api";
 
-export const createCategoryService = async (reqBody) => {
+export const createService = async (reqBody) => {
     try {
         const res = await create(reqBody);
         if (res) {
@@ -28,10 +28,10 @@ export const getByIdService = async (id) => {
 export const getByListSerivce = async (params) => {
     try {
         const res = await getAll(params);
-        if (res?.success || res?.data) {
+        if (res.success || res.data) {
             return res;
         }
-        return res?.message;
+        return res.message;
     } catch (error) {
         console.log('Error: ', error);
     }
