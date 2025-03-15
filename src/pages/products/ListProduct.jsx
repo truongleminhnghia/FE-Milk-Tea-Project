@@ -1,12 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Ingredients from '../../stores/data/list-product.json'
 import CardProductComponent from '../../components/ui/carts/CardProductComponent'
 import { Button, Col, Input, Menu, Pagination, Row, Select } from 'antd'
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
+import { getByListSerivce } from '../../services/product.service';
 
 
 const ListProduct = () => {
+
+  const [isLoading, setisLoading] = useState(false);
+  const [listIngredient, setListIngredient] = useState([]);
+  const [params, setParams] = useState({
+    status: null,
+    minPrice: null,
+    maxPrice: null,
+    isSale: null,
+    isDescending: null,
+    categoryId: null,
+    search: null,
+    startDate: null,
+    endDate: null,
+    paging: {
+      pageCurrent: 1,
+      pageSize: 10,
+      total: 0,
+    }
+  })
+  const fetchIngredient = async (params) => {
+    try {
+      setisLoading(true);  // Bắt đầu tải dữ liệu
+      const param = {
+        pageCurrent: params.paging.pageCurrent,
+        pageSize: params.paging.pageSize,
+        status: params.status,
+        categoryId: params.categoryId,
+        search: params.search,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        minPrice: params.minPrice,
+        maxPrice: params.maxPrice,
+        isSale: params.isSale
+      };
+      const res = await getByListSerivce(param);
+      if (res?.data) {
+        setListIngredient(res?.data.data);
+        setParams((prev) => ({
+          ...prev,
+          paging: {
+            ...prev.paging,
+            total: res.data.total || 100,
+          }
+        }));
+      }
+    } catch (error) {
+      console.error("Error: ", error.message);
+    } finally {
+      setisLoading(false); // dừng loading sau khi tải xog haowjc gặp lỗi
+    }
+  }
+  useEffect(() => {
+    fetchIngredient(params);
+  }, [JSON.stringify(params)]);
 
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/' },
@@ -20,10 +75,12 @@ const ListProduct = () => {
   const categories = [
     { key: 'all', label: 'Tất cả sản phẩm' },
     { key: 'bot', label: 'Bột' },
-    { key: 'syrup', label: 'Syrup', children: [
-      { key: 'nuocduong', label: 'Nước đường' },
-      { key: 'sirosweetbird', label: 'Siro Sweetbird' }
-    ]},
+    {
+      key: 'syrup', label: 'Syrup', children: [
+        { key: 'nuocduong', label: 'Nước đường' },
+        { key: 'sirosweetbird', label: 'Siro Sweetbird' }
+      ]
+    },
     { key: 'topping', label: 'Topping' },
     { key: 'tra', label: 'Trà' },
     { key: 'suaphache', label: 'Sữa pha chế' },
@@ -73,7 +130,7 @@ const ListProduct = () => {
             </Col>
             <Col span={18}>
               <Row gutter={[16, 24]} className='!mx-0' wrap>
-                {Ingredients.map((item) => (
+                {listIngredient?.map((item) => (
                   <Col
                     className='flex justify-center items-center'
                     key={item.id} xs={24} sm={12} md={8} lg={6}>
@@ -82,7 +139,7 @@ const ListProduct = () => {
                 ))}
               </Row>
               <div className="flex justify-center mt-4">
-                <Pagination defaultCurrent={1} total={50} />
+                <Pagination defaultCurrent={params.paging.pageCurrent} total={params.paging.total} />
               </div>
             </Col>
           </Row>

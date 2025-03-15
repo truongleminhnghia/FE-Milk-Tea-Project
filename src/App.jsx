@@ -9,7 +9,7 @@ import ListProduct from "./pages/products/ListProduct";
 import NewProduct from "./pages/admin-pages/products-admin/NewProduct";
 import ListOrders from "./pages/orders/ListOrders";
 import NewOrder from "./pages/orders/NewOrder";
-import ListRecipes from "./pages/recipes/ListRecipes";
+// import ListRecipes from "./pages/recipes/ListRecipes";
 import CreateNewRecipe from "./pages/recipes/CreateNewRecipe";
 import ListUsers from "./pages/users/ListUsers";
 import CreateNewUser from "./pages/users/CreateNewUser";
@@ -22,6 +22,7 @@ import ViewAccount from "./pages/accounts/ViewAccount";
 import ViewDetail from "./pages/products/ViewDetail";
 import ListCart from "./pages/carts/ListCart";
 import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
+import ListRecipesAdmin from "./pages/admin-pages/recipes/ListRecipesAdmin";
 
 const router = createBrowserRouter([
   {
@@ -92,7 +93,6 @@ const router = createBrowserRouter([
         path: 'products',
         element: <ListProductsAdmin />
       },
-      
       {
         path: 'products/:id',
         element: <ProductDetail />
@@ -102,6 +102,10 @@ const router = createBrowserRouter([
         element: <NewProduct />
       },
       {
+        path: 'recipes',
+        element: <ListRecipesAdmin />
+      },
+      {
         path: 'orders',
         element: <ListOrders />
       },
@@ -109,10 +113,10 @@ const router = createBrowserRouter([
         path: 'new-order',
         element: <NewOrder />
       },
-      {
-        path: 'recipes',
-        element: <ListRecipes />
-      },
+      // {
+      //   path: 'recipes',
+      //   element: <ListRecipes />
+      // },
       {
         path: 'create-recipe',
         element: <CreateNewRecipe />

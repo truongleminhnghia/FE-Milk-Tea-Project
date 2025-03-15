@@ -20,13 +20,22 @@ const items = [
         ],
     },
     {
-        key: "/admin-page/products",
+        key: "/products",
         icon: <SettingOutlined />,
         label: "Sản phẩm",
         children: [
             { key: "/admin-page/categories", label: "Danh mục sản phẩm" },
             { key: "/admin-page/products", label: "Danh sách sản phẩm" },
             { key: "/admin-page/create-product", label: "Tạo mới sản phẩm" },
+        ],
+    },
+    {
+        key: "/recipes",
+        icon: <SettingOutlined />,
+        label: "Công thức",
+        children: [
+            { key: "/admin-page/recipes", label: "Danh sách công thức" },
+            { key: "/admin-page/create-recipes", label: "Tạo mới công thức" },
         ],
     },
     {

@@ -140,8 +140,9 @@ const ProductDetail = () => {
                         <Col span={12} className='pl-2 py-2'>
                             <Swiper
                                 className='h-[400px]'
-                                loop={true}
+                                loop={data.images?.lenght > 1}
                                 spaceBetween={0}
+                                slidesPerView={1}
                                 navigation={true}
                                 autoplay={{
                                     delay: 2500,
@@ -159,7 +160,7 @@ const ProductDetail = () => {
                             </Swiper>
                             <Swiper
                                 onSwiper={setThumbsSwiper}
-                                loop={true}
+                                loop={data.images?.lenght > 1}
                                 spaceBetween={0}
                                 slidesPerView={4}
                                 freeMode={true}

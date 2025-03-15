@@ -12,11 +12,12 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import ListPrdocut from "../../stores/data/list-product.json"
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 import { useParams } from 'react-router-dom';
-import { getByIdService } from '../../services/product.service';
+import { getByIdService, getByListSerivce } from '../../services/product.service';
 
 const ViewDetail = () => {
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(false)
+    const [listIngredient, setListIngredient] = useState([])
     const [data, setData] = useState({});
     const breadcrumbItems = [
         { title: 'Trang chủ', href: '/' },
@@ -37,6 +38,24 @@ const ViewDetail = () => {
     }
     useEffect(() => {
         fetchDetail(id)
+    }, [id]);
+
+    const fetchIngredient = async () => {
+        try {
+            setIsLoading(true);
+            const res = await getByListSerivce();
+            if (res?.data) {
+                setListIngredient(res?.data.data);
+            }
+        } catch (error) {
+            console.error("Error: ", error.message);
+        } finally {
+            setIsLoading(false); // dừng loading sau khi tải xog haowjc gặp lỗi
+        }
+    }
+
+    useEffect(() => {
+        fetchIngredient();
     }, [id]);
 
     const [form] = Form.useForm();
@@ -89,8 +108,9 @@ const ViewDetail = () => {
                 <Col span={12} className='!h-full'>
                     <Swiper
                         className='h-[450px]'
-                        loop={true}
+                        loop={data.images?.lenght > 1}
                         spaceBetween={0}
+                        slidesPerView={1}
                         navigation={true}
                         autoplay={{
                             delay: 2500,
@@ -108,7 +128,7 @@ const ViewDetail = () => {
                     </Swiper>
                     <Swiper
                         onSwiper={setThumbsSwiper}
-                        loop={true}
+                        loop={data.images?.lenght > 1}
                         spaceBetween={0}
                         slidesPerView={4}
                         freeMode={true}
@@ -278,11 +298,11 @@ const ViewDetail = () => {
                                     delay: 2500,
                                     disableOnInteraction: false,
                                 }}
-                                loop={true}
+                                loop={listIngredient?.lenght > 1}
                                 modules={[Pagination, Navigation, Autoplay]}
                                 className="h-[310px]"
                             >
-                                {ListPrdocut.map((item, index) => (
+                                {listIngredient.map((item, index) => (
                                     <SwiperSlide key={item.id}>
                                         <CardProductComponent item={item} isNew={true} />
                                     </SwiperSlide>
