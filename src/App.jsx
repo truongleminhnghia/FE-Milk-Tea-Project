@@ -23,6 +23,8 @@ import ViewDetail from "./pages/products/ViewDetail";
 import ListCart from "./pages/carts/ListCart";
 import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
 import ListRecipesAdmin from "./pages/admin-pages/recipes/ListRecipesAdmin";
+import DetailCategory from "./pages/categories/DetailCategory";
+import ListAccount from "./pages/admin-pages/accounts/ListAccount";
 
 const router = createBrowserRouter([
   {
@@ -86,8 +88,16 @@ const router = createBrowserRouter([
         element: <Dashboard />
       },
       {
+        path: 'accounts',
+        element: <ListAccount />
+      },
+      {
         path: 'categories',
         element: <ListCategory />
+      },
+      {
+        path: 'categories/:id',
+        element: <DetailCategory />
       },
       {
         path: 'products',

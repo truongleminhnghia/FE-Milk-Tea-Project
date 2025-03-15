@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent'
-import TableGenerComponent from '../../../components/tables/TableGenerComponent';
-import { useNavigate } from 'react-router-dom';
-import { Button, DatePicker, Input, Row, Select } from 'antd';
-import { Icon } from '@iconify/react/dist/iconify.js';
+import { Button, DatePicker, Input, Row, Select } from 'antd'
+import TableGenerComponent from '../../../components/tables/TableGenerComponent'
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { getByListSerivce } from '../../../services/user.service'
+import { Link, useNavigate } from 'react-router-dom'
+import StatusAvitceComponent from '../../../components/ui/status/StatusActiveComponent'
+import { formatISODate } from '../../../utils/utils'
 
-const ListRecipesAdmin = () => {
+const ListAccount = () => {
+    const navigate = useNavigate();
+    const [isLoading, setisLoading] = useState(false);
+    const [products, setProducts] = useState([])
     const breadcrumbItems = [
         { title: 'Trang chủ', href: '/admin-page' },
         { title: 'Tất cả công thức' }
     ];
-
-    const navigate = useNavigate();
-    const [isLoading, setisLoading] = useState(false);
-    const [products, setProducts] = useState([])
     const [params, setParams] = useState({
         status: null,
         minPrice: null,
@@ -49,7 +51,7 @@ const ListRecipesAdmin = () => {
         }));
     };
 
-    const fetchAllCatetegories = async () => {
+    const fetchAllAccounts = async (params) => {
         try {
             setisLoading(true);  // Bắt đầu tải dữ liệu
             const param = {
@@ -66,7 +68,8 @@ const ListRecipesAdmin = () => {
             };
             const res = await getByListSerivce(param);
             if (res?.data) {
-                setProducts(res?.data.data);
+                console.log("res", res.data)
+                setProducts(res?.data);
                 setParams((prev) => ({
                     ...prev,
                     paging: {
@@ -83,61 +86,30 @@ const ListRecipesAdmin = () => {
         }
     }
 
-    const handleDateChange = (key, date) => {
-        setParams((prev) => ({
-            ...prev,
-            [key]: date ? dayjs(date).isValid() ? dayjs(date).format("YYYY-MM-DD") : null : null
-        }));
-    };
-
-    const handleParamsChange = (key, value) => {
-        setParams((prev) => ({
-            ...prev,
-            [key]: value || null,
-        }));
-    };
-
-    const handleView = (item) => {
-        console.log("item", item);
-        const id = item.id;
-        console.log("id", id);
-        navigate(`/admin-page/products/${id}`);
-    }
-
     useEffect(() => {
-        fetchAllCatetegories(params);
-    }, [JSON.stringify(params)]);
-
+        fetchAllAccounts(params);
+        }, [JSON.stringify(params)]);
     const stauts = [
         { label: 'Đang hoạt động', value: 'ACTIVE' },
         { label: 'Không hoạt động', value: 'NO_ACTIVE' },
     ];
-
     const type = [
-        { label: 'Nguyên Liệu', value: 'CATEGORY_PRODUCT' },
-        { label: 'Công thức', value: 'CATEGORY_RECIPE' },
+        { label: 'ID', value: 'CATEGORY_PRODUCT' },
+        { label: 'ROLE', value: 'CATEGORY_' },
     ];
-
     const columns = [
-       
+
         {
-            key: 'name',
-            title: 'Công thức',
-            dataIndex: 'recipeTitle',
+            key: 'FullName',
+            title: 'Họ và Tên',
+            dataIndex: 'firstName',
+            render: (_, record) => (
+                <Link className='text-[#2289ff]'>
+                    {record.firstName} {record.lastName}
+                </Link>
+            )
         },
-        {
-            title: 'Action',
-            key: 'operation',
-            fixed: 'right',
-            render: (item) => (
-                <ButtonActionComponent
-                    record={item}
-                    onView={handleView}
-                // onUpdate={handleUpdate}
-                // onDelete={handleDelete}
-                />
-            ),
-        },
+
         {
             key: 'createAt',
             title: 'Ngày Tạo',
@@ -145,37 +117,42 @@ const ListRecipesAdmin = () => {
             render: (date) => formatISODate(date),
         },
         {
-            key: 'expiredDate',
-            title: 'Ngày hết hạn',
-            dataIndex: 'expiredDate',
-            render: (date) => formatISODate(date),
+            key: 'email',
+            title: 'Email',
+            dataIndex: 'email',
         },
         {
-            key: 'supplier',
-            title: 'Nhà cung cấp',
-            dataIndex: 'supplier',
-        },
-        {
-            key: 'type',
-            title: 'Loại nguyên liệu',
-            dataIndex: 'ingredientType',
+            key: 'phone',
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
         },
         {
             title: 'Trạng thái',
-            dataIndex: "ingredientStatus",
-            key: "ingredientStatus",
+            dataIndex: "accountStatus",
+            key: "accountStatus",
             render: (status) => <StatusAvitceComponent status={status} />,
         },
         {
-            key: "priceOrigin",
-            title: 'Giá',
-            dataIndex: 'priceOrigin',
+            key: "imgUrl",
+            title: 'ảnh',
+            dataIndex: 'imgUrl',
         },
         {
-            key: "category",
-            title: 'Loại danh mục',
-            dataIndex: ["category", "categoryName"],
-        }
+            key: "roleName",
+            title: 'Role',
+            dataIndex: "roleName",
+        },
+        {
+            key: 'role',
+            title: 'Vai trò',
+            render: (_, record) => {
+                if (record.customer) return 'Khách hàng';
+                if (record.employee) return 'Nhân viên';
+                return 'Không xác định';
+            }
+        },
+        
+
     ]
     return (
         <div>
@@ -192,23 +169,6 @@ const ListRecipesAdmin = () => {
                         allowClear
                         value={params.search}
                         onChange={handleSearchChange}
-                    />
-                    <DatePicker
-                        placeholder="Ngày bắt đầu"
-                        className="flex !w-[200px] h-full items-center text-[#3C2F2F] py-2 px-3 mr-3"
-                        onChange={(date) => handleDateChange("startDate", date)}
-                        allowClear
-                        format="DD-MM-YYYY"
-                        // Convert string back to dayjs for DatePicker
-                        value={params.startDate ? dayjs(params.startDate, "YYYY-MM-DD") : null}
-                    />
-                    <DatePicker
-                        placeholder='Ngày kết thúc'
-                        className='flex w-[200px] h-full items-center text-[#3C2F2F] py-2 px-3 mr-3'
-                        onChange={(date) => handleDateChange('endDate', date)}
-                        allowClear
-                        format="DD-MM-YYYY"
-                        value={params.endDate ? dayjs(params.endDate, "YYYY-MM-DD") : null}
                     />
                     <Select
                         className='h-full !w-[200px] mr-3'
@@ -241,7 +201,7 @@ const ListRecipesAdmin = () => {
 
             <div className='rounded-lg mt-3'>
                 <TableGenerComponent
-                    data={products.map((item) => ({ ...item, key: item.id }))}
+                    data={products?.map((item) => ({ ...item, key: item.id }))}
                     columns={columns}
                     loading={isLoading}
                     pagination={{ current: params.paging.pageCurrent, pageSize: params.paging.pageSize, total: params.paging.total }}
@@ -252,4 +212,4 @@ const ListRecipesAdmin = () => {
     )
 }
 
-export default ListRecipesAdmin
+export default ListAccount

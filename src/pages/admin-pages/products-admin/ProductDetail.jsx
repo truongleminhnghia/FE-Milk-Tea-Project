@@ -65,6 +65,7 @@ const ProductDetail = () => {
 
     return (
         <>
+            <>
             <BreadcrumbComponent items={breadcrumbItems} />
             <div>
                 <Form
@@ -210,6 +211,7 @@ const ProductDetail = () => {
                     </Col>
                 </Row>
             </div >
+        </>
         </>
     )
 }

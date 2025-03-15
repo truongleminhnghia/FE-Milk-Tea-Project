@@ -4,13 +4,14 @@ import { Button, DatePicker, Dropdown, Form, Input, Modal, Row, Select } from 'a
 import { Icon } from '@iconify/react';
 import { formatISODate, toastConfig } from '../../utils/utils';
 import TableGenerComponent from '../../components/tables/TableGenerComponent';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createCategoryService, deleteByIdservice, getByListSerivce } from '../../services/category.service';
 import StatusAvitceComponent from '../../components/ui/status/StatusActiveComponent';
 import dayjs from "dayjs";
 import ButtonActionComponent from '../../components/ui/actions/ButtonActionComponent';
 
 const ListCategory = () => {
+    const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setisLoading] = useState(false);
     const [form] = Form.useForm();
@@ -119,9 +120,12 @@ const ListCategory = () => {
         { label: 'Công thức', value: 'CATEGORY_RECIPE' },
     ];
 
-    const handleView = (record) => {
-        console.log("Viewing:", record);
-    };
+    const handleView = (item) => {
+        console.log("item", item);
+        const id = item.id;
+        console.log("id", id);
+        navigate(`/admin-page/categories/${id}`);
+      }
 
     const handleUpdate = (record) => {
         console.log("Updating:", record);
