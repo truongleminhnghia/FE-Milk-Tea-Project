@@ -21,6 +21,7 @@ const SwiperSliderComponent = () => {
                     delay: 2500,
                     disableOnInteraction: false,
                 }}
+                slidesPerView={1}
                 navigation={{
                     nextEl: ".next-btn",
                     prevEl: ".prev-btn",
@@ -28,7 +29,7 @@ const SwiperSliderComponent = () => {
                 onSwiper={(swiper) => {
                     swiperRef.current = swiper;
                 }}
-                loop={true}
+                loop={Slider.length > 1}
                 modules={[Pagination, Navigation, Autoplay]}
                 className="relative !w-full h-[60vh]"
             >

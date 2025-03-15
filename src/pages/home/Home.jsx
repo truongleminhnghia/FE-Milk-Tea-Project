@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SwiperSliderComponent from '../../components/SwipperComponents/SwiperSliderComponent'
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,11 +12,62 @@ import { Button, Col, Input, Row, Space } from 'antd';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import CardRecipeComponent from '../../components/ui/carts/CardRecipeComponent';
 import ListPrdocut from "../../stores/data/list-product.json"
+import { getByListSerivce } from '../../services/product.service';
 
 const Home = () => {
-  
+  const [isLoading, setisLoading] = useState(false);
+  const [listIngredient, setListIngredient] = useState([]);
+  const [params, setParams] = useState({
+    status: null,
+    minPrice: null,
+    maxPrice: null,
+    isSale: null,
+    isDescending: null,
+    categoryId: null,
+    search: null,
+    startDate: null,
+    endDate: null,
+    paging: {
+      pageCurrent: 1,
+      pageSize: 10,
+      total: 0,
+    }
+  })
+  const fetchIngredient = async (params) => {
+    try {
+      setisLoading(true);  // Bắt đầu tải dữ liệu
+      const param = {
+        pageCurrent: params.paging.pageCurrent,
+        pageSize: params.paging.pageSize,
+        status: params.status,
+        categoryId: params.categoryId,
+        search: params.search,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        minPrice: params.minPrice,
+        maxPrice: params.maxPrice,
+        isSale: params.isSale
+      };
+      const res = await getByListSerivce(param);
+      if (res?.data) {
+        setListIngredient(res?.data.data);
+        setParams((prev) => ({
+          ...prev,
+          paging: {
+            ...prev.paging,
+            total: res.data.total || 100,
+          }
+        }));
+      }
+    } catch (error) {
+      console.error("Error: ", error.message);
+    } finally {
+      setisLoading(false); // dừng loading sau khi tải xog haowjc gặp lỗi
+    }
+  }
   useEffect(() => {
-  }, []);
+    fetchIngredient(params);
+    }, [JSON.stringify(params)]);
   return (
     <div>
       <SwiperSliderComponent />
@@ -35,11 +86,11 @@ const Home = () => {
               delay: 2500,
               disableOnInteraction: false,
             }}
-            loop={true}
+            loop={listIngredient?.lenght > 1}
             modules={[Pagination, Navigation, Autoplay]}
             className="h-[310px]"
           >
-            {ListPrdocut.map((item, index) => (
+            {listIngredient.slice(0, 10)?.map((item, index) => (
               <SwiperSlide key={item.id}>
                 <CardProductComponent item={item} isNew={true} />
               </SwiperSlide>
@@ -74,11 +125,11 @@ const Home = () => {
                   delay: 2500,
                   disableOnInteraction: false,
                 }}
-                loop={true}
+                loop={listIngredient?.lenght > 1}
                 modules={[Pagination, Navigation, Autoplay]}
                 className="h-[310px]"
               >
-                {ListPrdocut.map((item, index) => (
+                {listIngredient.slice(0, 10)?.map((item, index) => (
                   <SwiperSlide key={item.id}>
                     <CardProductComponent item={item} isNew={true} />
                   </SwiperSlide>
@@ -117,11 +168,11 @@ const Home = () => {
                 delay: 2500,
                 disableOnInteraction: false,
               }}
-              loop={true}
+              loop={listIngredient?.lenght > 1}
               modules={[Pagination, Navigation, Autoplay]}
               className="h-[310px]"
             >
-              {ListPrdocut.map((item, index) => (
+              {listIngredient.slice(0, 10)?.map((item, index) => (
                 <SwiperSlide key={item.id}>
                   <CardProductComponent item={item} isNew={true} />
                 </SwiperSlide>
@@ -139,11 +190,11 @@ const Home = () => {
                 delay: 2500,
                 disableOnInteraction: false,
               }}
-              loop={true}
+              loop={listIngredient?.lenght > 1}
               modules={[Pagination, Navigation, Autoplay]}
               className="h-[310px]"
             >
-              {ListPrdocut.map((item, index) => (
+              {listIngredient.slice(0, 10)?.map((item, index) => (
                 <SwiperSlide key={item.id}>
                   <CardProductComponent item={item} isNew={true} />
                 </SwiperSlide>
@@ -184,7 +235,7 @@ const Home = () => {
                 nextEl: ".next-btn",
                 prevEl: ".prev-btn",
               }}
-              loop={true}
+              loop={listIngredient?.lenght > 1}
               modules={[Pagination, Navigation, Autoplay]}
               className="h-[350px]"
             >

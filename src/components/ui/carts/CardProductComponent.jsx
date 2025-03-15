@@ -5,19 +5,19 @@ import { useNavigate } from 'react-router-dom';
 
 const CardProductComponent = ({ isNew, item }) => {
     const navigate = useNavigate();
-      const gotToDetailIngredient = (item) => {
+    const gotToDetailIngredient = (item) => {
         const id = item.id;
         navigate(`/nguyen-lieu/${id}`);
-      }
+    }
     return (
-        <div className='relative overflow-hidden w-[240px] bg-white rounded-xl drop-shadow-md cursor-pointer' 
-        onClick={() => gotToDetailIngredient(item)}
-        onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
+        <div className='relative overflow-hidden w-[240px] bg-white rounded-xl drop-shadow-md cursor-pointer'
+            onClick={() => gotToDetailIngredient(item)}
+            onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
         >
             <div className="relative group">
                 <img
                     className="w-full h-[220px] object-cover transition-opacity duration-300 group-hover:opacity-80"
-                    src={item?.Images?.[0]?.ImageURL}
+                    src={item?.images?.[0]?.imageUrl}
                     alt={item?.IngredientName}
                 />
                 {isNew && (
@@ -42,10 +42,15 @@ const CardProductComponent = ({ isNew, item }) => {
                 </div>
             </div>
             <div className='px-2 mt-2 pb-2'>
-                <h2 className='text-[18px] text-black font-medium hover:text-[#EF2A39] line-clamp-1'>{item?.IngredientName}</h2>
+                <h2 className='text-[18px] text-black font-medium hover:text-[#EF2A39] line-clamp-1'>{item?.ingredientName}</h2>
                 <p className='flex justify-between mt-2'>
-                    <span className='block text-[16px] text-[#F46C02] font-medium'>{item?.PricePromotion}<u className='ml-[2px]'>đ</u></span>
-                    <span className='block text-[16px] font-medium text-[#7d7d7d] line-through'>{item?.PriceOriginal}<u className='ml-[2px]'>đ</u></span>
+                    <span className='block text-[16px] text-[#F46C02] font-medium'>
+                        {item?.pricePromotion && item?.pricePromotion !== 0 ? item.pricePromotion : item?.priceOrigin}
+                        <u className='ml-[2px]'>đ</u>
+                    </span>
+                    {item?.IsSale && (
+                        <span className='block text-[16px] font-medium text-[#7d7d7d] line-through'>{item?.priceOrigin}<u className='ml-[2px]'>đ</u></span>
+                    )}
                 </p>
             </div>
         </div>

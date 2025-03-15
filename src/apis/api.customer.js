@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const baseURL = import.meta.env.VITE_BECKEND_URL;
-const baseURL = "https://be-milk-tea-project.onrender.com/api/v1/"
-// const baseURL = "https://localhost:7190/api/v1/"
+// const baseURL = "https://be-milk-tea-project.onrender.com/api/v1/"
+ const baseURL = "https://localhost:7190/api/v1/"
 const config = {
   baseURL: baseURL,
   timeout: 3000000,
