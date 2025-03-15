@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import SwiperSliderComponent from '../../components/SwipperComponents/SwiperSliderComponent'
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,7 +10,6 @@ import 'swiper/css/navigation';
 import { Button, Col, Input, Row, Space } from 'antd';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import CardRecipeComponent from '../../components/ui/carts/CardRecipeComponent';
-import ListPrdocut from "../../stores/data/list-product.json"
 import { getByListSerivce } from '../../services/product.service';
 
 const Home = () => {

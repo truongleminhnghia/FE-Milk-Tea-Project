@@ -9,7 +9,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs, Pagination, Autoplay } from 'swiper/modules';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import ListPrdocut from "../../stores/data/list-product.json"
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 import { useParams } from 'react-router-dom';
 import { getByIdService, getByListSerivce } from '../../services/product.service';

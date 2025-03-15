@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Ingredients from '../../stores/data/list-product.json'
 import CardProductComponent from '../../components/ui/carts/CardProductComponent'
 import { Button, Col, Input, Menu, Pagination, Row, Select } from 'antd'
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'

@@ -3,8 +3,11 @@ import { Button, Form, Input, Radio, DatePicker, message } from 'antd';
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent';
 import AccountSidebar from '../../components/navigations/AccountSidebar';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { getById } from '../../apis/user.api';
 
-const ViewAccount = ({ accountId }) => {
+const ViewAccount = () => {
+    const { id } = useParams();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [initialValues, setInitialValues] = useState({});
@@ -15,22 +18,24 @@ const ViewAccount = ({ accountId }) => {
         { title: 'Thông tin cá nhân' }
     ];
 
-    useEffect(() => {
-        const fetchAccountDetails = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get(`/api/accounts/${accountId}`);
-                setInitialValues(response.data);
-                form.setFieldsValue(response.data);
-            } catch (error) {
-                message.error('Failed to load account details');
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchAccountDetails();
-    }, [accountId, form]);
+    const fetchAccountDetails = async (id) => {
+        setLoading(true);
+        try {
+            const response = await getById(id);
+            console.log("data", response.data)
+            setInitialValues(response.data);
+            form.setFieldsValue(response.data);
+        } catch (error) {
+            message.error('Failed to load account details');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAccountDetails(id);
+    }, [id, form]);
 
     const handleFormSubmit = async () => {
         setLoading(true);

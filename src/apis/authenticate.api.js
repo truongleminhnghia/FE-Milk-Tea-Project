@@ -1,5 +1,4 @@
 
-import { message } from "antd";
 import ApiCustomer from "../apis/api.customer"
 
 export const LoginLocalApi = async (model) => {
