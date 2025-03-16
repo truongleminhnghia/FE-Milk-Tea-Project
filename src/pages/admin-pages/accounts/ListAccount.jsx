@@ -69,7 +69,7 @@ const ListAccount = () => {
             const res = await getByListSerivce(param);
             if (res?.data) {
                 console.log("res", res.data)
-                setProducts(res?.data);
+                setProducts(res?.data?.data);
                 setParams((prev) => ({
                     ...prev,
                     paging: {
