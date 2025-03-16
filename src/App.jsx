@@ -25,6 +25,7 @@ import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
 import ListRecipesAdmin from "./pages/admin-pages/recipes/ListRecipesAdmin";
 import DetailCategory from "./pages/categories/DetailCategory";
 import ListAccount from "./pages/admin-pages/accounts/ListAccount";
+import NewAccount from "./pages/admin-pages/accounts/NewAccount";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: 'accounts',
         element: <ListAccount />
+      },
+      {
+        path: 'create-account',
+        element: <NewAccount/>
       },
       {
         path: 'categories',
