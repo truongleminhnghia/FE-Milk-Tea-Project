@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ImageUploader from '../../../components/uploads/ImageUploader ';
 
 const NewAccount = () => {
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
   const [categories, setCategories] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -110,7 +110,7 @@ const NewAccount = () => {
     setLoading(false);
   };
   return (
-    
+
     <div>
       <BreadcrumbComponent items={breadcrumbItems} />
 
@@ -125,31 +125,19 @@ const NewAccount = () => {
         >Tạo mới tài khoản</h1>
         <Row>
           <Col span={12} className="px-2">
-            <Form.Item label="Tên nguyên liệu" name="ingredientName" rules={[{ required: true, message: "Nhập tên nguyên liệu!" }]}>
+          
+            <Form.Item label="Họ" name="firstName" rules={[{ required: true, message: "Nhập họ của bạn!" }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Tên" name="lastName" rules={[{ required: true, message: "Nhập tên của bạn!" }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Nhà sản xuất" name="supplier" rules={[{ required: true, message: "Nhập nhà sản xuất!" }]}>
               <Input />
             </Form.Item>
 
-            <Row>
-              
-              <Col span={12} >
-                <Form.Item
-                  label="Loại nguyên liệu"
-                  name="ingredientType"
-                  colon={false}
-                >
-                  <Select
-                    className='h-full !w-[200px] mr-3'
-                    placeholder="Loại nguyên liệu"
-                    options={ingredientTypes}
-                    allowClear
-                  />
-                </Form.Item>
-
-              </Col>
-            </Row>
-
-            <Form.Item label="Ngày hết hạn" name="expiredDate" rules={[{ required: true, message: "Chọn ngày hết hạn!" }]}>
-              <DatePicker style={{ width: "100%" }} />
+            <Form.Item label="Nhà sản xuất" name="supplier" rules={[{ required: true, message: "Nhập nhà sản xuất!" }]}>
+              <Input />
             </Form.Item>
 
             <Row>
@@ -163,17 +151,9 @@ const NewAccount = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12} >
-                <Form.Item label="Khuyến mãi" name="isSale" valuePropName="checked">
-                  <Switch />
-                </Form.Item>
-              </Col>
             </Row>
 
-            <Form.Item label="Nhà sản xuất" name="supplier" rules={[{ required: true, message: "Nhập nhà sản xuất!" }]}>
-              <Input />
-            </Form.Item>
-
+           
 
             <Form.Item label="Giá nguyên" name="priceOrigin" rules={[{ required: true, message: "Nhập giá gốc!" }]}>
               <InputNumber style={{ width: "100%" }} min={0} />
