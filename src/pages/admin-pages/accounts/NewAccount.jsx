@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react'
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
 import { Button, Col, DatePicker, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import ImageUploader from '../../../components/uploads/ImageUploader ';
 
 const NewAccount = () => {
   const [form] = Form.useForm();
   const [categories, setCategories] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/admin-page' },
@@ -40,72 +38,33 @@ const NewAccount = () => {
     fetchCateByField();
   }, []);
 
-  const status = [
-    { label: 'Đang hoạt động', value: 'ACTIVE' },
-    { label: 'Không hoạt động', value: 'NO_ACTIVE' },
-  ];
-
-  const quantityTypes = [
-    { label: 'Thùng', value: 'BIG' },
-    { label: 'bịch', value: 'BAG' },
-  ]
-  const units = [
-    { label: 'gam', value: 'Gam' },
-    { label: 'kg', value: 'Kg' }
-  ]
-  const ingredientTypes = [
-    { label: 'Bột', value: 'bot' },
-    { label: 'Trà', value: 'tra' },
-  ]
 
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
       // upload all
       const uploadPromises = fileList.map((file) => uploadFile(file.originFileObj));
-      const uploadedUrls = await Promise.all(uploadPromises);
       // lọc thất bại
-      const imageUrls = uploadedUrls.filter((url) => url !== null);
-
-      if (imageUrls.length === 0) {
-        toastConfig("error", "Tải ảnh lên thất bại!")
-        setLoading(false);
-        return;
-      }
-      const imageRequest = imageUrls.map(url => ({ imageUrl: url }));
-      const ingredientQuantities = values.ingredientQuantities.map(iq => ({
-        quantity: iq.quantity,
-        productType: iq.productType
-      }));
-      const ingredientRequest = {
-        supplier: values.supplier,
-        ingredientName: values.ingredientName,
-        description: values.description,
-        foodSafetyCertification: values.foodSafetyCertification,
-        expiredDate: values.expiredDate,
+      const createaccountRequest = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        password: values.password,
+        roleName: values.roleName,
         ingredientStatus: values.ingredientStatus,
-        weightPerBag: values.weightPerBag,
-        quantityPerCarton: values.quantityPerCarton,
-        ingredientType: values.ingredientType,
-        unit: values.unit,
-        priceOrigin: values.priceOrigin,
-        categoryId: values.categoryId,
-        isSale: values.isSale,
-        imageRequest: imageRequest,
-        ingredientQuantities: ingredientQuantities,
       }
-      const res = await create(ingredientRequest);
+      const res = await create(createaccountRequest);
       if (res.success) {
-        toastConfig("success", "Tạo sản phẩm thành công!");
+        toastConfig("success", "Tạo tài khoản thành công!");
         console.log(res.data);
         form.resetFields();
         setFileList([])
-        navigate('/admin-page/products')
+        navigate('/admin-page/NewAccount')
       }
 
     } catch (error) {
       console.error("Create product failed:", error);
-      message.error("Lỗi khi tạo sản phẩm!");
+      message.error("Lỗi khi tạo tài khoản!");
     }
     setLoading(false);
   };
@@ -142,19 +101,6 @@ const NewAccount = () => {
             <Form.Item label="Quyền truy cập" name="roleName" rules={[{ required: true, message: "Nhập quyền truy cập!" }]}>
               <Input />
             </Form.Item>
-
-            <Row>
-              <Col span={12}>
-                <Form.Item label="Trạng thái" name="ingredientStatus">
-                  <Select
-                    className='h-full !w-[200px] mr-3'
-                    placeholder="Trạng thái"
-                    options={status}
-                    allowClear
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
           </Col>
         </Row>
         <Row>
