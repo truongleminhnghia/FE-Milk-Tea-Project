@@ -125,18 +125,21 @@ const NewAccount = () => {
         >Tạo mới tài khoản</h1>
         <Row>
           <Col span={12} className="px-2">
-          
+
             <Form.Item label="Họ" name="firstName" rules={[{ required: true, message: "Nhập họ của bạn!" }]}>
               <Input />
             </Form.Item>
             <Form.Item label="Tên" name="lastName" rules={[{ required: true, message: "Nhập tên của bạn!" }]}>
               <Input />
             </Form.Item>
-            <Form.Item label="Nhà sản xuất" name="supplier" rules={[{ required: true, message: "Nhập nhà sản xuất!" }]}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, message: "Nhập email của bạn!" }]}>
               <Input />
             </Form.Item>
 
-            <Form.Item label="Nhà sản xuất" name="supplier" rules={[{ required: true, message: "Nhập nhà sản xuất!" }]}>
+            <Form.Item label="Mật khẩu" name="password" rules={[{ required: true, message: "Nhập mật khẩu của bạn!" }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Quyền truy cập" name="roleName" rules={[{ required: true, message: "Nhập quyền truy cập!" }]}>
               <Input />
             </Form.Item>
 
@@ -152,27 +155,12 @@ const NewAccount = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-           
-
-            <Form.Item label="Giá nguyên" name="priceOrigin" rules={[{ required: true, message: "Nhập giá gốc!" }]}>
-              <InputNumber style={{ width: "100%" }} min={0} />
-            </Form.Item>
-          </Col>
-          <Col span={12} className="px-2">
-            <Form.Item label="Chứng nhận ATTP" name="foodSafetyCertification">
-              <Input />
-            </Form.Item>
-
-            <Form.Item label="Mô tả" name="description">
-              <Input.TextArea rows={4} />
-            </Form.Item>
           </Col>
         </Row>
         <Row>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Tạo sản phẩm
+              Tạo tài khoản
             </Button>
           </Form.Item>
         </Row>
