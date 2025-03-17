@@ -1,35 +1,54 @@
 import { Button, Checkbox, Col, Input, Row, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent';
 import ingredientProducts from '../../stores/data/in-products.json';
 import { Icon } from '@iconify/react';
-
+import { useParams } from 'react-router-dom';
+import { getByIdService } from '../../services/cart.service';
 
 const ListCart = () => {
+    const { id } = useParams();
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const breadcrumbItems = [
-        { title: 'Trang chủ', href: '/admin-page' },
+        { title: 'Trang chủ', href: '/' },
         { title: 'Danh mục sản phẩm' }
     ];
 
-    // Lưu danh sách sản phẩm đã chọn
+    const fetchDetail = async (id) => {
+        try {
+            setIsLoading(true);
+            const res = await getByIdService(id);
+            if (res?.success || res?.data) {
+                console.log("list Cart", res.data);
+                setData(res.data);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.log("error", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDetail(id);
+    }, [id]);
+
     const [selectedProducts, setSelectedProducts] = useState([]);
 
-    // Cập nhật danh sách sản phẩm đã chọn khi click vào checkbox
     const handleCheckboxChange = (product) => {
         setSelectedProducts((prevSelected) => {
             const updatedList = [...prevSelected];
             const index = updatedList.findIndex((p) => p.id === product.id);
 
             if (index !== -1) {
-                updatedList.splice(index, 1); // Bỏ chọn nếu đã có trong danh sách
+                updatedList.splice(index, 1);
             } else {
-                updatedList.push({ ...product, quantity: product.quantity || 1 }); // Thêm vào danh sách với số lượng mặc định là 1
+                updatedList.push({ ...product, quantity: product.quantity || 1 });
             }
             return updatedList;
         });
     };
 
-    // Giảm số lượng sản phẩm
     const handleMinus = (id) => {
         setSelectedProducts((prev) =>
             prev.map((p) =>
@@ -38,7 +57,6 @@ const ListCart = () => {
         );
     };
 
-    // Tăng số lượng sản phẩm
     const handlePlus = (id) => {
         setSelectedProducts((prev) =>
             prev.map((p) =>
@@ -47,7 +65,6 @@ const ListCart = () => {
         );
     };
 
-    // Khi nhấn nút "Mua hàng"
     const handleBuy = () => {
         console.log("Sản phẩm đã chọn:", selectedProducts);
     };
@@ -60,13 +77,13 @@ const ListCart = () => {
                     <h1 className='text-2xl font-medium text-black'>Giỏ hàng</h1>
                 </Col>
             </Row>
-            {ingredientProducts.map((product) => {
+            {ingredientProducts.map((product, index) => {
                 const pricePerUnit = product?.ingredient?.pricePromotion ?? product?.ingredient?.priceOrigin;
                 const totalPrice = pricePerUnit * (product.quantity || 1);
                 const isChecked = selectedProducts.some((p) => p.id === product.id);
 
                 return (
-                    <Row key={product.id}>
+                    <Row key={product.id || `product-${index}`}>
                         <Col span={24} className='flex items-center px-4 py-3 bg-white mt-4 rounded-lg'>
                             <Checkbox
                                 checked={isChecked}

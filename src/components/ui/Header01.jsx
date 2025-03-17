@@ -2,16 +2,25 @@ import React, { useState } from "react";
 import Logo from "../../assets/images/logo/logo.png";
 import { Button, Col, Input, Row, Space } from "antd";
 import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../redux/features/authSlice";
 
 const Header01 = () => {
-    const [searchValue, setSearchValue] = useState("")
+    const [searchValue, setSearchValue] = useState("");
+    const currentUser = useSelector(selectUser);
+    const navigate = useNavigate();
 
     const onSearch = () => {
-        console.log("Searching for:", searchValue);
+        console.log("user for:", currentUser);
     }
+
+    const goToCart = () => {
+        navigate(`/customer/gio-hang/${currentUser.id}`)
+    }
+
     return (
-        <header className="py-4 border-b bg-white">
+        <header className="py-2 border-b bg-white">
             <Row className="container mx-auto flex flex-wrap items-center">
                 <Col
                     span={24}
@@ -64,7 +73,10 @@ const Header01 = () => {
                             <span className="block text-[#29aae1]">
                                 <Icon icon="fluent:cart-24-filled" width="30" height="30" />
                             </span>
-                            <span className="ml-2 text-[#094067] text-base font-medium">
+                            <span className="ml-2 text-[#094067] text-base font-medium"
+                                onClick={goToCart}
+                                onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
+                            >
                                 Giỏ hàng
                             </span>
                             <span className="block bg-[#29aae1] px-[6px] py-[4px] rounded ml-2 text-white text-xs">

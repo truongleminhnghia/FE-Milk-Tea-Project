@@ -65,10 +65,12 @@ const Home = () => {
   }
   useEffect(() => {
     fetchIngredient(params);
-    }, [JSON.stringify(params)]);
+  }, [JSON.stringify(params)]);
   return (
     <div>
-      <SwiperSliderComponent />
+      <div className='relative'>
+        <SwiperSliderComponent />
+      </div>
       <section className='content'>
         <div className='container'>
           <h1

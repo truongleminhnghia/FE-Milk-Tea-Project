@@ -11,8 +11,8 @@
         "WeightPerBag": 0.1,
         "QuantityPerCarton": 10,
         "Unit": "gam",
-        "PriceOriginal": 100000,
-        "PricePromotion": 90000,
+        "PriceOrigin": 100000,
+        "PricePromotion": 0,
         "Category": {
             "Id": 1,
             "CategoryName": "Bột pha trà sữa",
@@ -93,7 +93,7 @@
         "WeightPerBag": 0.2,
         "QuantityPerCarton": 20,
         "Unit": "gam",
-        "PriceOriginal": 150000,
+        "PriceOrigin": 150000,
         "PricePromotion": 135000,
         "Category": {
             "Id": 2,
@@ -149,7 +149,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 12,
         "Unit": "kg",
-        "PriceOriginal": 80000,
+        "PriceOrigin": 80000,
         "PricePromotion": 72000,
         "Category": {
             "Id": 3,
@@ -205,7 +205,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 60000,
+        "PriceOrigin": 60000,
         "PricePromotion": 54000,
         "Category": {
             "Id": 4,
@@ -261,7 +261,7 @@
         "WeightPerBag": 1.0,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 50000,
+        "PriceOrigin": 50000,
         "PricePromotion": 45000,
         "Category": {
             "Id": 5,
@@ -317,7 +317,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 120000,
+        "PriceOrigin": 120000,
         "PricePromotion": 108000,
         "Category": {
             "Id": 6,
@@ -373,7 +373,7 @@
         "WeightPerBag": 0.2,
         "QuantityPerCarton": 20,
         "Unit": "kg",
-        "PriceOriginal": 200000,
+        "PriceOrigin": 200000,
         "PricePromotion": 180000,
         "Category": {
             "Id": 7,
@@ -429,7 +429,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 100000,
+        "PriceOrigin": 100000,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -485,7 +485,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 100000,
+        "PriceOrigin": 100000,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -541,7 +541,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 100000,
+        "PriceOrigin": 100000,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -597,7 +597,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 100000,
+        "PriceOrigin": 100000,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -653,7 +653,7 @@
         "WeightPerBag": 0.5,
         "QuantityPerCarton": 10,
         "Unit": "kg",
-        "PriceOriginal": 100000,
+        "PriceOrigin": 100000,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
