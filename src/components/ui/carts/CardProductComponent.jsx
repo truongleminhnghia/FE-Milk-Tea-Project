@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { Button } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrencyVND } from '../../../utils/utils';
 
 const CardProductComponent = ({ isNew, item }) => {
     const navigate = useNavigate();
@@ -10,14 +11,14 @@ const CardProductComponent = ({ isNew, item }) => {
         navigate(`/nguyen-lieu/${id}`);
     }
     return (
-        <div className='relative overflow-hidden w-[240px] bg-white rounded-xl drop-shadow-md cursor-pointer'
+        <div className='relative h-auto w-auto overflow-hidden bg-white rounded-xl drop-shadow-md cursor-pointer'
             onClick={() => gotToDetailIngredient(item)}
             onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
         >
             <div className="relative group">
                 <img
                     className="w-full h-[220px] object-cover transition-opacity duration-300 group-hover:opacity-80"
-                    src={item?.images?.[0]?.imageUrl}
+                    src={item?.Images?.[0]?.ImageURL}
                     alt={item?.IngredientName}
                 />
                 {isNew && (
@@ -42,14 +43,22 @@ const CardProductComponent = ({ isNew, item }) => {
                 </div>
             </div>
             <div className='px-2 mt-2 pb-2'>
-                <h2 className='text-[18px] text-black font-medium hover:text-[#EF2A39] line-clamp-1'>{item?.ingredientName}</h2>
+                <h2 className='text-[18px] text-black font-medium hover:text-[#EF2A39] line-clamp-1'>{item?.IngredientName}</h2>
                 <p className='flex justify-between mt-2'>
-                    <span className='block text-[16px] text-[#F46C02] font-medium'>
-                        {item?.pricePromotion && item?.pricePromotion !== 0 ? item.pricePromotion : item?.priceOrigin}
-                        <u className='ml-[2px]'>đ</u>
-                    </span>
+                    {item?.PricePromotion !== 0 && (
+                        <span className='block text-[16px] text-[#F46C02] font-medium'>
+                            {formatCurrencyVND(item?.PricePromotion)}
+                        </span>
+                    )}
+
+                    {item?.PricePromotion === 0 && (
+                        <span className='block text-[16px] text-[#7d7d7d] font-medium'>
+                            {formatCurrencyVND(item?.PriceOrigin)}
+                        </span>
+                    )}
+                    
                     {item?.IsSale && (
-                        <span className='block text-[16px] font-medium text-[#7d7d7d] line-through'>{item?.priceOrigin}<u className='ml-[2px]'>đ</u></span>
+                        <span className='block text-[16px] font-medium text-[#7d7d7d] line-through'>{formatCurrencyVND(item?.PriceOrigin)}</span>
                     )}
                 </p>
             </div>

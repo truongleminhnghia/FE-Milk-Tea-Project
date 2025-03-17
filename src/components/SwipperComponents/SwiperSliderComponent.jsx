@@ -45,7 +45,7 @@ const SwiperSliderComponent = () => {
                 <div className="custom-pagination text-center absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
                 </div>
             </Swiper>
-            <div className="absolute z-10 top-[45%] w-full transform -translate-y-1/2 flex justify-between px-4">
+            <div className="absolute z-10 top-[50%] w-full transform -translate-y-1/2 flex justify-between px-4">
                 <Button className="prev-btn bg-white text-black text-[18px] px-3 py-2 rounded-full">
                     ❮
                 </Button>

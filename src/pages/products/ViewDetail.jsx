@@ -10,11 +10,13 @@ import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs, Pagination, Autoplay } from 'swiper/modules';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getByIdService, getByListSerivce } from '../../services/product.service';
+import { createServiceOrder } from '../../services/ingredien-product.service';
 
 const ViewDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
     const [listIngredient, setListIngredient] = useState([])
     const [data, setData] = useState({});
@@ -82,21 +84,42 @@ const ViewDetail = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const onSubmit = (values) => {
-        console.log('Mua hàng:', { ...values, productType: selectedProductType });
+    const onSubmit = async (values) => {
+        try {
+            // console.log('Mua hàng:', { ...values, productType: selectedProductType });
+            // const price = data?.pricePromotion ?? data?.priceOrigin;
+            // const model = {
+            //     quantity: values.quantity,
+            //     productType: values.productType,
+            //     ingredientId: id,
+            //     totalPrice: selectedProductType === "Thung"
+            //         ? price * values.quantity * data.quantityPerCarton
+            //         : price * values.quantity
+            // }
+            // console.log("model", model)
+            // const res = await createServiceOrder(model);
+            // if (res?.success || res?.data) {
+            //     console.log("data ingre_p", res.data);
+            //     navigate(`/check-out/${res.data.id}`);
+            // }
+            navigate(`/check-out/${1}`);
+        } catch (error) {
+            console.log("error", error)
+        }
     };
 
     const addToCart = () => {
-        const values = form.getFieldsValue();
-        if (selectedProductType === '') {
-            form.setFields([{ name: 'productType', errors: ['Vui lòng chọn loại sản phẩm'] }]);
-            return;
-        }
-        if (quantity === 0) {
-            form.setFields([{ name: 'quantity', errors: ['Vui lòng chọn số lượng'] }]);
-            return
-        }
-        console.log('Thêm vào giỏ hàng:', { ...values, productType: selectedProductType });
+        // const values = form.getFieldsValue();
+        // if (selectedProductType === '') {
+        //     form.setFields([{ name: 'productType', errors: ['Vui lòng chọn loại sản phẩm'] }]);
+        //     return;
+        // }
+        // if (quantity === 0) {
+        //     form.setFields([{ name: 'quantity', errors: ['Vui lòng chọn số lượng'] }]);
+        //     return
+        // }
+        // console.log('Thêm vào giỏ hàng:', { ...values, productType: selectedProductType });
+        navigate(`/customer/gio-hang/${1}`)
     };
     return (
         <>
@@ -257,8 +280,9 @@ const ViewDetail = () => {
                                         Thêm vào giỏ hàng
                                     </Button>
                                     <Button
-                                        htmlType='submit'
-                                        className='!border-none bg-[#29aae1] w-full text-[#fff] hover:!bg-[#29aae1] hover:!text-white hover:border-none text-lg font-medium'
+                                        // htmlType='submit'
+                                        onClick={onSubmit}
+                                        className='!border-none bg-[#29aae1] w-full text-[#fff] hover:!bg-white hover:!border-[#29aae1] hover:!border-solid hover:!text-[#29aae1] text-lg font-medium'
                                         size='large'
                                     >
                                         Mua hàng

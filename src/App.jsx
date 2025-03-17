@@ -23,6 +23,7 @@ import ViewDetail from "./pages/products/ViewDetail";
 import ListCart from "./pages/carts/ListCart";
 import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
 import ListRecipesAdmin from "./pages/admin-pages/recipes/ListRecipesAdmin";
+import Checkout from "./pages/orders/Checkout";
 
 const router = createBrowserRouter([
   {
@@ -54,20 +55,26 @@ const router = createBrowserRouter([
         element: <ViewDetail />
       },
       {
-        path: '/gio-hang',
-        element: <ListCart />
+        path: '/check-out/:id',
+        element: <Checkout />
       }
     ]
   },
   {
     path: '/customer',
     element: (
-      <ProtectedRoute element={<Layout01 />} allowedRoles={["ROLE_CUSTOMER"]} />
+      // <ProtectedRoute element={<Layout01 />} allowedRoles={[]} />
+      <Layout01 />
     ),
     children: [
       {
         path: 'profile/:id',
         element: <ViewAccount />
+      },
+
+      {
+        path: 'gio-hang/:id',
+        element: <ListCart />
       }
     ]
   },
