@@ -10,6 +10,7 @@ import products from '../../stores/data/list-product.json'
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
   const [listIngredient, setListIngredient] = useState([]);
+  const [receivedMessage, setReceivedMessage] = useState("");
   const [params, setParams] = useState({
     categoryId: null,
     supplier: null,
@@ -26,48 +27,101 @@ const ListProduct = () => {
     }
   });
 
-  useEffect(() => {
-    setListIngredient(products);
-  }, [products])
+  // useEffect(() => {
+  //   setListIngredient(products);
+  // }, [products])
 
-  // const fetchIngredient = async (params) => {
-  //   try {
-  //     setisLoading(true);
-  //     const param = {
-  //       pageCurrent: params.paging.pageCurrent,
-  //       pageSize: params.paging.pageSize,
-  //       status: params.status,
-  //       categoryId: params.categoryId,
-  //       search: params.search,
-  //       startDate: params.startDate,
-  //       endDate: params.endDate,
-  //       minPrice: params.minPrice,
-  //       maxPrice: params.maxPrice,
-  //       isSale: params.isSale,
-  //       supplier: params.supplier,
-  //       rating: params.rating,
-  //     };
-  //     const res = await getByListSerivce(param);
-  //     if (res?.data) {
-  //       setListIngredient(res?.data.data);
-  //       setParams((prev) => ({
-  //         ...prev,
-  //         paging: {
-  //           ...prev.paging,
-  //           total: res.data.total || 100,
-  //         }
-  //       }));
+  const fetchIngredient = async (params) => {
+    try {
+      setisLoading(true);
+      const param = {
+        pageCurrent: params.paging.pageCurrent,
+        pageSize: params.paging.pageSize,
+        status: params.status,
+        categoryId: params.categoryId,
+        search: params.search,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        minPrice: params.minPrice,
+        maxPrice: params.maxPrice,
+        isSale: params.isSale,
+        supplier: params.supplier,
+        rating: params.rating,
+      };
+      const res = await getByListSerivce(param);
+      if (res?.data) {
+        setListIngredient(res?.data.data);
+        setParams((prev) => ({
+          ...prev,
+          paging: {
+            ...prev.paging,
+            total: res.data.total || 100,
+          }
+        }));
+      }
+    } catch (error) {
+      console.error("Error: ", error.message);
+    } finally {
+      setisLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchIngredient(params);
+  }, [JSON.stringify(params)]);
+
+  // const fetchApiSocket = async (params) => {
+  //   setisLoading(true);
+  //   const param = {
+  //     pageCurrent: params.paging.pageCurrent,
+  //     pageSize: params.paging.pageSize,
+  //     status: params.status,
+  //     categoryId: params.categoryId,
+  //     search: params.search,
+  //     startDate: params.startDate,
+  //     endDate: params.endDate,
+  //     minPrice: params.minPrice,
+  //     maxPrice: params.maxPrice,
+  //     isSale: params.isSale,
+  //     supplier: params.supplier,
+  //     rating: params.rating,
+  //   };
+  //   const pageCurrent = 1;
+  //   const pageSize = 10;
+  //   const queryString = new URLSearchParams(param).toString();
+  //   const socket = new WebSocket('wss://localhost:7190/api/v1/ws/ingredients?pageCurrent=1&pageSize=10');
+  //   // wss://localhost:7190/api/ws?categoryStatus=ACTIVE&categoryType=CATEGORY_PRODUCT&page=1?
+  //   socket.onopen = () => {
+  //     console.log("WebSocket Connected!");
+  //     setIsLoading(true);
+  //   };
+  //   socket.onmessage = (event) => {
+  //     console.log("Received from server:", event.data);
+  //     try {
+  //       const data = JSON.parse(event.data);
+  //       setReceivedMessage(data);
+  //     } catch (error) {
+  //       console.error("Lỗi khi parse JSON:", error);
   //     }
-  //   } catch (error) {
-  //     console.error("Error: ", error.message);
-  //   } finally {
-  //     setisLoading(false);
+  //     setIsLoading(false);
+  //     socket.onerror = (error) => {
+  //       console.error("WebSocket Error:", error);
+  //       setIsLoading(false);
+  //     };
+
+  //     socket.onclose = () => {
+  //       console.log("WebSocket Disconnected!");
+  //     };
+  //     return () => {
+  //       socket.close();
+  //       console.log("WebSocket Cleanup!");
+  //     };
   //   }
-  // };
+  // }
 
   // useEffect(() => {
-  //   fetchIngredient(params);
-  // }, [JSON.stringify(params)]);
+  //   fetchApiSocket(params);
+  // }, [])
 
   const handleCategoryChange = (id) => {
     console.log("cate chose", id);
@@ -256,7 +310,7 @@ const ListProduct = () => {
         </Col>
       </Row>
     </div>
-  );
+  )
 }
 
 export default ListProduct;

@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/images/logo/logo.png";
 import { Button, Col, Input, Row, Space } from "antd";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/features/authSlice";
+import { getByIdService } from "../../services/cart.service";
 
 const Header01 = () => {
     const [searchValue, setSearchValue] = useState("");
+    const [cartId, setCartId] = useState('');
+    const [totalCart, setTotalCart] = useState(0);
     const currentUser = useSelector(selectUser);
     const navigate = useNavigate();
 
@@ -15,9 +18,27 @@ const Header01 = () => {
         console.log("user for:", currentUser);
     }
 
-    const goToCart = () => {
-        navigate(`/customer/gio-hang/${currentUser.id}`)
+    const fetchCart = async (currentUser) => {
+        try {
+            const res = await getByIdService(currentUser.id);
+            if (res?.data || res.code === 200) {
+                setTotalCart(res.data.totalCount)
+                setCartId(res.data.id)
+                console.log("res", res.data);
+            }
+        } catch (error) {
+            console.error("error", error);
+        }
     }
+
+    useEffect(() => {
+        fetchCart(currentUser)
+    }, [currentUser])
+
+
+    const goToCart = () => {
+        navigate('/customer/gio-hang', { state: { cartId } });
+    };
 
     return (
         <header className="py-2 border-b bg-white">
@@ -69,18 +90,19 @@ const Header01 = () => {
                     </div>
 
                     <div className="ml-4">
-                        <div className="flex items-center border-2 border-gray-200 p-2 rounded-lg">
+                        <div className="flex items-center border-2 border-gray-200 p-2 rounded-lg"
+                            onClick={goToCart}
+                            onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
+                        >
                             <span className="block text-[#29aae1]">
                                 <Icon icon="fluent:cart-24-filled" width="30" height="30" />
                             </span>
                             <span className="ml-2 text-[#094067] text-base font-medium"
-                                onClick={goToCart}
-                                onKeyDown={(event) => handleKeyDown(event, onEnterPress)}
                             >
                                 Giỏ hàng
                             </span>
                             <span className="block bg-[#29aae1] px-[6px] py-[4px] rounded ml-2 text-white text-xs">
-                                0
+                                {totalCart}
                             </span>
                         </div>
                     </div>

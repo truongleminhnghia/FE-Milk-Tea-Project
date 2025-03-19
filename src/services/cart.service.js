@@ -1,4 +1,4 @@
-import { create, getByAccount} from "../apis/cart.api";
+import { addItem, create, getByAccount, getListItem} from "../apis/cart.api";
 
 export const createCategoryService = async (reqBody) => {
     try {
@@ -16,12 +16,37 @@ export const createCategoryService = async (reqBody) => {
 export const getByIdService = async (id) => {
     try {
         const res = await getByAccount(id);
-        if (res.success && res.data) {
+        if (res?.success || res?.data || res.code === 200) {
             return res;
         }
         return res.message;
     } catch (error) {
         console.log("Error", error);
+    }
+}
+
+export const getListItemByCart = async (id) => {
+    try {
+        const res = await getListItem(id);
+        if (res?.success || res?.data || res.code === 200) {
+            return res;
+        }
+        return res.message;
+    } catch (error) {
+        console.log("Error", error);
+    }
+}
+
+export const createItem = async (reqBody) => {
+    try {
+        const res = await addItem(reqBody);
+        if (res) {
+            return res;
+        }
+        return res?.message;
+    } catch (error) {
+        console.log("Error: ", error);
+        return error.message;
     }
 }
 

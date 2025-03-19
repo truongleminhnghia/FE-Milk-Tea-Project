@@ -13,8 +13,13 @@ import CardProductComponent from '../../components/ui/carts/CardProductComponent
 import { useNavigate, useParams } from 'react-router-dom';
 import { getByIdService, getByListSerivce } from '../../services/product.service';
 import { createServiceOrder } from '../../services/ingredien-product.service';
+import { formatCurrencyVND, toastConfig } from '../../utils/utils';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/authSlice';
+import { createItem } from '../../services/cart.service';
 
 const ViewDetail = () => {
+    const currentUser = useSelector(selectUser);
     const { id } = useParams();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
@@ -108,18 +113,40 @@ const ViewDetail = () => {
         }
     };
 
-    const addToCart = () => {
-        // const values = form.getFieldsValue();
-        // if (selectedProductType === '') {
-        //     form.setFields([{ name: 'productType', errors: ['Vui lòng chọn loại sản phẩm'] }]);
-        //     return;
-        // }
-        // if (quantity === 0) {
-        //     form.setFields([{ name: 'quantity', errors: ['Vui lòng chọn số lượng'] }]);
-        //     return
-        // }
-        // console.log('Thêm vào giỏ hàng:', { ...values, productType: selectedProductType });
-        navigate(`/customer/gio-hang/${1}`)
+    const addToCart = async () => {
+        try {
+            if (currentUser == null) {
+                navigate("/login");
+            }
+            const values = form.getFieldsValue();
+            if (selectedProductType === '') {
+                form.setFields([{ name: 'productType', errors: ['Vui lòng chọn loại sản phẩm'] }]);
+                return;
+            }
+            if (quantity === 0) {
+                form.setFields([{ name: 'quantity', errors: ['Vui lòng chọn số lượng'] }]);
+                return
+            }
+            // console.log('Thêm vào giỏ hàng:', { ...values, productType: selectedProductType });
+            const model = {
+                accountId: currentUser.id,
+                quantity: values.quantity,
+                ingredientId: id,
+                productType: selectedProductType,
+            }
+            console.log("model", model)
+
+            const response = await createItem(model);
+            if (response?.success || response?.data) {
+                console.log("Added to cart:", response.data);
+                toastConfig("success", "Thêm giỏ hàng thành công")
+            }
+            toastConfig("error", "Thêm giỏ hàng thất bại")
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+            toastConfig("error", error.message)
+        }
+
     };
     return (
         <>
@@ -191,12 +218,19 @@ const ViewDetail = () => {
                         </div>
                         <div className='mt-4'>
                             <p className='bg-slate-200 p-2 rounded-lg flex items-center'>
-                                <span className='text-lg font-medium text-[#ee4d2d]'>
-                                    100.000đ
+                                <span className='text-lg font-medium text-[#9b9b9b]'>
+                                    {formatCurrencyVND(data?.priceOrigin)}
                                 </span>
-                                <span className='text-base font-normal line-through ml-4 text-[#9b9b9b]'>
-                                    110.000đ
-                                </span>
+                                {data.isSale && (
+                                    <>
+                                        <span className='text-lg font-medium text-[#ee4d2d]'>
+                                            {formatCurrencyVND(data?.pricePromotion)}
+                                        </span>
+                                        <span className='text-base font-normal line-through ml-4 text-[#9b9b9b]'>
+                                            {formatCurrencyVND(data?.priceOrigin)}
+                                        </span>
+                                    </>
+                                )}
                             </p>
                             <p className='mt-3 flex items-center'>
                                 <span className='text-black text-base font-normal'>Trạng thái: </span>
@@ -338,6 +372,31 @@ const ViewDetail = () => {
                         </Row>
                     </div>
                 </Col>
+            </Row>
+
+            <Row className='container'>
+                <div className=' mt-10 bg-white px-3 py-3 rounded-lg border-[#747474] w-full'>
+                    <Row className=''>
+                        <h1 className='text-[24px] font-medium w-full'>Bình luận và đánh giá</h1>
+                        <p className='flex gap-3 mt-2 text-[14px] font-normal'>
+                            <span className='block' ><u>4.2</u> sao</span>
+                            <span className='block' ><u>2.4k</u> bình luận</span>
+                        </p>
+                    </Row>
+                    <Row>
+                        <Col span={24}>
+                            <div className='flex items-center gap-2 mt-3'>
+                                <img src="/images/images/avatar-default.png" alt="" className='h-[50px] w-[50] rounded-full' />
+                                <div>
+                                    <strong>Nguyễn Văn A</strong>
+                                    <span className='block'>5 sao</span>
+                                    <span className='block'>2025-01-21 13:26</span>
+                                </div>
+                            </div>
+                            <p>Sản phẩm chất lượng qá tốt</p>
+                        </Col>
+                    </Row>
+                </div>
             </Row>
         </>
     )

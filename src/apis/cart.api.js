@@ -19,4 +19,19 @@ export const getByAccount = async (id) => {
     }
 }
 
+export const getListItem = async (id) => {
+    const res = await ApiCustomer.get(`cart-items/cart/${id}`);
+    if (res?.data) {
+        return res;
+    }
+}
+
+export const addItem= async (model) => {
+    const res = await ApiCustomer.post('cart-items', model);
+    if (res?.data) {
+        return res;
+    }
+}
+
+
 
