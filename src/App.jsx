@@ -25,10 +25,10 @@ import ProductDetail from "./pages/admin-pages/products-admin/ProductDetail";
 import ListRecipesAdmin from "./pages/admin-pages/recipes/ListRecipesAdmin";
 import Checkout from "./pages/orders/Checkout";
 import Introduction from "./pages/introducts/Introduction";
-import ListRecipeLayout1 from "./pages/recipes/ListRecipeLayout1";
 import PromotionListLayout1 from "./pages/promotions/PromotionListLayout1";
 import News from "./pages/news/News";
 import HotLine from "./pages/hotline/HotLine";
+import ListRecipeLayout01 from "./pages/recipes/ListRecipeLayout01";
 
 const router = createBrowserRouter([
   {
@@ -61,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/cong-thuc',
-        element: <ListRecipeLayout1 />
+        element: <ListRecipeLayout01 />
       },
       {
         path: '/cong-thuc/:id',
