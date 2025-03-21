@@ -63,34 +63,25 @@ const items = [
 const SidebarComponent = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
-    // Lấy `selectedKey` từ URL
     const [selectedKey, setSelectedKey] = useState(location.pathname);
     const [stateOpenKeys, setStateOpenKeys] = useState([]);
 
-    // Khi reload trang, cập nhật `selectedKey` và mở menu cha tương ứng
     useEffect(() => {
         setSelectedKey(location.pathname);
 
-        // Tìm menu cha chứa đường dẫn hiện tại
         const parentItem = items.find(item => item.children?.some(child => location.pathname.startsWith(child.key)));
 
         if (parentItem) {
-            setStateOpenKeys([parentItem.key]); // Mở menu cha
+            setStateOpenKeys([parentItem.key]);
         }
     }, [location.pathname]);
-
-    // Xử lý chọn menu
     const onSelect = ({ key }) => {
         setSelectedKey(key);
         navigate(key);
     };
-
-    // Xử lý mở menu cha
     const onOpenChange = (openKeys) => {
         setStateOpenKeys(openKeys);
     };
-
     return (
         <Menu
             mode="inline"
