@@ -11,6 +11,17 @@ const items = [
         label: "Dashboard",
     },
     {
+        key: "/admin-page/accountss",
+        icon: <AppstoreOutlined />,
+        label: "Tài khoản",
+        children: [
+            { key: "/admin-page/accounts", label: "Doanh mục tài khoản" },
+            { key: "/admin-page/create-account", label: "Tạo mới tài khoản" },
+            { key: "/admin-page/update-account", label: "Cập nhật tài khoản" },
+        ],
+        
+    },
+    {
         key: "/admin-page/orders",
         icon: <AppstoreOutlined />,
         label: "Đơn hàng",
