@@ -4,7 +4,7 @@ import axios from "axios";
 // const baseURL = "https://be-milk-tea-project.onrender.com/api/v1/"
  const baseURL = "https://localhost:7190/api/v1/"
 const config = {
-  baseURL: baseURL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 3000000,
   headers: {
     'Content-Type': 'application/json',
