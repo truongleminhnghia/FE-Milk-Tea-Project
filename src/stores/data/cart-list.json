@@ -13,6 +13,7 @@
         "Unit": "gam",
         "PriceOrigin": 100000,
         "PricePromotion": 0,
+        "Quantity": 23,
         "Category": {
             "Id": 1,
             "CategoryName": "Bột pha trà sữa",
@@ -94,6 +95,7 @@
         "QuantityPerCarton": 20,
         "Unit": "gam",
         "PriceOrigin": 150000,
+        "quantity": 2,
         "PricePromotion": 135000,
         "Category": {
             "Id": 2,
@@ -151,6 +153,7 @@
         "Unit": "kg",
         "PriceOrigin": 80000,
         "PricePromotion": 72000,
+        "quantity": 12,
         "Category": {
             "Id": 3,
             "CategoryName": "Sữa đặc",
@@ -206,6 +209,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 60000,
+        "quantity": 3,
         "PricePromotion": 54000,
         "Category": {
             "Id": 4,
@@ -262,6 +266,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 50000,
+        "quantity": 5,
         "PricePromotion": 45000,
         "Category": {
             "Id": 5,
@@ -318,6 +323,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 120000,
+        "quantity": 36,
         "PricePromotion": 108000,
         "Category": {
             "Id": 6,
@@ -374,6 +380,7 @@
         "QuantityPerCarton": 20,
         "Unit": "kg",
         "PriceOrigin": 200000,
+        "quantity": 31,
         "PricePromotion": 180000,
         "Category": {
             "Id": 7,
@@ -430,6 +437,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 100000,
+        "quantity": 20,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -486,6 +494,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 100000,
+        "quantity": 50,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -542,6 +551,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 100000,
+        "quantity": 21,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -598,6 +608,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 100000,
+        "quantity": 6,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
@@ -654,6 +665,7 @@
         "QuantityPerCarton": 10,
         "Unit": "kg",
         "PriceOrigin": 100000,
+        "quantity": 32,
         "PricePromotion": 90000,
         "Category": {
             "Id": 8,
