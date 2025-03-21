@@ -35,6 +35,7 @@ instance.interceptors.response.use(
       console.log("response", response)
       return response.data;
     }
+    return response;
   },
   (error) => {
     console.error("Error in response interceptor:", error.response);
