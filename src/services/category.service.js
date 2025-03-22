@@ -39,11 +39,12 @@ export const getByListSerivce = async (params) => {
 
 export const updateByIdService = async (id, req) => {
     try {
-        const res = updateById(id, req);
-        if (res.success || res.data) {
+        const res = await updateById(id, req);
+        console.log("res", res);
+        if (res?.success || res?.data) {
             return res;
         }
-        return res.message;
+        return res?.message;
     } catch (error) {
         console.log("Error: ", error);
     }
@@ -55,8 +56,9 @@ export const deleteByIdservice = async (id) => {
         if (res.success || res.data) {
             return res;
         } 
-        return res.message
+        return res.message;
     } catch (error) {
         console.log("Error: ", error);
+        return { success: false, message: error.message || "Lỗi khi xóa danh mục" };
     }
 }

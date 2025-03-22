@@ -3,7 +3,7 @@ import ApiCustomer from "../apis/api.customer"
 export const createCategory = async (model) => {
     try {
         const res = await ApiCustomer.post('/categories', model);
-        if (res) {
+        if (res || res?.code === 200) {
             return res;
         }
         return null;
@@ -14,7 +14,7 @@ export const createCategory = async (model) => {
 
 export const getById = async (id) => {
     const res = await ApiCustomer.get(`/categories/${id}`);
-    if (res?.data) {
+    if (res?.data || res?.code === 200) {
         return res;
     }
 }
@@ -23,21 +23,22 @@ export const getByList = async (params) => {
     const res = await ApiCustomer.get('/categories', {
         params
     });
-    if (res?.data) {
+    if (res?.data || res?.code === 200) {
         return res;
     }
 };
 
 export const updateById = async (id, model) => {
     const res = await ApiCustomer.put(`/categories/${id}`, model);
-    if (res?.data) {
+        console.log("res", res);
+    if (res?.data || res?.code === 200) {
         return res;
     }
 };
 
 export const deleteById = async (id) => {
     const res = await ApiCustomer.delete(`/categories/${id}`);
-    if (res) {
+    if (res || res?.code === 200) {
         return res;
     }
 };

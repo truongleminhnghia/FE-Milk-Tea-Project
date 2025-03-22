@@ -2,7 +2,7 @@ import ApiCustomer from "../apis/api.customer"
 
 export const create = async (model) => {
     try {
-        const res = await ApiCustomer.post('/accounts', model);
+        const res = await ApiCustomer.post('/admins/create-account', model);
         if (res) {
             return res;
         }

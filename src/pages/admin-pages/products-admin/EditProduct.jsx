@@ -1,30 +1,80 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, InputNumber, Select, DatePicker, Switch, Button, Upload, Row, Col, Card, Divider, Space, Spin, Typography } from "antd";
-import { UploadOutlined, SaveOutlined, ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Form, Input, InputNumber, Select, DatePicker, Switch, Button, Upload, Row, Col, Card, Divider, Space, Spin, Typography, Modal } from "antd";
+import { UploadOutlined, SaveOutlined, ArrowLeftOutlined, LoadingOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent'
 import { getByListSerivce } from '../../../services/category.service';
 import ImageUploader from "../../../components/uploads/ImageUploader ";
 import uploadFile from "../../../utils/upload";
-import { toastConfig } from "../../../utils/utils";
-import { create } from "../../../apis/product.api";
-import { useNavigate, Link } from "react-router-dom";
+import { formatCurrencyVND, formatISODate, toastConfig } from "../../../utils/utils";
+import { getByIdService, updateByIdService } from "../../../services/product.service";
+import { useNavigate, Link, useParams } from "react-router-dom";
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 const { Title, Text } = Typography;
+const { confirm } = Modal;
 
-const NewProduct = () => {
+const EditProduct = () => {
+  const { id } = useParams();
   const [form] = Form.useForm();
   const [categories, setCategories] = useState([]);
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetchingCategories, setFetchingCategories] = useState(false);
+  const [initialValues, setInitialValues] = useState(null);
+  const [productData, setProductData] = useState(null);
   const navigate = useNavigate();
   
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/admin-page' },
     { title: 'Sản phẩm', href: '/admin-page/products' },
-    { title: 'Tạo mới sản phẩm' }
+    { title: 'Cập nhật sản phẩm' }
   ];
+
+  // Fetch product data
+  const fetchProductData = async () => {
+    try {
+      setLoading(true);
+      const res = await getByIdService(id);
+      if (res?.success || res?.data) {
+        const data = res.data;
+        
+        // Format data for form
+        const formData = {
+          ...data,
+          expiredDate: data.expiredDate ? dayjs(data.expiredDate) : null,
+          // Use categoryId from the category object for the Select component
+          categoryId: data.category ? data.category.id : null,
+          // Add any other date fields that need conversion
+        };
+        
+        setProductData(data);
+        setInitialValues(formData);
+        form.setFieldsValue(formData);
+        
+        // Set existing images to fileList
+        if (data.images && data.images.length > 0) {
+          const existingImages = data.images.map((image, index) => ({
+            uid: image.id || `-${index}`,
+            name: `image-${index}.jpg`,
+            status: 'done',
+            url: image.imageUrl,
+            originFileObj: null, // No need to upload existing images again
+            isExisting: true, // Mark as existing
+            imageId: image.id
+          }));
+          setFileList(existingImages);
+        }
+      } else {
+        toastConfig("error", "Không thể tải thông tin sản phẩm");
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      toastConfig("error", "Đã xảy ra lỗi khi tải chi tiết sản phẩm");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchCateByField = async () => {
     try {
@@ -51,7 +101,8 @@ const NewProduct = () => {
 
   useEffect(() => {
     fetchCateByField();
-  }, []);
+    fetchProductData();
+  }, [id]);
 
   const status = [
     { label: 'Đang hoạt động', value: 'ACTIVE' },
@@ -75,66 +126,169 @@ const NewProduct = () => {
     { label: 'Khác', value: 'OTHER' }
   ];
 
-  const handleSubmit = async (values) => {
-    setLoading(true);
-    try {
-      // upload all
-      const uploadPromises = fileList.map((file) => uploadFile(file.originFileObj));
-      const uploadedUrls = await Promise.all(uploadPromises);
-      // lọc thất bại
-      const imageUrls = uploadedUrls.filter((url) => url !== null);
+  // Compare values to detect changes
+  const isFieldChanged = (fieldName, values) => {
+    if (!initialValues) return false;
+    
+    // Handle special cases like dates
+    if (fieldName === 'expiredDate') {
+      const oldDate = initialValues.expiredDate ? initialValues.expiredDate.format('YYYY-MM-DD') : null;
+      const newDate = values.expiredDate ? values.expiredDate.format('YYYY-MM-DD') : null;
+      return oldDate !== newDate;
+    }
+    
+    // Arrays need special comparison
+    if (fieldName === 'ingredientQuantities') {
+      // For simplicity, we'll consider them changed if length differs
+      // For a more precise comparison, you'd need to compare each element
+      if (!values.ingredientQuantities || !initialValues.ingredientQuantities) return true;
+      if (values.ingredientQuantities.length !== initialValues.ingredientQuantities.length) return true;
+      
+      // More detailed comparison could be implemented here if needed
+      return true; // For now, assume changed if the array exists in values
+    }
+    
+    return initialValues[fieldName] !== values[fieldName];
+  };
 
-      if (imageUrls.length === 0) {
-        toastConfig("error", "Tải ảnh lên thất bại!")
+  // Get only changed fields
+  const getChangedFields = (values) => {
+    const changedValues = {};
+    
+    // Process regular fields
+    Object.keys(values).forEach(key => {
+      if (values[key] !== undefined && isFieldChanged(key, values)) {
+        // Handle date conversion for API
+        if (key === 'expiredDate' && values[key]) {
+          changedValues[key] = values[key].format('YYYY-MM-DD');
+        } else {
+          changedValues[key] = values[key];
+        }
+      }
+    });
+    
+    return changedValues;
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      setLoading(true);
+      
+      // Get only changed fields
+      const changedValues = getChangedFields(values);
+      
+      // If no fields changed, show info toast and return
+      if (Object.keys(changedValues).length === 0 && fileList.every(file => file.isExisting)) {
+        toastConfig("info", "Không có thay đổi nào để cập nhật");
         setLoading(false);
         return;
       }
-      const imageRequest = imageUrls.map(url => ({ imageUrl: url }));
-      const ingredientQuantities = values.ingredientQuantities?.map(iq => ({
-        quantity: iq.quantity,
-        productType: iq.productType
-      })) || [];
       
-      const ingredientRequest = {
-        supplier: values.supplier,
-        ingredientName: values.ingredientName,
-        description: values.description,
-        foodSafetyCertification: values.foodSafetyCertification,
-        expiredDate: values.expiredDate,
-        ingredientStatus: values.ingredientStatus || 'ACTIVE',
-        weightPerBag: values.weightPerBag,
-        quantityPerCarton: values.quantityPerCarton,
-        ingredientType: values.ingredientType,
-        unit: values.unit,
-        priceOrigin: values.priceOrigin,
-        categoryId: values.categoryId,
-        isSale: values.isSale || false,
-        imageRequest: imageRequest,
-        ingredientQuantities: ingredientQuantities,
-      }
+      // Handle image uploads for new images
+      let imageRequest = [];
+      const existingImages = fileList.filter(file => file.isExisting).map(file => ({ 
+        id: file.imageId,
+        imageUrl: file.url 
+      }));
       
-      const res = await create(ingredientRequest);
-      if (res.success) {
-        toastConfig("success", "Tạo sản phẩm thành công!");
-        form.resetFields();
-        setFileList([]);
-        navigate('/admin-page/products');
+      const newImages = fileList.filter(file => !file.isExisting);
+      if (newImages.length > 0) {
+        const uploadPromises = newImages.map((file) => uploadFile(file.originFileObj));
+        const uploadedUrls = await Promise.all(uploadPromises);
+        const newImageUrls = uploadedUrls.filter(url => url !== null);
+        const formattedNewImages = newImageUrls.map(url => ({ imageUrl: url }));
+        
+        imageRequest = [...existingImages, ...formattedNewImages];
       } else {
-        throw new Error(res?.message || "Tạo sản phẩm thất bại");
+        imageRequest = existingImages;
       }
-
+      
+      // Format ingredient quantities if changed
+      let ingredientQuantities = undefined;
+      if (changedValues.ingredientQuantities) {
+        ingredientQuantities = changedValues.ingredientQuantities.map(iq => ({
+          quantity: iq.quantity,
+          productType: iq.productType,
+          // Include ID if available
+          ...(iq.id && { id: iq.id })
+        }));
+      }
+      
+      // Prepare update request
+      const updateRequest = {
+        ...changedValues,
+        // Always include ID in the request
+        // id: id,
+        // Include imageRequest if there are any images
+        ...(imageRequest.length > 0 && { imageRequest }),
+        // Include ingredientQuantities if changed
+        ...(ingredientQuantities && { ingredientQuantities })
+      };
+      
+      // Show confirmation dialog
+      confirm({
+        title: 'Xác nhận cập nhật',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Bạn có chắc chắn muốn cập nhật sản phẩm này?',
+        okText: 'Xác nhận',
+        cancelText: 'Hủy',
+        onOk: async () => {
+          try {
+            const res = await updateByIdService(id, updateRequest);
+            console.log("reupdateRequests", updateRequest);
+            if (res?.success || res?.data || res?.code === 200) {
+              toastConfig("success", "Cập nhật sản phẩm thành công!");
+              // Refresh data after update
+              fetchProductData();
+            } else {
+              throw new Error(res?.message || "Cập nhật sản phẩm thất bại");
+            }
+          } catch (error) {
+            console.error("Update product failed:", error);
+            toastConfig("error", error.message || "Lỗi khi cập nhật sản phẩm!");
+          } finally {
+            setLoading(false);
+          }
+        },
+        onCancel() {
+          setLoading(false);
+        },
+      });
     } catch (error) {
-      console.error("Create product failed:", error);
-      toastConfig("error", error.message || "Lỗi khi tạo sản phẩm!");
-    } finally {
+      console.error("Update process failed:", error);
+      toastConfig("error", "Lỗi trong quá trình cập nhật sản phẩm!");
       setLoading(false);
     }
   };
 
+  const handleCancel = () => {
+    confirm({
+      title: 'Hủy thay đổi',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Bạn có chắc chắn muốn hủy các thay đổi?',
+      okText: 'Có',
+      cancelText: 'Không',
+      onOk() {
+        navigate('/admin-page/products');
+      },
+    });
+  };
+
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
+  if (!initialValues) {
+    return (
+      <div className="edit-product-container">
+        <BreadcrumbComponent items={breadcrumbItems} />
+        <div className="flex justify-center items-center h-[300px]">
+          <Spin indicator={antIcon} tip="Đang tải thông tin sản phẩm..." />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="new-product-container">
+    <div className="edit-product-container">
       <BreadcrumbComponent items={breadcrumbItems} />
       
       <Card className="mt-4 shadow-sm">
@@ -147,7 +301,7 @@ const NewProduct = () => {
             >
               Quay lại
             </Button>
-            <Title level={4} className="mb-0">Tạo mới nguyên liệu</Title>
+            <Title level={4} className="mb-0">Cập nhật nguyên liệu: {productData?.ingredientName}</Title>
           </div>
         </div>
         
@@ -160,10 +314,7 @@ const NewProduct = () => {
             onFinish={handleSubmit}
             className="py-3 px-3"
             requiredMark="optional"
-            initialValues={{
-              ingredientStatus: 'ACTIVE',
-              isSale: false
-            }}
+            initialValues={initialValues}
           >
             <Row gutter={24}>
               <Col xs={24} md={12}>
@@ -422,7 +573,7 @@ const NewProduct = () => {
             <div className="flex justify-end">
               <Space>
                 <Button 
-                  onClick={() => navigate('/admin-page/products')}
+                  onClick={handleCancel}
                   disabled={loading}
                 >
                   Hủy
@@ -434,7 +585,7 @@ const NewProduct = () => {
                   icon={<SaveOutlined />}
                   className="bg-[#29aae1]"
                 >
-                  Tạo sản phẩm
+                  Cập nhật sản phẩm
                 </Button>
               </Space>
             </div>
@@ -445,4 +596,4 @@ const NewProduct = () => {
   );
 };
 
-export default NewProduct;
+export default EditProduct; 

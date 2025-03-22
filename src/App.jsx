@@ -4,7 +4,6 @@ import Home from "./pages/home/Home";
 import LoginPage from "./pages/authentication/LoginPage";
 import RegisterPage from "./pages/authentication/RegisterPage";
 import Layout02 from "./components/layouts/Layout02";
-import Dashboard from "./pages/admin-pages/dashboard/Dashboard";
 import ListProduct from "./pages/products/ListProduct";
 import NewProduct from "./pages/admin-pages/products-admin/NewProduct";
 import ListOrders from "./pages/orders/ListOrders";
@@ -33,6 +32,10 @@ import DetailCategory from "./pages/categories/DetailCategory";
 import ListAccount from "./pages/admin-pages/accounts/ListAccount";
 import NewAccount from "./pages/admin-pages/accounts/NewAccount";
 import UpdateAccount from "./pages/admin-pages/accounts/UpdateAccount";
+import AccountDetail from "./pages/admin-pages/accounts/AccountDetail";
+import Dashboard from "./pages/admin-pages/dashboard/Dashboard"
+import Layout03 from "./components/layouts/Layout03";
+import EditProduct from "./pages/admin-pages/products-admin/EditProduct"
 
 const router = createBrowserRouter([
   {
@@ -129,12 +132,12 @@ const router = createBrowserRouter([
         element: <ListAccount />
       },
       {
-        path: 'create-account',
-        element: <NewAccount/>
+        path: 'accounts/:id',
+        element: <AccountDetail />
       },
       {
-        path: 'update-account',
-        element: <UpdateAccount/>
+        path: 'create-account',
+        element: <NewAccount/>
       },
       {
         path: 'categories',
@@ -151,6 +154,10 @@ const router = createBrowserRouter([
       {
         path: 'products/:id',
         element: <ProductDetail />
+      },
+      {
+        path: 'products/edit/:id',
+        element: <EditProduct />
       },
       {
         path: 'create-product',
@@ -184,6 +191,15 @@ const router = createBrowserRouter([
         path: 'create-user',
         element: <CreateNewUser />
       },
+    ]
+  },
+  {
+    path: '/staff-page',
+    element: (
+      <ProtectedRoute element={<Layout03 />}/>
+    ),
+    children: [
+
     ]
   }
 ])

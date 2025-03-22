@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent'
-import { Col, Form, Input, Row, Table } from 'antd';
+import { Col, Form, Input, Row, Table, Card, Typography, Tag, Divider, Spin, Button, Space, Descriptions, Badge, Statistic } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs, Pagination, Autoplay } from 'swiper/modules';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import Product from '../../../stores/data/ingredient.json'
+import { EditOutlined, ArrowLeftOutlined, LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined, CalendarOutlined, TagOutlined, ShoppingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import TableGenerComponent from '../../../components/tables/TableGenerComponent';
-import { Link, useParams } from 'react-router-dom';
-import { toastConfig } from '../../../utils/utils';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { formatCurrencyVND, formatISODate, toastConfig } from '../../../utils/utils';
 import { getByIdService } from '../../../services/product.service';
 
+const { Title, Text } = Typography;
+
 const ProductDetail = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();
+    const navigate = useNavigate();
     const breadcrumbItems = [
         { title: 'Trang chủ', href: '/admin-page' },
-        { title: 'Chi tiết' }
+        { title: 'Sản phẩm', href: '/admin-page/products' },
+        { title: 'Chi tiết sản phẩm' }
     ];
     const [activeIndex, setActiveIndex] = useState(0);
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -33,187 +36,350 @@ const ProductDetail = () => {
             const res = await getByIdService(id);
             if (res?.success || res?.data) {
                 form.setFieldsValue(res.data);
-                setData(res.data)
-                setIsLoading(false);
+                setData(res.data);
+            } else {
+                toastConfig("error", "Không thể tải thông tin sản phẩm");
             }
         } catch (error) {
-            console.log("error", error);
+            console.error("Error fetching product details:", error);
+            toastConfig("error", "Đã xảy ra lỗi khi tải chi tiết sản phẩm");
+        } finally {
+            setIsLoading(false);
         }
     }
+    
     useEffect(() => {
-        fetchDetail(id)
-    }, [id, form]);
+        fetchDetail(id);
+    }, [id]);
 
     const columnsQuantity = [
         {
             title: "Số lượng",
             dataIndex: "quantity",
-            key: "quantity"
+            key: "quantity",
+            render: (text) => <span>{text?.toLocaleString()}</span>
         },
         {
             title: "Loại",
             dataIndex: "productType",
-            key: "productType"
+            key: "productType",
+            render: (text) => <Tag color="blue">{text}</Tag>
         },
         {
             title: "Ngày nhập",
             dataIndex: "createAt",
-            key: "createAt"
+            key: "createAt",
+            render: (text) => text ? formatISODate(text) : 'N/A'
         },
-    ]
+    ];
 
+    const getStatusTag = (status) => {
+        if (!status) return <Tag>Không xác định</Tag>;
+        
+        const statusMap = {
+            'ACTIVE': { color: 'green', text: 'Đang hoạt động', icon: <CheckCircleOutlined /> },
+            'NO_ACTIVE': { color: 'red', text: 'Không hoạt động', icon: <CloseCircleOutlined /> }
+        };
+        
+        const { color, text, icon } = statusMap[status] || { color: 'default', text: status, icon: null };
+        
+        return (
+            <Tag color={color} icon={icon}>
+                {text}
+            </Tag>
+        );
+    };
+
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+    const handleEdit = () => {
+        // Implement edit product logic here
+        navigate(`/admin-page/products/edit/${id}`);
+    };
+
+    // Function to check if a date is expired
+    const isExpired = (dateString) => {
+        if (!dateString) return false;
+        
+        const expireDate = new Date(dateString);
+        const today = new Date();
+        
+        return expireDate < today;
+    };
 
     return (
-        <>
-            <>
+        <div className="product-detail-container">
             <BreadcrumbComponent items={breadcrumbItems} />
-            <div>
-                <Form
-                    form={form}
-                    layout='vertical'
-                >
-                    <Row
-                        className='bg-white px-3 py-3 rounded-lg mb-[20px]'
-                    >
-                        <Row className='w-full border-b-[2px] mb-2'>
-                            <h1 className='text-[24px] font-medium'>Thông tin nguyên liệu</h1>
-                        </Row>
-                        <Col
-                            span={12}
-                            className='pr-2 py-2'
-                        >
-                            <Form.Item
-                                className='!text-[18px] text-black font-medium'
-                                label="Tên nguyên liệu"
-                                name='ingredientName'
+            
+            <Spin spinning={isLoading} indicator={antIcon}>
+                <Card className="mt-4 shadow-sm">
+                    <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center">
+                            <Button 
+                                icon={<ArrowLeftOutlined />} 
+                                onClick={() => navigate('/admin-page/products')}
+                                className="mr-4"
                             >
-                                <Input className='text-[16px] font-normal text-[#747474]' />
-                            </Form.Item>
-                            <Form.Item
-                                className='!text-[18px] text-black font-medium'
-                                label="Nhà sản xuất"
-                                name='supplier'
-                            >
-                                <Input className='text-[16px] font-normal text-[#747474]' />
-                            </Form.Item>
-                            <Form.Item
-                                className='!text-[18px] text-black font-medium'
-                                label="Mã sản phẩm"
-                                name='ingredientCode'
-                            >
-                                <Input className='text-[16px] font-normal text-[#747474]' />
-                            </Form.Item>
-                            <Form.Item
-                                className='!text-[18px] text-black font-medium'
-                                label="Trạng thái"
-                                name='ingredientStatus'
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Row>
-                                <Col span={12} className='pr-2'>
-                                    <Form.Item
-                                        className='!text-[18px] text-black font-medium'
-                                        label='Giá'
-                                        name='priceOrigin'
-                                    >
-                                        <Input className='text-[16px] font-normal text-[#747474]' />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12} className='pl-2'>
-                                    <Form.Item
-                                        className='!text-[18px] text-black font-medium'
-                                        label='Giá khuyến mãi'
-                                        name='pricePromotion'
-                                    >
-                                        <Input className='text-[16px] font-normal text-[#747474]' />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Form.Item
-                                className='!text-[18px] text-black font-medium'
-                                label="Dạng nguyên liệu"
-                                name="ingredientType"
-                            >
-                                <Input className='text-[16px] font-normal text-[#747474]' />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12} className='pl-2 py-2'>
-                            <Swiper
-                                className='h-[400px]'
-                                loop={data.images?.lenght > 1}
-                                spaceBetween={0}
-                                slidesPerView={1}
-                                navigation={true}
-                                autoplay={{
-                                    delay: 2500,
-                                    disableOnInteraction: false,
-                                }}
-                                thumbs={{ swiper: thumbsSwiper }}
-                                modules={[Navigation, Thumbs, FreeMode, Autoplay, Pagination]}
-                                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                            >
-                                {data.images?.map((item, index) => (
-                                    <SwiperSlide key={item.id} className=''>
-                                        <img className='rounded-lg object-cover h-full w-full' src={item?.imageUrl} alt="" />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                            <Swiper
-                                onSwiper={setThumbsSwiper}
-                                loop={data.images?.lenght > 1}
-                                spaceBetween={0}
-                                slidesPerView={4}
-                                freeMode={true}
-                                watchSlidesProgress={true}
-                                modules={[FreeMode, Navigation, Thumbs]}
-                                className='h-[90px] bg-slate-100 rounded-lg mt-2'
-                            >
-                                {data.images?.map((item, index) => (
-                                    <SwiperSlide
-                                        key={item.id}
-                                        className={`px-1 py-1 cursor-pointer ${activeIndex === index ? "border-2 border-blue-500 rounded-lg" : ""
-                                            }`}
-                                        onClick={() => thumbsSwiper?.slideTo(index)} // Đồng bộ active
-                                    >
-                                        <img src={item?.imageUrl} alt="" className="rounded-lg object-cover h-full w-full" />
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                        </Col>
-                    </Row>
-                </Form>
-                <Row
-                    className='bg-white px-3 py-3 rounded-lg mb-[20px]'
-                >
-                    <Row className='w-full border-b-[2px] mb-2'>
-                        <h1 className='text-[24px] font-medium'>Thông tin chi tiết</h1>
-                    </Row>
-                    <Col span={12} className='w-full'>
-                        <h3 className='text-[18px] font-normal text-black mb-2'>Số lượng trong kho</h3>
-                        <TableGenerComponent columns={columnsQuantity} data={data.ingredientQuantities} pagination={null} />
-                    </Col>
-                    <Col span={12}>
-                        <h3 className='text-[18px] font-normal text-black mb-2'>Mô tả sản phẩm</h3>
-                        <div className='h-full'>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2' >Mã sản phẩm: <strong className='ml-6 text-black'>{data.ingredientCode}</strong></p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Danh mục sản phẩm:
-                                <strong className='ml-6 text-black hover:text-blue-600 hover:underline'>
-                                    <Link>{data.category?.categoryName}</Link>
-                                </strong>
-                            </p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Mã sản phẩm: <strong className='ml-6 text-black'>{data.ingredientCode}</strong></p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Trọng lượng trên một bịch: <strong className='ml-6 text-black'>{data.weightPerBag} {Product.unit}</strong></p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Số lượng trong một thùng: <strong className='ml-6 text-black'>{data.quantityPerCarton}</strong></p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Hạng sử dụng: <strong className='ml-[100px] text-black'>{data.expiredDate}</strong></p>
-                            <p className='text-[16px] text-[#747474] font-normal mb-2'>Một số mô tả khác: <strong className='ml-[100px] text-black'>{data.description}</strong></p>
+                                Quay lại
+                            </Button>
+                            <Title level={4} className="mb-0">
+                                Chi tiết nguyên liệu: {data.ingredientName}
+                            </Title>
                         </div>
-                    </Col>
-                </Row>
-            </div >
-        </>
-        </>
-    )
-}
+                        <Button 
+                            type="primary" 
+                            icon={<EditOutlined />} 
+                            onClick={handleEdit}
+                            className="bg-[#29aae1]"
+                        >
+                            Chỉnh sửa
+                        </Button>
+                    </div>
+                    
+                    <Divider />
+                    
+                    <Row gutter={24}>
+                        <Col xs={24} lg={12} className="mb-4">
+                            <Card title="Thông tin cơ bản" className="h-full">
+                                <Descriptions layout="vertical" column={{ xs: 1, sm: 2 }} bordered>
+                                    <Descriptions.Item label="Mã sản phẩm" span={2}>
+                                        <Text copyable>{data.ingredientCode}</Text>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Tên nguyên liệu">
+                                        <Text strong>{data.ingredientName}</Text>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Nhà sản xuất">
+                                        {data.supplier}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Trạng thái">
+                                        {getStatusTag(data.ingredientStatus)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Khuyến mãi">
+                                        <Badge status={data.isSale ? "success" : "error"} text={data.isSale ? "Có" : "Không"} />
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Danh mục">
+                                        <Link to={`/admin-page/categories/detail/${data.category?.id}`}>
+                                            <Tag color="blue">{data.category?.categoryName}</Tag>
+                                        </Link>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Loại nguyên liệu">
+                                        <Tag color="purple">{data.ingredientType}</Tag>
+                                    </Descriptions.Item>
+                                </Descriptions>
+                                
+                                <div className="mt-4">
+                                    <Row gutter={16}>
+                                        <Col span={12}>
+                                            <Statistic 
+                                                title="Giá gốc" 
+                                                value={data.priceOrigin} 
+                                                formatter={(value) => value ? formatCurrencyVND(value) : 'Không có'}
+                                            />
+                                        </Col>
+                                        <Col span={12}>
+                                            <Statistic 
+                                                title="Giá khuyến mãi" 
+                                                value={data.pricePromotion || '-'} 
+                                                valueStyle={{ color: data.pricePromotion ? '#3f8600' : '#999' }}
+                                                formatter={(value) => value ? formatCurrencyVND(value) : 'Không có'}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </Card>
+                        </Col>
+                        <Col xs={24} lg={12} className="mb-4">
+                            <Card title="Hình ảnh sản phẩm" className="h-full">
+                                <div className="product-images">
+                                    <Swiper
+                                        className='h-[350px] mb-3 border border-gray-100 rounded-lg'
+                                        loop={data.images?.length > 1}
+                                        spaceBetween={0}
+                                        slidesPerView={1}
+                                        navigation={{
+                                            nextEl: '.swiper-button-next',
+                                            prevEl: '.swiper-button-prev',
+                                        }}
+                                        autoplay={{
+                                            delay: 3000,
+                                            disableOnInteraction: false,
+                                            pauseOnMouseEnter: true
+                                        }}
+                                        pagination={{
+                                            clickable: true,
+                                            dynamicBullets: true,
+                                        }}
+                                        thumbs={{ swiper: thumbsSwiper }}
+                                        modules={[Navigation, Thumbs, FreeMode, Autoplay, Pagination]}
+                                        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                                    >
+                                        {data.images?.length > 0 ? (
+                                            data.images.map((item, index) => (
+                                                <SwiperSlide key={item.id || index} className="bg-gray-50 rounded-lg">
+                                                    <div className="flex justify-center items-center h-full p-3">
+                                                        <img 
+                                                            className="rounded-lg object-contain max-h-full max-w-full shadow-sm hover:shadow-md transition-all duration-300"
+                                                            src={item?.imageUrl} 
+                                                            alt={`${data.ingredientName} - ${index + 1}`} 
+                                                        />
+                                                    </div>
+                                                </SwiperSlide>
+                                            ))
+                                        ) : (
+                                            <SwiperSlide className="bg-gray-50 rounded-lg">
+                                                <div className="flex flex-col justify-center items-center h-full">
+                                                    <InfoCircleOutlined style={{ fontSize: '32px', color: '#bfbfbf', marginBottom: '12px' }} />
+                                                    <Text type="secondary">Sản phẩm chưa có hình ảnh</Text>
+                                                </div>
+                                            </SwiperSlide>
+                                        )}
+                                        <div className="swiper-button-next !text-[#29aae1] !opacity-70 !w-[35px] !h-[35px] !right-2 after:!text-[18px] hover:!opacity-100"></div>
+                                        <div className="swiper-button-prev !text-[#29aae1] !opacity-70 !w-[35px] !h-[35px] !left-2 after:!text-[18px] hover:!opacity-100"></div>
+                                    </Swiper>
+                                    
+                                    {data.images?.length > 1 && (
+                                        <Swiper
+                                            onSwiper={setThumbsSwiper}
+                                            loop={data.images.length > 4}
+                                            spaceBetween={10}
+                                            slidesPerView="auto"
+                                            breakpoints={{
+                                                320: {
+                                                    slidesPerView: 3,
+                                                },
+                                                640: {
+                                                    slidesPerView: 4,
+                                                }
+                                            }}
+                                            freeMode={true}
+                                            watchSlidesProgress={true}
+                                            modules={[FreeMode, Navigation, Thumbs]}
+                                            className='h-[80px] bg-gray-50 rounded-lg p-2'
+                                        >
+                                            {data.images.map((item, index) => (
+                                                <SwiperSlide
+                                                    key={item.id || index}
+                                                    className={`cursor-pointer rounded-lg overflow-hidden ${
+                                                        activeIndex === index 
+                                                            ? "border-2 border-[#29aae1] shadow-md" 
+                                                            : "border border-gray-200 opacity-70 hover:opacity-100 transition-opacity"
+                                                    }`}
+                                                    onClick={() => thumbsSwiper?.slideTo(index)}
+                                                >
+                                                    <div className="h-full w-full">
+                                                        <img 
+                                                            src={item?.imageUrl} 
+                                                            alt={`thumbnail-${index}`} 
+                                                            className="rounded-lg object-cover h-full w-full" 
+                                                        />
+                                                    </div>
+                                                </SwiperSlide>
+                                            ))}
+                                        </Swiper>
+                                    )}
+                                </div>
+                            </Card>
+                        </Col>
+                    </Row>
+                    
+                    <Row gutter={24}>
+                        <Col xs={24} lg={12} className="mb-4">
+                            <Card 
+                                title={
+                                    <Space>
+                                        <ShoppingOutlined />
+                                        <span>Số lượng trong kho</span>
+                                    </Space>
+                                } 
+                                className="h-full"
+                            >
+                                <TableGenerComponent 
+                                    columns={columnsQuantity} 
+                                    data={data.ingredientQuantities || []} 
+                                    pagination={{ pageSize: 5 }} 
+                                    loading={isLoading}
+                                    rowClassName="hover:bg-gray-50"
+                                    bordered
+                                />
+                            </Card>
+                        </Col>
+                        <Col xs={24} lg={12} className="mb-4">
+                            <Card 
+                                title={
+                                    <Space>
+                                        <InfoCircleOutlined />
+                                        <span>Thông tin chi tiết</span>
+                                    </Space>
+                                } 
+                                className="h-full"
+                            >
+                                <Descriptions layout="vertical" column={1} bordered>
+                                    <Descriptions.Item 
+                                        label={
+                                            <Space>
+                                                <TagOutlined />
+                                                <span>Trọng lượng trên một bịch</span>
+                                            </Space>
+                                        }
+                                    >
+                                        <Text strong>{data.weightPerBag}</Text> {data.unit}
+                                    </Descriptions.Item>
+                                    
+                                    <Descriptions.Item 
+                                        label={
+                                            <Space>
+                                                <ShoppingOutlined />
+                                                <span>Số lượng trong một thùng</span>
+                                            </Space>
+                                        }
+                                    >
+                                        <Text strong>{data.quantityPerCarton}</Text>
+                                    </Descriptions.Item>
+                                    
+                                    <Descriptions.Item 
+                                        label={
+                                            <Space>
+                                                <CalendarOutlined />
+                                                <span>Hạn sử dụng</span>
+                                            </Space>
+                                        }
+                                    >
+                                        {data.expiredDate ? (
+                                            <Tag color={isExpired(data.expiredDate) ? 'red' : 'green'}>
+                                                {formatISODate(data.expiredDate)}
+                                            </Tag>
+                                        ) : 'Không có thông tin'}
+                                    </Descriptions.Item>
+                                    
+                                    <Descriptions.Item 
+                                        label={
+                                            <Space>
+                                                <InfoCircleOutlined />
+                                                <span>Chứng nhận ATTP</span>
+                                            </Space>
+                                        }
+                                    >
+                                        {data.foodSafetyCertification || 'Không có thông tin'}
+                                    </Descriptions.Item>
+                                    
+                                    <Descriptions.Item 
+                                        label={
+                                            <Space>
+                                                <InfoCircleOutlined />
+                                                <span>Mô tả</span>
+                                            </Space>
+                                        }
+                                    >
+                                        {data.description || 'Không có mô tả'}
+                                    </Descriptions.Item>
+                                </Descriptions>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Card>
+            </Spin>
+        </div>
+    );
+};
 
-export default ProductDetail
+export default ProductDetail;

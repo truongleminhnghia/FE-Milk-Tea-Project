@@ -39,11 +39,11 @@ export const getByListSerivce = async (params) => {
 
 export const updateByIdService = async (id, req) => {
     try {
-        const res = updateById(id, req);
-        if (res.success || res.data) {
+        const res = await updateById(id, req);
+        if (res?.success || res?.data || res?.code === 200) {
             return res;
         }
-        return res.message;
+        return res?.message;
     } catch (error) {
         console.log("Error: ", error);
     }

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent'
-import { Button, DatePicker, Dropdown, Form, Input, Modal, Row, Select } from 'antd';
-import { Icon } from '@iconify/react';
+import { Button, Card, DatePicker, Dropdown, Form, Input, Modal, Row, Select, Space, Tag, Spin } from 'antd';
+import { PlusOutlined, SearchOutlined, FilterOutlined, ReloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { formatISODate, toastConfig } from '../../utils/utils';
 import TableGenerComponent from '../../components/tables/TableGenerComponent';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,11 +9,15 @@ import { createCategoryService, deleteByIdservice, getByListSerivce } from '../.
 import StatusAvitceComponent from '../../components/ui/status/StatusActiveComponent';
 import dayjs from "dayjs";
 import ButtonActionComponent from '../../components/ui/actions/ButtonActionComponent';
+const { Option } = Select;
 
 const ListCategory = () => {
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setisLoading] = useState(false);
+    const [formSubmitting, setFormSubmitting] = useState(false);
+    const [filterLoading, setFilterLoading] = useState(false);
+    const [deletingId, setDeletingId] = useState(null);
     const [form] = Form.useForm();
     const [categories, setCategories] = useState([]);
     const [formData, setFormData] = useState({
@@ -48,7 +52,7 @@ const ListCategory = () => {
 
     const fetchAllCatetegories = async () => {
         try {
-            setisLoading(true);  // Bắt đầu tải dữ liệu
+            setisLoading(true);
             const param = {
                 page: params.paging.pageCurrent,
                 pageSize: params.paging.pageSize,
@@ -72,7 +76,8 @@ const ListCategory = () => {
         } catch (error) {
             console.error("Error: ", error.message);
         } finally {
-            setisLoading(false); // dừng loading sau khi tải xog haowjc gặp lỗi
+            setisLoading(false);
+            setFilterLoading(false);
         }
     }
 
@@ -82,18 +87,22 @@ const ListCategory = () => {
 
     const onSubmit = async (value) => {
         try {
+            setFormSubmitting(true);
             const res = await createCategoryService(value);
             console.log("res", res)
             if (res?.success || res?.data) {
-                toastConfig("success", res.message)
+                toastConfig("success", res.message || "Tạo danh mục thành công");
+                fetchAllCatetegories();
+                clearData();
+                setIsModalOpen(false);
             } else {
                 toastConfig("error", res);
             }
-            fetchAllCatetegories();
-            clearData();
-            setIsModalOpen(false);
         } catch (error) {
             console.log("Error: ", error);
+            toastConfig("error", error.message || "Đã xảy ra lỗi khi tạo danh mục");
+        } finally {
+            setFormSubmitting(false);
         }
     }
 
@@ -127,24 +136,41 @@ const ListCategory = () => {
         navigate(`/admin-page/categories/${id}`);
       }
 
-    const handleUpdate = (record) => {
+      const handleUpdate = (record) => {
         console.log("Updating:", record);
+        const id = record.id;
+        navigate(`/admin-page/categories/${id}?edit=true`);
     };
 
     const handleDelete = async (item) => {
         try {
+            setDeletingId(item.id);
             const res = await deleteByIdservice(item.id);
             console.log("res", res);
-            if (res.success) {
+            if (res?.success) {
                 toastConfig("success", "Xóa thành công");
+                fetchAllCatetegories();
             } else {
                 toastConfig("error", res.message || "Xóa thất bại");
             }
         } catch (error) {
             console.log("Error: ", error.message);
             toastConfig("error", error.message);
+        } finally {
+            setDeletingId(null);
         }
     };
+
+    const categoryType = (type) => {
+        switch (type) {
+            case "CATEGORY_PRODUCT":
+                return <Tag color="blue">Danh mục nguyên liệu</Tag>;
+            case "CATEGORY_RECIPE":
+                return <Tag color="green">Danh mục công thức</Tag>;
+            default:
+                return <Tag color="default">Không xác định</Tag>;
+        }
+    }
 
     const columns = [
         {
@@ -153,7 +179,32 @@ const ListCategory = () => {
             dataIndex: 'categoryName',
         },
         {
-            title: 'Action',
+            key: 'createAt',
+            title: 'Ngày Tạo',
+            dataIndex: 'createAt',
+            render: (date) => formatISODate(date),
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: "categoryStatus",
+            key: "categoryStatus",
+            render: (status) => {
+                if (!status) return <Tag color="default">Không xác định</Tag>;
+
+                const color = status === 'ACTIVE' ? 'success' : 'error';
+                const text = status === 'ACTIVE' ? 'Đang hoạt động' : 'Không hoạt động';
+
+                return <Tag color={color}>{text}</Tag>;
+            },
+        },
+        {
+            key: "categoryType",
+            title: 'Loại Danh Mục',
+            dataIndex: 'categoryType',
+            render: (type) => categoryType(type)
+        },
+        {
+            title: 'Thao tác',
             key: 'operation',
             fixed: 'right',
             width: 150,
@@ -163,37 +214,11 @@ const ListCategory = () => {
                     onView={handleView}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
+                    loading={deletingId === item.id}
                 />
             ),
-        },
-        {
-            key: 'createAt',
-            title: 'Ngày Tạo',
-            dataIndex: 'createAt',
-            render: (date) => formatISODate(date),
-        },
-        {
-            title: 'Status',
-            dataIndex: "categoryStatus",
-            key: "categoryStatus",
-            render: (status) => <StatusAvitceComponent status={status} />,
-        },
-        {
-            key: "categoryType",
-            title: 'Loại Danh Mục',
-            dataIndex: 'categoryType',
-            render: (type) => categoryType(type)
         }
     ]
-
-    const categoryType = (type) => {
-        switch (type) {
-            case "CATEGORY_PRODUCT":
-                return "Danh mục nguyên liệu";
-            case "CATEGORY_RECIPE":
-                return "Danh mục công thức";
-        }
-    }
 
     const handleTableChange = (pagination) => {
         setParams(prev => ({
@@ -213,14 +238,32 @@ const ListCategory = () => {
         }));
     };
 
-    // useEffect(() => {
-
-    // })
     const handleParamsChange = (key, value) => {
         setParams((prev) => ({
             ...prev,
             [key]: value || null,
         }));
+    };
+
+    const handleFilterClick = () => {
+        setFilterLoading(true);
+        fetchAllCatetegories();
+    };
+
+    const handleResetFilters = () => {
+        setFilterLoading(true);
+        setParams({
+            categoryStatus: null,
+            categoryType: null,
+            search: null,
+            startDate: null,
+            endDate: null,
+            paging: {
+                pageCurrent: 1,
+                pageSize: 10,
+                total: 0,
+            }
+        });
     };
 
     const clearData = () => {
@@ -232,158 +275,190 @@ const ListCategory = () => {
         })
     }
 
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     return (
-        <div>
+        <div className="list-category-container">
             <BreadcrumbComponent items={breadcrumbItems} />
-            <Button
-                onClick={showModal}
-                className='bg-[#00CC33] text-white px-4 py-4 flex items-center text-lg font-medium '
-                icon={
-                    <Icon icon="mynaui:plus-solid" />
-                }>
-                <span>Tạo mới</span>
-            </Button>
 
-            <Row className='bg-white py-3 px-3 rounded-xl border-[1px] border-[#ccc] mt-2'>
-                <div className='flex items-center h-[40px] w-full'>
-                    <Input
-                        className='h-full max-w-[200px] py-2 px-3 mr-3 inline-flex text-[14px]'
-                        prefix={<Icon
-                            className='text-lg text-[#3C2F2F]'
-                            icon="iconamoon:search" />}
-                        placeholder='Tìm kiếm'
-                        allowClear
-                        value={params.search}
-                        onChange={handleSearchChange}
-                    />
-                    <DatePicker
-                        placeholder="Ngày bắt đầu"
-                        className="flex !w-[200px] h-full items-center text-[#3C2F2F] py-2 px-3 mr-3"
-                        onChange={(date) => handleDateChange("startDate", date)}
-                        allowClear
-                        format="DD-MM-YYYY"
-                        // Convert string back to dayjs for DatePicker
-                        value={params.startDate ? dayjs(params.startDate, "YYYY-MM-DD") : null}
-                    />
-                    <DatePicker
-                        placeholder='Ngày kết thúc'
-                        className='flex w-[200px] h-full items-center text-[#3C2F2F] py-2 px-3 mr-3'
-                        onChange={(date) => handleDateChange('endDate', date)}
-                        allowClear
-                        format="DD-MM-YYYY"
-                        value={params.endDate ? dayjs(params.endDate, "YYYY-MM-DD") : null}
-                    />
-                    <Select
-                        className='h-full !w-[200px] mr-3'
-                        placeholder="Trạng thái"
-                        value={params.categoryStatus}
-                        options={stauts}
-                        allowClear
-                        format="DD-MM-YYYY"
-                        onChange={(value) => {
-                            setParams((prev) => ({
-                                ...prev,
-                                categoryStatus: value || null // Nếu xóa chọn, đặt thành null
-                            }));
-                        }}
-                    />
-                    <Select
-                        className='h-full !w-[200px]'
-                        placeholder="Loại"
-                        value={params.categoryType}
-                        options={type}
-                        allowClear
-                        onChange={(value) => handleParamsChange("categoryType", value)}
-                    />
-                    {/* <DropdownComponent /> */}
+            <Card className="mt-4 shadow-sm">
+                <div className="flex flex-wrap justify-between items-center mb-4">
+                    <div className="text-xl font-medium">Danh sách danh mục</div>
                     <Button
-                        className='h-full p-3 flex items-center ml-auto'
-                        type='primary'
-                        icon={
-                            <Icon
-                                className='!text-[#fff] text-[18px]'
-                                icon="mdi:filter" />}>
-                        <span className='!text-[#fff] text-[18px] !font-medium'>Lọc</span>
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={showModal}
+                        className="bg-[#29aae1]"
+                    >
+                        Thêm danh mục
                     </Button>
                 </div>
-            </Row>
 
-            <div className='rounded-lg mt-3'>
+                <div className="bg-white py-4 px-4 rounded-lg border border-gray-200 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div>
+                            <Input
+                                placeholder='Tìm kiếm theo tên...'
+                                prefix={<SearchOutlined className="text-gray-400" />}
+                                allowClear
+                                value={params.search}
+                                onChange={handleSearchChange}
+                                className="w-full"
+                                disabled={filterLoading}
+                            />
+                        </div>
+                        <div>
+                            <DatePicker
+                                placeholder="Ngày bắt đầu"
+                                className="w-full"
+                                onChange={(date) => handleDateChange("startDate", date)}
+                                allowClear
+                                format="DD-MM-YYYY"
+                                value={params.startDate ? dayjs(params.startDate, "YYYY-MM-DD") : null}
+                                disabled={filterLoading}
+                            />
+                        </div>
+                        <div>
+                            <DatePicker
+                                placeholder='Ngày kết thúc'
+                                className="w-full"
+                                onChange={(date) => handleDateChange('endDate', date)}
+                                allowClear
+                                format="DD-MM-YYYY"
+                                value={params.endDate ? dayjs(params.endDate, "YYYY-MM-DD") : null}
+                                disabled={filterLoading}
+                            />
+                        </div>
+                        <div>
+                            <Select
+                                className='w-full'
+                                placeholder="Trạng thái"
+                                value={params.categoryStatus}
+                                options={stauts}
+                                allowClear
+                                onChange={(value) => handleParamsChange("categoryStatus", value)}
+                                disabled={filterLoading}
+                            />
+                        </div>
+                        <div>
+                            <Select
+                                className='w-full'
+                                placeholder="Loại danh mục"
+                                value={params.categoryType}
+                                options={type}
+                                allowClear
+                                onChange={(value) => handleParamsChange("categoryType", value)}
+                                disabled={filterLoading}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex justify-end mt-4 space-x-2">
+                        <Button
+                            onClick={handleResetFilters}
+                            icon={<ReloadOutlined />}
+                            loading={filterLoading}
+                        >
+                            Đặt lại
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={handleFilterClick}
+                            icon={filterLoading ? null : <FilterOutlined />}
+                            className="bg-[#29aae1]"
+                            loading={filterLoading}
+                        >
+                            Lọc
+                        </Button>
+                    </div>
+                </div>
+
                 <TableGenerComponent
                     data={categories.map((item) => ({ ...item, key: item.id }))}
                     columns={columns}
                     loading={isLoading}
-                    pagination={{ current: params.paging.pageCurrent, pageSize: params.paging.pageSize, total: params.paging.total }}
+                    pagination={{ 
+                        current: params.paging.pageCurrent, 
+                        pageSize: params.paging.pageSize, 
+                        total: params.paging.total,
+                        showSizeChanger: true,
+                        showTotal: (total) => `Tổng ${total} danh mục`,
+                        pageSizeOptions: ['10', '20', '50'],
+                    }}
                     onChange={handleTableChange}
+                    className="rounded-lg shadow-sm overflow-hidden"
+                    bordered
+                    size="middle"
+                    scroll={{ x: 'max-content' }}
+                    locale={{
+                        emptyText: isLoading ? <Spin indicator={antIcon} /> : 'Không có dữ liệu'
+                    }}
                 />
-            </div>
+            </Card>
 
-            <Modal title={"Tạo mới"} open={isModalOpen} onOk={() => form.submit()} onCancel={handleCancel}>
-                <Form form={form} layout='vertical' onFinish={onSubmit}>
-                    <Form.Item
-                        label="Tên danh mục"
-                        name="categoryName"
-                        colon={false}
-                        rules={
-                            [
-                                {
-                                    required: true, message: "Vui lòng nhập tên danh mục"
-                                }
-                            ]
-                        }
-                    >
-                        <Input
-                            placeholder='Nhập tên danh mục sản phẩm'
-                            value={formData.categoryName}
-                            onChange={(e) => handleChange("categoryName", e.target.value)}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label="Trạng thái"
-                        name="categoryStatus"
-                        colon={false}
-                        rules={
-                            [
-                                {
-                                    required: true, message: "Vui lòng nhập trạng thái"
-                                }
-                            ]
-                        }
-                    >
-                        <Select
-                            placeholder="Chọn trạng thái"
-                            value={formData.categoryStatus || undefined}
-                            onChange={(value) => handleChange("categoryStatus", value)}
+            <Modal 
+                title={<div className="text-lg">Thêm danh mục mới</div>} 
+                open={isModalOpen} 
+                onOk={() => form.submit()} 
+                onCancel={handleCancel}
+                okText="Lưu"
+                cancelText="Hủy"
+                okButtonProps={{ 
+                    className: 'bg-[#29aae1]',
+                    loading: formSubmitting 
+                }}
+                cancelButtonProps={{
+                    disabled: formSubmitting
+                }}
+                confirmLoading={formSubmitting}
+            >
+                <Spin spinning={formSubmitting} indicator={antIcon}>
+                    <Form form={form} layout='vertical' onFinish={onSubmit}>
+                        <Form.Item
+                            label="Tên danh mục"
+                            name="categoryName"
+                            rules={[{ required: true, message: "Vui lòng nhập tên danh mục" }]}
                         >
-                            <Option value="ACTIVE">Hoạt động</Option>
-                            <Option value="NO_ACTIVE">Không hoạt động</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Loại danh mục"
-                        name="categoryType"
-                        colon={false}
-                        rules={
-                            [
-                                {
-                                    required: true, message: "Vui lòng chọn loại danh mục"
-                                }
-                            ]
-                        }
-                    >
-                        <Select
-                            placeholder="Loại danh mục"
-                            value={formData.categoryType || undefined}
-                            onChange={(value) => handleChange("categoryType", value)}
+                            <Input
+                                placeholder='Nhập tên danh mục sản phẩm'
+                                value={formData.categoryName}
+                                onChange={(e) => handleChange("categoryName", e.target.value)}
+                                disabled={formSubmitting}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Trạng thái"
+                            name="categoryStatus"
+                            rules={[{ required: true, message: "Vui lòng chọn trạng thái" }]}
                         >
-                            <Option value={"CATEGORY_PRODUCT"}>Danh mục nguyên liệu</Option>
-                            <Option value={"CATEGORY_RECIPE"}>Danh mục công thức</Option>
-                        </Select>
-                    </Form.Item>
-                </Form>
+                            <Select
+                                placeholder="Chọn trạng thái"
+                                value={formData.categoryStatus || undefined}
+                                onChange={(value) => handleChange("categoryStatus", value)}
+                                disabled={formSubmitting}
+                            >
+                                <Option value="ACTIVE">Hoạt động</Option>
+                                <Option value="NO_ACTIVE">Không hoạt động</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Loại danh mục"
+                            name="categoryType"
+                            rules={[{ required: true, message: "Vui lòng chọn loại danh mục" }]}
+                        >
+                            <Select
+                                placeholder="Chọn loại danh mục"
+                                value={formData.categoryType || undefined}
+                                onChange={(value) => handleChange("categoryType", value)}
+                                disabled={formSubmitting}
+                            >
+                                <Option value={"CATEGORY_PRODUCT"}>Danh mục nguyên liệu</Option>
+                                <Option value={"CATEGORY_RECIPE"}>Danh mục công thức</Option>
+                            </Select>
+                        </Form.Item>
+                    </Form>
+                </Spin>
             </Modal>
-        </div >
+        </div>
     )
 }
 
