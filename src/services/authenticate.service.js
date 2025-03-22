@@ -24,7 +24,7 @@ export const Login = async (user, dispatch, navigate) => {
                     navigate("/");
                     break;
                 case "ROLE_STAFF":
-                    navigate("/admin-page");
+                    navigate("/staff-page");
                     break;
                 default:
                     break;

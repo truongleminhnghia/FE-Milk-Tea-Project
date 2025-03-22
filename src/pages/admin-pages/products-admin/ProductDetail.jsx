@@ -12,15 +12,18 @@ import TableGenerComponent from '../../../components/tables/TableGenerComponent'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { formatCurrencyVND, formatISODate, toastConfig } from '../../../utils/utils';
 import { getByIdService } from '../../../services/product.service';
+import { selectUser } from '../../../redux/features/authSlice';
+import { useSelector } from 'react-redux';
 
 const { Title, Text } = Typography;
 
 const ProductDetail = () => {
+    const currentUser = useSelector(selectUser)
     const { id } = useParams();
     const navigate = useNavigate();
     const breadcrumbItems = [
-        { title: 'Trang chủ', href: '/admin-page' },
-        { title: 'Sản phẩm', href: '/admin-page/products' },
+        { title: 'Trang chủ', href: currentUser.roleName === "ROLE_ADMIN" ? '/admin-page' : '/staff-page' },
+        { title: 'Sản phẩm', href: currentUser.roleName === "ROLE_ADMIN" ? '/admin-page/products' : '/staff-page/products' },
         { title: 'Chi tiết sản phẩm' }
     ];
     const [activeIndex, setActiveIndex] = useState(0);
@@ -47,7 +50,7 @@ const ProductDetail = () => {
             setIsLoading(false);
         }
     }
-    
+
     useEffect(() => {
         fetchDetail(id);
     }, [id]);
@@ -75,14 +78,14 @@ const ProductDetail = () => {
 
     const getStatusTag = (status) => {
         if (!status) return <Tag>Không xác định</Tag>;
-        
+
         const statusMap = {
             'ACTIVE': { color: 'green', text: 'Đang hoạt động', icon: <CheckCircleOutlined /> },
             'NO_ACTIVE': { color: 'red', text: 'Không hoạt động', icon: <CloseCircleOutlined /> }
         };
-        
+
         const { color, text, icon } = statusMap[status] || { color: 'default', text: status, icon: null };
-        
+
         return (
             <Tag color={color} icon={icon}>
                 {text}
@@ -94,30 +97,38 @@ const ProductDetail = () => {
 
     const handleEdit = () => {
         // Implement edit product logic here
-        navigate(`/admin-page/products/edit/${id}`);
+        navigate(`/staff-page/products/edit/${id}`);
     };
 
     // Function to check if a date is expired
     const isExpired = (dateString) => {
         if (!dateString) return false;
-        
+
         const expireDate = new Date(dateString);
         const today = new Date();
-        
+
         return expireDate < today;
     };
+
+    const goBack = () => {
+        if (currentUser.roleName === "ROLE_ADMIN") {
+            navigate('/admin-page/categories')
+        } else if (currentUser.roleName === "ROLE_STAFF") {
+            navigate('/staff-page/categories')
+        }
+    }
 
     return (
         <div className="product-detail-container">
             <BreadcrumbComponent items={breadcrumbItems} />
-            
+
             <Spin spinning={isLoading} indicator={antIcon}>
                 <Card className="mt-4 shadow-sm">
                     <div className="flex flex-wrap justify-between items-center mb-4">
                         <div className="flex items-center">
-                            <Button 
-                                icon={<ArrowLeftOutlined />} 
-                                onClick={() => navigate('/admin-page/products')}
+                            <Button
+                                icon={<ArrowLeftOutlined />}
+                                onClick={goBack}
                                 className="mr-4"
                             >
                                 Quay lại
@@ -126,18 +137,20 @@ const ProductDetail = () => {
                                 Chi tiết nguyên liệu: {data.ingredientName}
                             </Title>
                         </div>
-                        <Button 
-                            type="primary" 
-                            icon={<EditOutlined />} 
-                            onClick={handleEdit}
-                            className="bg-[#29aae1]"
-                        >
-                            Chỉnh sửa
-                        </Button>
+                        {currentUser.roleName !== "ROLE_ADMIN" && (
+                            <Button
+                                type="primary"
+                                icon={<EditOutlined />}
+                                onClick={handleEdit}
+                                className="bg-[#29aae1]"
+                            >
+                                Chỉnh sửa
+                            </Button>
+                        )}
                     </div>
-                    
+
                     <Divider />
-                    
+
                     <Row gutter={24}>
                         <Col xs={24} lg={12} className="mb-4">
                             <Card title="Thông tin cơ bản" className="h-full">
@@ -166,20 +179,20 @@ const ProductDetail = () => {
                                         <Tag color="purple">{data.ingredientType}</Tag>
                                     </Descriptions.Item>
                                 </Descriptions>
-                                
+
                                 <div className="mt-4">
                                     <Row gutter={16}>
                                         <Col span={12}>
-                                            <Statistic 
-                                                title="Giá gốc" 
-                                                value={data.priceOrigin} 
+                                            <Statistic
+                                                title="Giá gốc"
+                                                value={data.priceOrigin}
                                                 formatter={(value) => value ? formatCurrencyVND(value) : 'Không có'}
                                             />
                                         </Col>
                                         <Col span={12}>
-                                            <Statistic 
-                                                title="Giá khuyến mãi" 
-                                                value={data.pricePromotion || '-'} 
+                                            <Statistic
+                                                title="Giá khuyến mãi"
+                                                value={data.pricePromotion || '-'}
                                                 valueStyle={{ color: data.pricePromotion ? '#3f8600' : '#999' }}
                                                 formatter={(value) => value ? formatCurrencyVND(value) : 'Không có'}
                                             />
@@ -217,10 +230,10 @@ const ProductDetail = () => {
                                             data.images.map((item, index) => (
                                                 <SwiperSlide key={item.id || index} className="bg-gray-50 rounded-lg">
                                                     <div className="flex justify-center items-center h-full p-3">
-                                                        <img 
+                                                        <img
                                                             className="rounded-lg object-contain max-h-full max-w-full shadow-sm hover:shadow-md transition-all duration-300"
-                                                            src={item?.imageUrl} 
-                                                            alt={`${data.ingredientName} - ${index + 1}`} 
+                                                            src={item?.imageUrl}
+                                                            alt={`${data.ingredientName} - ${index + 1}`}
                                                         />
                                                     </div>
                                                 </SwiperSlide>
@@ -236,7 +249,7 @@ const ProductDetail = () => {
                                         <div className="swiper-button-next !text-[#29aae1] !opacity-70 !w-[35px] !h-[35px] !right-2 after:!text-[18px] hover:!opacity-100"></div>
                                         <div className="swiper-button-prev !text-[#29aae1] !opacity-70 !w-[35px] !h-[35px] !left-2 after:!text-[18px] hover:!opacity-100"></div>
                                     </Swiper>
-                                    
+
                                     {data.images?.length > 1 && (
                                         <Swiper
                                             onSwiper={setThumbsSwiper}
@@ -259,18 +272,17 @@ const ProductDetail = () => {
                                             {data.images.map((item, index) => (
                                                 <SwiperSlide
                                                     key={item.id || index}
-                                                    className={`cursor-pointer rounded-lg overflow-hidden ${
-                                                        activeIndex === index 
-                                                            ? "border-2 border-[#29aae1] shadow-md" 
+                                                    className={`cursor-pointer rounded-lg overflow-hidden ${activeIndex === index
+                                                            ? "border-2 border-[#29aae1] shadow-md"
                                                             : "border border-gray-200 opacity-70 hover:opacity-100 transition-opacity"
-                                                    }`}
+                                                        }`}
                                                     onClick={() => thumbsSwiper?.slideTo(index)}
                                                 >
                                                     <div className="h-full w-full">
-                                                        <img 
-                                                            src={item?.imageUrl} 
-                                                            alt={`thumbnail-${index}`} 
-                                                            className="rounded-lg object-cover h-full w-full" 
+                                                        <img
+                                                            src={item?.imageUrl}
+                                                            alt={`thumbnail-${index}`}
+                                                            className="rounded-lg object-cover h-full w-full"
                                                         />
                                                     </div>
                                                 </SwiperSlide>
@@ -281,22 +293,22 @@ const ProductDetail = () => {
                             </Card>
                         </Col>
                     </Row>
-                    
+
                     <Row gutter={24}>
                         <Col xs={24} lg={12} className="mb-4">
-                            <Card 
+                            <Card
                                 title={
                                     <Space>
                                         <ShoppingOutlined />
                                         <span>Số lượng trong kho</span>
                                     </Space>
-                                } 
+                                }
                                 className="h-full"
                             >
-                                <TableGenerComponent 
-                                    columns={columnsQuantity} 
-                                    data={data.ingredientQuantities || []} 
-                                    pagination={{ pageSize: 5 }} 
+                                <TableGenerComponent
+                                    columns={columnsQuantity}
+                                    data={data.ingredientQuantities || []}
+                                    pagination={{ pageSize: 5 }}
                                     loading={isLoading}
                                     rowClassName="hover:bg-gray-50"
                                     bordered
@@ -304,17 +316,17 @@ const ProductDetail = () => {
                             </Card>
                         </Col>
                         <Col xs={24} lg={12} className="mb-4">
-                            <Card 
+                            <Card
                                 title={
                                     <Space>
                                         <InfoCircleOutlined />
                                         <span>Thông tin chi tiết</span>
                                     </Space>
-                                } 
+                                }
                                 className="h-full"
                             >
                                 <Descriptions layout="vertical" column={1} bordered>
-                                    <Descriptions.Item 
+                                    <Descriptions.Item
                                         label={
                                             <Space>
                                                 <TagOutlined />
@@ -324,8 +336,8 @@ const ProductDetail = () => {
                                     >
                                         <Text strong>{data.weightPerBag}</Text> {data.unit}
                                     </Descriptions.Item>
-                                    
-                                    <Descriptions.Item 
+
+                                    <Descriptions.Item
                                         label={
                                             <Space>
                                                 <ShoppingOutlined />
@@ -335,8 +347,8 @@ const ProductDetail = () => {
                                     >
                                         <Text strong>{data.quantityPerCarton}</Text>
                                     </Descriptions.Item>
-                                    
-                                    <Descriptions.Item 
+
+                                    <Descriptions.Item
                                         label={
                                             <Space>
                                                 <CalendarOutlined />
@@ -350,8 +362,8 @@ const ProductDetail = () => {
                                             </Tag>
                                         ) : 'Không có thông tin'}
                                     </Descriptions.Item>
-                                    
-                                    <Descriptions.Item 
+
+                                    <Descriptions.Item
                                         label={
                                             <Space>
                                                 <InfoCircleOutlined />
@@ -361,8 +373,8 @@ const ProductDetail = () => {
                                     >
                                         {data.foodSafetyCertification || 'Không có thông tin'}
                                     </Descriptions.Item>
-                                    
-                                    <Descriptions.Item 
+
+                                    <Descriptions.Item
                                         label={
                                             <Space>
                                                 <InfoCircleOutlined />

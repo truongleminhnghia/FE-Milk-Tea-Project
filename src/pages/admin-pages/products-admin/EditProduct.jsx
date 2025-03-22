@@ -38,13 +38,14 @@ const EditProduct = () => {
       const res = await getByIdService(id);
       if (res?.success || res?.data) {
         const data = res.data;
+        console.log("Product data:", data);
         
         // Format data for form
         const formData = {
           ...data,
           expiredDate: data.expiredDate ? dayjs(data.expiredDate) : null,
-          // Use categoryId from the category object for the Select component
-          categoryId: data.category ? data.category.id : null,
+          // Handle different category data structures
+          categoryId: data.category?.id || data.categoryId,
           // Add any other date fields that need conversion
         };
         
@@ -85,10 +86,11 @@ const EditProduct = () => {
       }
       const res = await getByListSerivce(params);
       if (res?.data) {
+        console.log("Categories data:", res.data);
         const formatOption = res.data.map((item) => ({
-          label: item.CategoryName,
-          value: item.Id
-        }))
+          label: item.CategoryName || item.categoryName,
+          value: item.Id || item.id
+        }));
         setCategories(formatOption);
       }
     } catch (error) {
@@ -269,7 +271,7 @@ const EditProduct = () => {
       okText: 'Có',
       cancelText: 'Không',
       onOk() {
-        navigate('/admin-page/products');
+        navigate('/staff-page/products');
       },
     });
   };

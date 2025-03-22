@@ -9,15 +9,18 @@ import StatusAvitceComponent from '../../../components/ui/status/StatusActiveCom
 import { formatISODate } from '../../../utils/utils';
 import ButtonActionComponent from '../../../components/ui/actions/ButtonActionComponent';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  SearchOutlined, 
-  FilterOutlined, 
-  ReloadOutlined, 
+import {
+  SearchOutlined,
+  FilterOutlined,
+  ReloadOutlined,
   PlusOutlined,
   LoadingOutlined
 } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../redux/features/authSlice';
 
 const ListProductsAdmin = () => {
+  const currentUser = useSelector(selectUser);
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
@@ -106,12 +109,14 @@ const ListProductsAdmin = () => {
   };
 
   const handleView = (item) => {
-    console.log("item", item);
     const id = item.id;
-    console.log("id", id);
-    navigate(`/admin-page/products/${id}`);
+    if (currentUser.roleName === "ROLE_ADMIN") {
+      navigate(`/admin-page/products/${id}`);
+    } else if (currentUser.roleName === "ROLE_STAFF") {
+      navigate(`/staff-page/products/${id}`);
+    }
   }
-  
+
   const handleFilterClick = () => {
     setFilterLoading(true);
     fetchAllProducts();
@@ -190,18 +195,18 @@ const ListProductsAdmin = () => {
       dataIndex: 'expiredDate',
       render: (date) => {
         if (!date) return <Tag color="default">Không có</Tag>;
-        
+
         const expiredDate = dayjs(date);
         const now = dayjs();
         const daysRemaining = expiredDate.diff(now, 'day');
-        
+
         let color = 'green';
         if (daysRemaining < 0) {
           color = 'error';
         } else if (daysRemaining < 30) {
           color = 'warning';
         }
-        
+
         return (
           <Tooltip title={daysRemaining < 0 ? 'Đã hết hạn' : `Còn ${daysRemaining} ngày`}>
             <Tag color={color}>{formatISODate(date)}</Tag>
@@ -256,7 +261,8 @@ const ListProductsAdmin = () => {
         <ButtonActionComponent
           record={item}
           onView={handleView}
-          onUpdate={handleUpdate}
+          onUpdate={currentUser.roleName !== "ROLE_ADMIN" ? handleUpdate : undefined}
+          onDelete={handleDelete}
         />
       ),
     }
@@ -264,7 +270,10 @@ const ListProductsAdmin = () => {
 
   const handleUpdate = (item) => {
     console.log("item", item);
-    navigate(`/admin-page/products/edit/${item.id}`);
+    navigate(`/staff-page/products/edit/${item.id}`);
+  }
+  const handleDelete = (item) => {
+    console.log("item", item);
   }
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -272,17 +281,19 @@ const ListProductsAdmin = () => {
   return (
     <div className="list-products-container">
       <BreadcrumbComponent items={breadcrumbItems} />
-      
+
       <Card className="mt-4 shadow-sm">
         <div className="flex flex-wrap justify-between items-center mb-4">
           <div className="text-xl font-medium">Danh sách sản phẩm</div>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            className="bg-[#29aae1]"
-          >
-            <Link to={'/admin-page/create-product'}>Thêm sản phẩm</Link>
-          </Button>
+          {currentUser.roleName !== "ROLE_ADMIN" && (
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              className="bg-[#29aae1]"
+            >
+              <Link to={'/staff-page/create-product'}>Thêm sản phẩm</Link>
+            </Button>
+          )}
         </div>
 
         <div className="bg-white py-4 px-4 rounded-lg border border-gray-200 mb-4">
@@ -367,9 +378,9 @@ const ListProductsAdmin = () => {
           data={products.map((item) => ({ ...item, key: item.id }))}
           columns={columns}
           loading={isLoading}
-          pagination={{ 
-            current: params.paging.pageCurrent, 
-            pageSize: params.paging.pageSize, 
+          pagination={{
+            current: params.paging.pageCurrent,
+            pageSize: params.paging.pageSize,
             total: params.paging.total,
             showSizeChanger: true,
             showTotal: (total) => `Tổng ${total} sản phẩm`,

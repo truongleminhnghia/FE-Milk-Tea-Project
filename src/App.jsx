@@ -36,6 +36,8 @@ import AccountDetail from "./pages/admin-pages/accounts/AccountDetail";
 import Dashboard from "./pages/admin-pages/dashboard/Dashboard"
 import Layout03 from "./components/layouts/Layout03";
 import EditProduct from "./pages/admin-pages/products-admin/EditProduct"
+import ListNewOrder from "./pages/orders/order-by-staff/ListNewOrder";
+import ListAllOrder from "./pages/orders/order-by-staff/ListAllOrder";
 
 const router = createBrowserRouter([
   {
@@ -137,7 +139,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'create-account',
-        element: <NewAccount/>
+        element: <NewAccount />
       },
       {
         path: 'categories',
@@ -154,14 +156,6 @@ const router = createBrowserRouter([
       {
         path: 'products/:id',
         element: <ProductDetail />
-      },
-      {
-        path: 'products/edit/:id',
-        element: <EditProduct />
-      },
-      {
-        path: 'create-product',
-        element: <NewProduct />
       },
       {
         path: 'recipes',
@@ -196,10 +190,45 @@ const router = createBrowserRouter([
   {
     path: '/staff-page',
     element: (
-      <ProtectedRoute element={<Layout03 />}/>
+      <ProtectedRoute element={<Layout03 />} allowedRoles={["ROLE_STAFF"]} />
     ),
     children: [
-
+      {
+        path: '/staff-page',
+        element: <ListNewOrder />
+      },
+      {
+        path: 'categories',
+        element: <ListCategory />
+      },
+      {
+        path: 'categories/:id',
+        element: <DetailCategory />
+      },
+      {
+        path: 'products',
+        element: <ListProductsAdmin />
+      },
+      {
+        path: 'products/:id',
+        element: <ProductDetail />
+      },
+      {
+        path: 'products/edit/:id',
+        element: <EditProduct />
+      },
+      {
+        path: 'create-product',
+        element: <NewProduct />
+      },
+      {
+        path: 'orders',
+        element: <ListAllOrder />
+      },
+      {
+        path: 'orders/new',
+        element: <ListNewOrder />
+      }
     ]
   }
 ])
@@ -207,7 +236,7 @@ const router = createBrowserRouter([
 
 function App() {
   return <RouterProvider router={router} />;
-  
+
 }
 
 export default App

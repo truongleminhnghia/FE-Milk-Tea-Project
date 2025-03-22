@@ -5,16 +5,22 @@ import { EyeOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 const ButtonActionComponent = ({ record, onView, onUpdate, onDelete }) => {
   return (
     <Space>
-            <Button type="link" icon={<EyeOutlined />} onClick={() => onView(record)}>
-                View
-            </Button>
-            <Button type="link" icon={<EditOutlined />} onClick={() => onUpdate(record)}>
-                Update
-            </Button>
-            <Button type="link" danger icon={<DeleteOutlined />} onClick={() => onDelete(record)}>
-                Delete
-            </Button>
-        </Space>
+      {onView && (
+        <Button type="link" icon={<EyeOutlined />} onClick={() => onView(record)}>
+          View
+        </Button>
+      )}
+      {onUpdate && (
+        <Button type="link" icon={<EditOutlined />} onClick={() => onUpdate(record)}>
+          Update
+        </Button>
+      )}
+      {onDelete && (
+        <Button type="link" danger icon={<DeleteOutlined />} onClick={() => onDelete(record)}>
+          Delete
+        </Button>
+      )}
+    </Space>
   )
 }
 

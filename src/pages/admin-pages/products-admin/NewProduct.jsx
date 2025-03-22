@@ -422,7 +422,7 @@ const NewProduct = () => {
             <div className="flex justify-end">
               <Space>
                 <Button 
-                  onClick={() => navigate('/admin-page/products')}
+                  onClick={() => navigate('/staff-page/products')}
                   disabled={loading}
                 >
                   Hủy

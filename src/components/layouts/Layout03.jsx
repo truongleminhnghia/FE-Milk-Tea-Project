@@ -10,23 +10,22 @@ const { Sider, Content } = Layout;
 // Define custom menu items for customer/staff layout
 const menuStaff = [
     {
-        key: "/admin-page/dashboard",
-        icon: <Icon icon="mdi:view-dashboard-outline" className="text-lg" />,
-        label: "Dashboard",
-        extra: <span className="bg-blue-100 text-blue-500 text-xs px-2 py-0.5 rounded-full">New</span>
+        key: "/staff-page",
+        icon: <Icon icon="mdi:account-group-outline" className="text-lg" />,
+        label: "Đơn hàng mới"
     },
     {
-        key: "/admin-page/accounts",
+        key: "/staff-page/accounts",
         icon: <Icon icon="mdi:account-group-outline" className="text-lg" />,
         label: "Tài khoản"
     },
     {
-        key: "/admin-page/orders",
+        key: "/staff-page/orders",
         icon: <Icon icon="mdi:cart-outline" className="text-lg" />,
         label: "Đơn hàng",
         children: [
-            { key: "/admin-page/orders/all", label: "Tất cả" },
-            { key: "/admin-page/orders/new", label: "Đơn hàng mới" },
+            { key: "/staff-page/orders", label: "Tất cả" },
+            { key: "/staff-page/orders/new", label: "Đơn hàng mới" },
         ],
     },
     {
@@ -34,9 +33,9 @@ const menuStaff = [
         icon: <Icon icon="mdi:package-variant-closed" className="text-lg" />,
         label: "Sản phẩm",
         children: [
-            { key: "/admin-page/categories", label: "Danh mục sản phẩm" },
-            { key: "/admin-page/products", label: "Danh sách sản phẩm" },
-            { key: "/admin-page/create-product", label: "Tạo mới sản phẩm" },
+            { key: "/staff-page/categories", label: "Danh mục sản phẩm" },
+            { key: "/staff-page/products", label: "Danh sách sản phẩm" },
+            { key: "/staff-page/create-product", label: "Tạo mới sản phẩm" },
         ],
     },
     {
@@ -44,8 +43,8 @@ const menuStaff = [
         icon: <Icon icon="mdi:book-open-variant" className="text-lg" />,
         label: "Công thức",
         children: [
-            { key: "/admin-page/recipes", label: "Danh sách công thức" },
-            { key: "/admin-page/create-recipes", label: "Tạo mới công thức" },
+            { key: "/staff-page/recipes", label: "Danh sách công thức" },
+            { key: "/staff-page/create-recipes", label: "Tạo mới công thức" },
         ],
     }
 ];

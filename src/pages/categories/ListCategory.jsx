@@ -9,9 +9,12 @@ import { createCategoryService, deleteByIdservice, getByListSerivce } from '../.
 import StatusAvitceComponent from '../../components/ui/status/StatusActiveComponent';
 import dayjs from "dayjs";
 import ButtonActionComponent from '../../components/ui/actions/ButtonActionComponent';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/authSlice';
 const { Option } = Select;
 
 const ListCategory = () => {
+    const currentUser = useSelector(selectUser);
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setisLoading] = useState(false);
@@ -120,12 +123,12 @@ const ListCategory = () => {
     ];
 
     const stauts = [
-        { label: 'Đang hoạt động', value: 'ACTIVE' }, 
+        { label: 'Đang hoạt động', value: 'ACTIVE' },
         { label: 'Không hoạt động', value: 'NO_ACTIVE' },
     ];
 
     const type = [
-        { label: 'Nguyên Liệu', value: 'CATEGORY_PRODUCT' }, 
+        { label: 'Nguyên Liệu', value: 'CATEGORY_PRODUCT' },
         { label: 'Công thức', value: 'CATEGORY_RECIPE' },
     ];
 
@@ -133,13 +136,17 @@ const ListCategory = () => {
         console.log("item", item);
         const id = item.id;
         console.log("id", id);
-        navigate(`/admin-page/categories/${id}`);
-      }
+        if (currentUser.roleName === "ROLE_ADMIN") {
+            navigate(`/admin-page/categories/${id}`);
+        } else if (currentUser.roleName === "ROLE_STAFF") {
+            navigate(`/staff-page/categories/${id}`);
+        }
+    }
 
-      const handleUpdate = (record) => {
+    const handleUpdate = (record) => {
         console.log("Updating:", record);
         const id = record.id;
-        navigate(`/admin-page/categories/${id}?edit=true`);
+        navigate(`/staff-page/categories/${id}?edit=true`);
     };
 
     const handleDelete = async (item) => {
@@ -212,7 +219,7 @@ const ListCategory = () => {
                 <ButtonActionComponent
                     record={item}
                     onView={handleView}
-                    onUpdate={handleUpdate}
+                    onUpdate={currentUser.roleName !== "ROLE_ADMIN" ? handleUpdate : undefined}
                     onDelete={handleDelete}
                     loading={deletingId === item.id}
                 />
@@ -284,14 +291,16 @@ const ListCategory = () => {
             <Card className="mt-4 shadow-sm">
                 <div className="flex flex-wrap justify-between items-center mb-4">
                     <div className="text-xl font-medium">Danh sách danh mục</div>
-                    <Button
-                        type="primary"
-                        icon={<PlusOutlined />}
-                        onClick={showModal}
-                        className="bg-[#29aae1]"
-                    >
-                        Thêm danh mục
-                    </Button>
+                    {currentUser.roleName !== "ROLE_ADMIN" && (
+                        <Button
+                            type="primary"
+                            icon={<PlusOutlined />}
+                            onClick={showModal}
+                            className="bg-[#29aae1]"
+                        >
+                            Thêm danh mục
+                        </Button>
+                    )}
                 </div>
 
                 <div className="bg-white py-4 px-4 rounded-lg border border-gray-200 mb-4">
@@ -376,9 +385,9 @@ const ListCategory = () => {
                     data={categories.map((item) => ({ ...item, key: item.id }))}
                     columns={columns}
                     loading={isLoading}
-                    pagination={{ 
-                        current: params.paging.pageCurrent, 
-                        pageSize: params.paging.pageSize, 
+                    pagination={{
+                        current: params.paging.pageCurrent,
+                        pageSize: params.paging.pageSize,
                         total: params.paging.total,
                         showSizeChanger: true,
                         showTotal: (total) => `Tổng ${total} danh mục`,
@@ -395,16 +404,16 @@ const ListCategory = () => {
                 />
             </Card>
 
-            <Modal 
-                title={<div className="text-lg">Thêm danh mục mới</div>} 
-                open={isModalOpen} 
-                onOk={() => form.submit()} 
+            <Modal
+                title={<div className="text-lg">Thêm danh mục mới</div>}
+                open={isModalOpen}
+                onOk={() => form.submit()}
                 onCancel={handleCancel}
                 okText="Lưu"
                 cancelText="Hủy"
-                okButtonProps={{ 
+                okButtonProps={{
                     className: 'bg-[#29aae1]',
-                    loading: formSubmitting 
+                    loading: formSubmitting
                 }}
                 cancelButtonProps={{
                     disabled: formSubmitting
