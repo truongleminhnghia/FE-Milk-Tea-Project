@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   InputNumber,
   Space,
-  Upload,
-  message,
   Button,
   Card,
   Col,
@@ -12,18 +10,13 @@ import {
   Input,
   Row,
   Select,
-  Typography
+  Typography,
+  message,
 } from 'antd';
-import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  UploadOutlined,
-  SaveOutlined,
-  ArrowLeftOutlined
-} from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined, SaveOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
+import { createRecipeService } from '../../../services/recipe.service'; // Import the service
 
 const { Title } = Typography;
 
@@ -41,13 +34,13 @@ const CreateNewRecipe = () => {
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/staff-page' },
     { title: 'Công thức', href: '/staff-page/products' },
-    { title: 'Tạo mới công thức' }
+    { title: 'Tạo mới công thức' },
   ];
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      // Chuẩn bị dữ liệu gửi API
+      // Prepare payload for the API request
       const payload = {
         recipeTitle: values.recipeTitle,
         content: values.content,
@@ -56,9 +49,15 @@ const CreateNewRecipe = () => {
         ingredients: values.ingredients,
       };
 
-      await axios.post('/api/recipes', payload);
-      message.success("Tạo công thức thành công!");
-      navigate('/staff-page/products');
+      // Use the service function to create the recipe
+      const result = await createRecipeService(payload);
+      
+      if (result.success) {
+        message.success("Tạo công thức thành công!");
+        navigate('/staff-page/products');
+      } else {
+        message.error(result.message || "Đã xảy ra lỗi khi tạo công thức!");
+      }
     } catch (error) {
       console.error(error);
       message.error("Đã xảy ra lỗi khi tạo công thức!");
