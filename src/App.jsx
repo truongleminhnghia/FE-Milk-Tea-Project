@@ -89,7 +89,7 @@ const router = createBrowserRouter([
         element: <HotLine />
       },
       {
-        path: '/check-out/:id',
+        path: '/check-out',
         element: <Checkout />
       },
       {

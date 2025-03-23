@@ -1,66 +1,112 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getByIdService } from '../../services/ingredien-product.service';
-import { Button, Card, Col, Form, Input, InputNumber, List, Row, Select, Space, Typography } from 'antd';
+import { Button, Card, Col, Form, Input, InputNumber, List, Row, Select, Space, Typography, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../redux/features/authSlice';
 import BreadcrumbComponent from '../../components/navigations/BreadcrumbComponent';
 import Icon, { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { formatCurrencyVND } from '../../utils/utils';
+import { formatCurrencyVND, toastConfig } from '../../utils/utils';
+import { getByIdItemService } from '../../services/cart.service';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const Checkout = () => {
-  const currentUser = useSelector(selectUser)
-  const [isLoading, setIsLoading] = useState();
-  const navigator = useNavigate();
-  const { id } = useParams();
+  const location = useLocation();
+  const currentUser = useSelector(selectUser);
+  const navigate = useNavigate();
+  const { cartItemId } = location.state || { cartItemId: '' };
+  const [isLoading, setIsLoading] = useState(false);
+  const [cartData, setCartData] = useState(null);
   const [form] = useForm();
-  const fetchDetail = async (id) => {
-    try {
-      setIsLoading(true);
-      const res = await getByIdService(id);
-      if (res?.success || res?.data) {
-        console.log('data', res.data)
-        form.setFieldsValue(res.data);
-        // setData(res.data)
-        // setIsLoading(false);
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
 
-  const onSubmit = async (values) => {
-    const model = {
-      fullNameShipping: values.fullNameShipping,
-      phoneShipping: values.phone,
-      emailShipping: values.email,
-      noteShipping: values.note,
-      addressShipping: values.address,
-      promotionCode: values.promotionCode,
-      accountId: currentUser.id,
-      // orderDetailList: listDetail
-    }
-    console.log("model", model)
-  }
-
-  useEffect(() => {
-    // if (currentUser == null) {
-    //   navigator('/login')
-    // }
-    form.setFieldsValue(currentUser)
-    form.setFieldsValue({
-      fullNameShipping: `${form.getFieldValue('firstName') || ''} ${form.getFieldValue('lastName') || ''}`.trim()
-    });
-    fetchDetail(id)
-  }, [currentUser, form, id])
-
+  console.log("Location state:", location.state);
+  console.log("Cart Item ID received:", cartItemId);
+  
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/' },
     { title: 'Tạo đơn hàng' }
   ];
+
+  const fetchCartItemDetails = async (cartItemId) => {
+    if (!cartItemId) {
+      console.error("No cart item ID provided");
+      toastConfig("error", "Không thể tải thông tin đơn hàng");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const res = await getByIdItemService(cartItemId);
+      if (res?.success || res?.data) {
+        console.log('Cart item data:', res.data);
+        setCartData(res.data);
+        // Pre-fill shipping info from user profile
+        form.setFieldsValue({
+          fullName: `${currentUser?.firstName || ''} ${currentUser?.lastName || ''}`.trim(),
+          email: currentUser?.email,
+          phone: currentUser?.phone,
+          address: currentUser?.address
+        });
+      } else {
+        toastConfig("error", "Không thể tải thông tin đơn hàng");
+      }
+    } catch (error) {
+      console.error("Error fetching cart item:", error);
+      toastConfig("error", "Đã xảy ra lỗi khi tải thông tin đơn hàng");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (cartItemId) {
+      fetchCartItemDetails(cartItemId);
+    } else {
+      console.warn("No cart item ID in location state");
+      // You might want to redirect or show an error message
+    }
+  }, [cartItemId]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate('/login', { state: { returnUrl: location.pathname } });
+    }
+  }, [currentUser, navigate, location.pathname]);
+
+  const onSubmit = async (values) => {
+    if (!cartItemId) {
+      toastConfig("error", "Không tìm thấy thông tin đơn hàng");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const model = {
+        fullNameShipping: values.fullName,
+        phoneShipping: values.phone,
+        emailShipping: values.email,
+        noteShipping: values.note,
+        addressShipping: values.address,
+        promotionCode: values.promotionCode,
+        accountId: currentUser.id,
+        cartItemId: cartItemId
+      };
+
+      console.log("Order model:", model);
+      // Add your API call to place the order here
+      
+      toastConfig("success", "Đặt hàng thành công!");
+      // Redirect to order confirmation or orders page
+      // navigate('/orders');
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      toastConfig("error", error?.message || "Lỗi khi đặt hàng");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   //detail
 
@@ -120,37 +166,58 @@ const Checkout = () => {
           <Row>
             <Col span={24} className='bg-white px-3 py-2 rounded-xl shadow-sm'>
               <Form
+                form={form}
                 layout='vertical'
                 colon={false}
                 labelAlign='left'
+                onFinish={onSubmit}
               >
                 <Form.Item
                   label="Họ & Tên"
                   name='fullName'
                   rules={[
                     {
-                        required: true,
-                        message: 'Tên không được trống',
+                      required: true,
+                      message: 'Tên không được trống',
                     }
-                ]}
+                  ]}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   label="Email"
                   name="email"
+                  rules={[
+                    {
+                      required: true,
+                      type: 'email',
+                      message: 'Email không hợp lệ',
+                    }
+                  ]}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   label="Số điện thoại"
                   name="phone"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Số điện thoại không được trống',
+                    }
+                  ]}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   label="Địa chỉ"
                   name="address"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Địa chỉ không được trống',
+                    }
+                  ]}
                 >
                   <Input />
                 </Form.Item>
@@ -158,7 +225,20 @@ const Checkout = () => {
                   label="Ghi chú"
                   name="note"
                 >
-                  <Input />
+                  <Input.TextArea rows={4} placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn." />
+                </Form.Item>
+                
+                <Form.Item>
+                  <Button 
+                    type="primary" 
+                    htmlType="submit" 
+                    className="bg-[#29aae1]" 
+                    size="large"
+                    loading={isLoading}
+                    block
+                  >
+                    Đặt hàng
+                  </Button>
                 </Form.Item>
               </Form>
             </Col>

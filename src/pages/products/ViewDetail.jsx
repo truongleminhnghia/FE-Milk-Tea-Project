@@ -20,6 +20,7 @@ import { createItem } from '../../services/cart.service';
 
 const ViewDetail = () => {
     const currentUser = useSelector(selectUser);
+    const [cartItemId, setCartItemId] = useState('');
     const { id } = useParams();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
@@ -81,12 +82,12 @@ const ViewDetail = () => {
         const selectedType = data.ingredientQuantities?.find(
             item => item.productType === selectedProductType
         );
-        
+
         if (selectedType && quantity + 1 > selectedType.quantity) {
             toastConfig("error", `Số lượng vượt quá giới hạn (${selectedType.quantity}) cho loại ${selectedProductType}`);
             return;
         }
-        
+
         setQuantity(quantity + 1);
         form.setFieldsValue({ quantity: quantity + 1 });
     }
@@ -127,6 +128,10 @@ const ViewDetail = () => {
 
     const onSubmit = async () => {
         try {
+            if (currentUser == null) {
+                navigate("/login");
+                return;
+            }
             const values = form.getFieldsValue();
             if (selectedProductType === '') {
                 form.setFields([{ name: 'productType', errors: ['Vui lòng chọn loại sản phẩm'] }]);
@@ -139,27 +144,29 @@ const ViewDetail = () => {
             const selectedType = data.ingredientQuantities?.find(
                 item => item.productType === selectedProductType
             );
-            
+
             if (selectedType && values.quantity > selectedType.quantity) {
                 toastConfig("error", `Số lượng vượt quá giới hạn (${selectedType.quantity}) cho loại ${selectedProductType}`);
                 return;
             }
             const totalPrice = calculateTotalPrice(selectedProductType, values.quantity);
-            
-            const model = [
-                {
-                    quantity: values.quantity,
-                    productType: selectedProductType,
-                    ingredientId: id,
-                    totalPrice: totalPrice
-                }
-            ];
-            
+
+            const model =
+            {
+                accountId: currentUser.id,
+                quantity: values.quantity,
+                productType: selectedProductType,
+                ingredientId: id,
+                totalPrice: totalPrice,
+                isCart: false
+            }
+
             console.log('model', model);
-            const response = await createServiceOrder(model);
+            const response = await createItem(model);
             if (response?.success || response?.data) {
                 toastConfig("success", "Đặt hàng thành công");
-                navigate("/order-history");
+                setCartItemId(response.data.id);
+                navigate("/check-out", { state: { cartItemId: response.data.id } });
             } else {
                 toastConfig("error", response?.message || "Đặt hàng thất bại");
             }
@@ -187,18 +194,19 @@ const ViewDetail = () => {
             const selectedType = data.ingredientQuantities?.find(
                 item => item.productType === selectedProductType
             );
-            
+
             if (selectedType && values.quantity > selectedType.quantity) {
                 toastConfig("error", `Số lượng vượt quá giới hạn (${selectedType.quantity}) cho loại ${selectedProductType}`);
                 return;
             }
             const totalPrice = calculateTotalPrice(selectedProductType, values.quantity);
-            
+
             const model = {
                 accountId: currentUser.id,
                 quantity: values.quantity,
                 ingredientId: id,
                 productType: selectedProductType,
+                isCart: true,
                 totalPrice: totalPrice
             }
             console.log("model", model)
@@ -246,12 +254,12 @@ const ViewDetail = () => {
                             </Row>
                         </Col>
                     </Row>
-                    
+
                     {/* Product details skeleton */}
                     <div className='mt-4 py-6 px-4 bg-white rounded-lg'>
                         <Skeleton active paragraph={{ rows: 6 }} />
                     </div>
-                    
+
                     {/* Related products skeleton */}
                     <div className='mt-4 py-6 px-4 bg-white rounded-lg'>
                         <Skeleton active paragraph={{ rows: 1 }} />
@@ -264,7 +272,7 @@ const ViewDetail = () => {
                             ))}
                         </Row>
                     </div>
-                    
+
                     {/* Reviews skeleton */}
                     <div className='mt-4 py-6 px-4 bg-white rounded-lg'>
                         <Skeleton active paragraph={{ rows: 3 }} />
@@ -296,15 +304,15 @@ const ViewDetail = () => {
                                     >
                                         {data.images.map((item, index) => (
                                             <SwiperSlide key={item.id || `image-${index}`}>
-                                                <img 
-                                                    className='rounded-lg object-cover h-full w-full' 
-                                                    src={item.imageUrl} 
-                                                    alt={`Product image ${index + 1}`} 
+                                                <img
+                                                    className='rounded-lg object-cover h-full w-full'
+                                                    src={item.imageUrl}
+                                                    alt={`Product image ${index + 1}`}
                                                 />
                                             </SwiperSlide>
                                         ))}
                                     </Swiper>
-                                    
+
                                     <Swiper
                                         onSwiper={setThumbsSwiper}
                                         loop={data.images.length > 1}
@@ -316,14 +324,14 @@ const ViewDetail = () => {
                                         className='h-[90px] bg-slate-100 rounded-lg mt-2'
                                     >
                                         {data.images.map((item, index) => (
-                                            <SwiperSlide 
-                                                key={item.id || `thumb-${index}`} 
+                                            <SwiperSlide
+                                                key={item.id || `thumb-${index}`}
                                                 className={`px-1 py-1 cursor-pointer ${activeIndex === index ? "border-2 border-blue-500 rounded-lg" : ""}`}
                                             >
-                                                <img 
-                                                    src={item.imageUrl} 
-                                                    alt={`Thumbnail ${index + 1}`} 
-                                                    className="rounded-lg object-cover h-full w-full" 
+                                                <img
+                                                    src={item.imageUrl}
+                                                    alt={`Thumbnail ${index + 1}`}
+                                                    className="rounded-lg object-cover h-full w-full"
                                                 />
                                             </SwiperSlide>
                                         ))}
@@ -409,7 +417,7 @@ const ViewDetail = () => {
                                                     onClick={() => {
                                                         setSelectedProductType(item.productType);
                                                         form.setFieldsValue({ productType: item.productType });
-                                                        
+
                                                         // Check if current quantity exceeds the max for this type
                                                         if (quantity > item.quantity) {
                                                             const newQuantity = Math.min(item.quantity, 1);
@@ -427,8 +435,8 @@ const ViewDetail = () => {
                                                         }
                                                     }}
                                                 >
-                                                    {item.productType} {item.quantity > 0 ? 
-                                                        `(Còn ${item.quantity})` : 
+                                                    {item.productType} {item.quantity > 0 ?
+                                                        `(Còn ${item.quantity})` :
                                                         "(Hết hàng)"}
                                                 </Button>
                                             ))}
@@ -452,17 +460,17 @@ const ViewDetail = () => {
                                                     const value = e.target.value;
                                                     if (/^\d+$/.test(value) && Number(value) >= 1) {
                                                         const numValue = Number(value);
-                                                        
+
                                                         // Find the selected product type's max quantity
                                                         const selectedType = data.ingredientQuantities?.find(
                                                             item => item.productType === selectedProductType
                                                         );
-                                                        
+
                                                         if (selectedType && numValue > selectedType.quantity) {
                                                             toastConfig("error", `Số lượng vượt quá giới hạn (${selectedType.quantity}) cho loại ${selectedProductType}`);
                                                             return;
                                                         }
-                                                        
+
                                                         setQuantity(numValue);
                                                         form.setFieldsValue({ quantity: numValue });
                                                     }

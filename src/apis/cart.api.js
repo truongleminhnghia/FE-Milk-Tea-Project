@@ -33,5 +33,12 @@ export const addItem= async (model) => {
     }
 }
 
+export const getCartItemId= async (id) => {
+    const res = await ApiCustomer.get(`cart-items/${id}`);
+    if (res?.data) {
+        return res;
+    }
+}
+
 
 

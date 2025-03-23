@@ -1,4 +1,4 @@
-import { addItem, create, getByAccount, getListItem } from "../apis/cart.api";
+import { addItem, create, getByAccount, getCartItemId, getListItem } from "../apis/cart.api";
 import { toastConfig } from "../utils/utils";
 
 export const createCategoryService = async (reqBody) => {
@@ -48,6 +48,18 @@ export const createItem = async (reqBody) => {
     } catch (error) {
         toastConfig("error", error.message)
         return error.message;
+    }
+}
+
+export const getByIdItemService = async (id) => {
+    try {
+        const res = await getCartItemId(id);
+        if (res?.success || res?.data || res?.code === 200) {
+            return res;
+        }
+        return res?.message;
+    } catch (error) {
+        console.log("Error", error);
     }
 }
 
