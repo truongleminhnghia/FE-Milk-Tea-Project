@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   InputNumber,
   Space,
-  Upload,
   message,
   Button,
   Card,
@@ -17,11 +16,10 @@ import {
 import {
   MinusCircleOutlined,
   PlusOutlined,
-  UploadOutlined,
   SaveOutlined,
   ArrowLeftOutlined
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
 
@@ -33,42 +31,57 @@ const ingredientOptions = [
   { label: 'Bột mì', value: '9xy12abc-9999-8888-7777-abcdef987654' },
 ];
 
-const CreateNewRecipe = () => {
-  const [form] = Form.useForm();
+const UpdateRecipe = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/staff-page' },
     { title: 'Công thức', href: '/staff-page/products' },
-    { title: 'Tạo mới công thức' }
+    { title: 'Cập nhật công thức' }
   ];
+
+  useEffect(() => {
+    fetchRecipeDetail();
+  }, []);
+
+  const fetchRecipeDetail = async () => {
+    try {
+      const res = await axios.get(`/api/recipes/${id}`);
+      if (res?.data) {
+        const { recipeTitle, content, imageUrl, categoryId, ingredients } = res.data;
+        form.setFieldsValue({ recipeTitle, content, imageUrl, categoryId, ingredients });
+      }
+    } catch (err) {
+      message.error('Không thể tải dữ liệu công thức.');
+    }
+  };
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      // Chuẩn bị dữ liệu gửi API
       const payload = {
         recipeTitle: values.recipeTitle,
         content: values.content,
         categoryId: values.categoryId,
         imageUrl: values.imageUrl,
-        ingredients: values.ingredients,
+        ingredients: values.ingredients
       };
-
-      await axios.post('/api/recipes', payload);
-      message.success("Tạo công thức thành công!");
+      await axios.put(`/api/recipes/${id}`, payload);
+      message.success('Cập nhật công thức thành công!');
       navigate('/staff-page/products');
     } catch (error) {
       console.error(error);
-      message.error("Đã xảy ra lỗi khi tạo công thức!");
+      message.error('Đã xảy ra lỗi khi cập nhật công thức!');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="new-product-container">
+    <div className="update-recipe-container">
       <BreadcrumbComponent items={breadcrumbItems} />
 
       <Card className="mt-4 shadow-sm">
@@ -81,7 +94,7 @@ const CreateNewRecipe = () => {
             >
               Quay lại
             </Button>
-            <Title level={4} className="mb-0">Tạo mới công thức</Title>
+            <Title level={4} className="mb-0">Cập nhật công thức</Title>
           </div>
         </div>
         <Divider />
@@ -183,7 +196,7 @@ const CreateNewRecipe = () => {
                 icon={<SaveOutlined />}
                 className="bg-[#29aae1]"
               >
-                Tạo sản phẩm
+                Lưu thay đổi
               </Button>
             </Space>
           </div>
@@ -193,4 +206,4 @@ const CreateNewRecipe = () => {
   );
 };
 
-export default CreateNewRecipe;
+export default UpdateRecipe;

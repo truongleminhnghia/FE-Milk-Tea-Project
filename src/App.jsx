@@ -39,6 +39,11 @@ import EditProduct from "./pages/admin-pages/products-admin/EditProduct"
 import ListNewOrder from "./pages/orders/order-by-staff/ListNewOrder";
 import ListAllOrder from "./pages/orders/order-by-staff/ListAllOrder";
 import ListRecipe from "./pages/recipes/recipes-by-staff/ListRecipe";
+import UpdateRecipe from "./pages/recipes/recipes-by-staff/UpdateRecipe";
+import CreatePromotion from "./pages/promotions/promotions-by-staff/CreatePromotion";
+import UpdatePromotion from "./pages/promotions/promotions-by-staff/UpdatePromotion";
+import ListAllPromotion from "./pages/promotions/promotions-by-staff/ListAllPromotion";
+import DeletePromotion from "./pages/promotions/promotions-by-staff/DeletePromotion";
 
 const router = createBrowserRouter([
   {
@@ -186,6 +191,7 @@ const router = createBrowserRouter([
         path: 'create-user',
         element: <CreateNewUser />
       },
+      
     ]
   },
   {
@@ -220,6 +226,10 @@ const router = createBrowserRouter([
         element: <CreateNewRecipe />
       },
       {
+        path: 'update-recipes',
+        element: <UpdateRecipe />
+      },
+      {
         path: 'products/:id',
         element: <ProductDetail />
       },
@@ -238,6 +248,23 @@ const router = createBrowserRouter([
       {
         path: 'orders/new',
         element: <ListNewOrder />
+      },
+      {
+        path: 'create-promotions',
+        element: <CreatePromotion />
+      },
+      {
+        path: 'update-promotions',
+        element: <UpdatePromotion />
+       
+      },
+      {
+        path: 'delete-promotions',
+        element: <DeletePromotion />
+      },
+      {
+        path: 'promotions',
+        element: <ListAllPromotion />
       }
     ]
   }
