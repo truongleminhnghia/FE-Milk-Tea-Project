@@ -50,6 +50,15 @@ const defaultItems = [
         ],
     },
     {
+        key: "/recipes",
+        icon: <Icon icon="mdi:book-open-variant" className="text-lg" />,
+        label: "Công thức",
+        children: [
+            { key: "/staff-page/recipes", label: "Danh sách công thức" },
+            { key: "/staff-page/create-recipes", label: "Tạo mới công thức" },
+        ],
+    },
+    {
         key: "/admin-page/users",
         icon: <Icon icon="mdi:account-outline" className="text-lg" />,
         label: "Người dùng",

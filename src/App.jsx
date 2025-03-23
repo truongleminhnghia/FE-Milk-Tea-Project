@@ -9,7 +9,7 @@ import NewProduct from "./pages/admin-pages/products-admin/NewProduct";
 import ListOrders from "./pages/orders/ListOrders";
 import NewOrder from "./pages/orders/NewOrder";
 // import ListRecipes from "./pages/recipes/ListRecipes";
-import CreateNewRecipe from "./pages/recipes/CreateNewRecipe";
+import CreateNewRecipe from "./pages/recipes/recipes-by-staff/CreateNewRecipe";
 import ListUsers from "./pages/users/ListUsers";
 import CreateNewUser from "./pages/users/CreateNewUser";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
@@ -38,6 +38,7 @@ import Layout03 from "./components/layouts/Layout03";
 import EditProduct from "./pages/admin-pages/products-admin/EditProduct"
 import ListNewOrder from "./pages/orders/order-by-staff/ListNewOrder";
 import ListAllOrder from "./pages/orders/order-by-staff/ListAllOrder";
+import ListRecipe from "./pages/recipes/recipes-by-staff/ListRecipe";
 
 const router = createBrowserRouter([
   {
@@ -190,7 +191,7 @@ const router = createBrowserRouter([
   {
     path: '/staff-page',
     element: (
-      <ProtectedRoute element={<Layout03 />} allowedRoles={["ROLE_STAFF"]} />
+      <ProtectedRoute element={<Layout03 />} />
     ),
     children: [
       {
@@ -208,6 +209,15 @@ const router = createBrowserRouter([
       {
         path: 'products',
         element: <ListProductsAdmin />
+        
+      },
+      {
+        path: 'recipes',
+        element: <ListRecipe />
+      },
+      {
+        path: 'create-recipes',
+        element: <CreateNewRecipe />
       },
       {
         path: 'products/:id',
