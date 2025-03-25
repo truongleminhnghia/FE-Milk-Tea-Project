@@ -47,8 +47,10 @@ const defaultItems = [
         children: [
             { key: "/admin-page/recipes", label: "Danh sách công thức" },
             { key: "/admin-page/create-recipes", label: "Tạo mới công thức" },
+            { key: "/staff-page/update-recipes", label: "Cập nhật công thức" },
         ],
     },
+    
     {
         key: "/admin-page/users",
         icon: <Icon icon="mdi:account-outline" className="text-lg" />,

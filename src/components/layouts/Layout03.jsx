@@ -45,6 +45,18 @@ const menuStaff = [
         children: [
             { key: "/staff-page/recipes", label: "Danh sách công thức" },
             { key: "/staff-page/create-recipes", label: "Tạo mới công thức" },
+            { key: "/staff-page/update-recipes", label: "Cập nhật công thức" },
+        ],
+    },
+    {
+        key: "/promotions",
+        icon: <Icon icon="lsicon:badge-promotion-filled" className="text-lg"  />,
+        label: "Khuyến mãi",
+        children: [
+            { key: "/staff-page/promotions", label: "Danh sách mã khuyến mãi" },
+            { key: "/staff-page/create-promotions", label: "Tạo mã khuyến mãi" },
+            { key: "/staff-page/update-promotions", label: "Cập nhật mã khuyến mãi" },
+            { key: "/staff-page/delete-promotions", label: "Xóa mã khuyến mãi" },
         ],
     }
 ];
