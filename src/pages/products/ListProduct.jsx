@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import CardProductComponent from '../../components/ui/carts/CardProductComponent'
 import { Button, Checkbox, Col, Input, Pagination, Row, Select, Spin, Empty } from 'antd'
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import { getByListSerivce } from '../../services/product.service';
+import { getByListSerivce as getCategoryService } from '../../services/category.service'; // Make sure to import this
 import { handleKeyDown } from '../../utils/utils'
+import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
   const [listIngredient, setListIngredient] = useState([]);
+  const [categories, setCategories] = useState([]); // State for categories
   const [receivedMessage, setReceivedMessage] = useState("");
   const [params, setParams] = useState({
     categoryId: null,
     supplier: null,
     status: null,
     isSale: null,
-    rating: null,
     search: null,
     startDate: null,
     endDate: null,
@@ -27,6 +28,31 @@ const ListProduct = () => {
       total: 0,
     }
   });
+
+  const fetchCategories = async () => {
+    try {
+      const params = {
+        _field: "Id,CategoryName",
+        categoryStatus: "ACTIVE",
+        categoryType: "CATEGORY_PRODUCT"
+      };
+      const res = await getCategoryService(params);
+      if (res?.data) {
+        const formatCategories = res.data.map((item) => ({
+          label: item.CategoryName,
+          value: item.Id
+        }));
+        setCategories(formatCategories);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); 
+    fetchIngredient(params); 
+  }, [JSON.stringify(params)]);
 
   const fetchIngredient = async (params) => {
     try {
@@ -43,7 +69,6 @@ const ListProduct = () => {
         maxPrice: params.maxPrice,
         isSale: params.isSale,
         supplier: params.supplier,
-        rating: params.rating,
         sortBy: params.sortBy,
         isDescending: params.isDescending
       };
@@ -65,9 +90,11 @@ const ListProduct = () => {
     }
   };
 
-  useEffect(() => {
-    fetchIngredient(params);
-  }, [JSON.stringify(params)]);
+  const checkList = [
+    { id: "1", label: "Tất cả" },
+    { id: "2", label: "Còn hàng" },
+    { id: "3", label: "Khuyến mãi" },
+  ];
 
   const handleCategoryChange = (id) => {
     setParams((prev) => ({ ...prev, categoryId: id }));
@@ -85,11 +112,6 @@ const ListProduct = () => {
     } else {
       setParams((prev) => ({ ...prev, status: null, isSale: null }));
     }
-  };
-
-  const handleRatingChange = (label) => {
-    const ratingValue = parseInt(label.split(" ")[0]);
-    setParams((prev) => ({ ...prev, rating: prev.rating === ratingValue ? null : ratingValue }));
   };
 
   const handleSearch = (e) => {
@@ -120,10 +142,8 @@ const ListProduct = () => {
     }
   };
 
-  // Extract unique suppliers from listIngredient
   const uniqueSuppliers = listIngredient.length > 0 
-    ? [...new Set(listIngredient.map(item => item.supplier))]
-      .map(supplier => ({ id: supplier, label: supplier }))
+    ? [...new Set(listIngredient.map(item => item.supplier))].map(supplier => ({ id: supplier, label: supplier }))
     : [
         { id: "1", label: "Wonderful" },
         { id: "2", label: "Gia Uy" },
@@ -131,43 +151,22 @@ const ListProduct = () => {
         { id: "4", label: "KING" },
       ];
 
-  const categoryActive = [
-    { id: "08dd6357-a14b-42c2-8239-2daa426656b7", label: "Bột pha trà sữa" },
-    { id: "08dd6380-59bc-412b-8df1-3f3babe81a68", label: "Topping" },
-    { id: "08dd6380-d15a-4ae1-8ee5-60c1ff5169dc", label: "Trà" },
-  ];
-
-  const checkList = [
-    { id: "1", label: "Tất cả" },
-    { id: "2", label: "Còn hàng" },
-    { id: "3", label: "Khuyến mãi" },
-  ];
-
-  const rating = [
-    { id: "1", label: "3 sao" },
-    { id: "2", label: "4 sao" },
-    { id: "3", label: "5 sao" },
-  ];
-
   const price = [
     { id: "1", label: "Tăng dần" },
     { id: "2", label: "Giảm dần" }
-  ]
-  
+  ];
+
   const rangePrice = [
     { id: "1", label: "Từ 0 đến 100,000đ", minVaule: 0, maxValue: 100000 },
     { id: "2", label: "Từ 100,000đ đến 500,000đ", minVaule: 100000, maxValue: 500000 },
     { id: "3", label: "Từ 500,000đ đến 1,000,000đ", minVaule: 500000, maxValue: 1000000 },
     { id: "4", label: "Từ 1,000,000đ trở lên", minVaule: 1000000, maxValue: null },
-  ]
+  ];
 
   return (
     <div className="container">
       <Row className='py-2 w-full !mx-0'>
-        <BreadcrumbItem items={[
-          { title: 'Trang chủ', href: '/' },
-          { title: 'Tất cả sản phẩm' }
-        ]} />
+        <BreadcrumbItem items={[ { title: 'Trang chủ', href: '/' }, { title: 'Tất cả sản phẩm' }]} />
         <img className='w-full h-[180px] object-cover rounded-lg' src="/images/baners/collection_main_banner.webp" alt="Nguyên liệu pha chế đồ uống" />
       </Row>
       <Row className='rounded-lg w-full mt-4'>
@@ -211,7 +210,7 @@ const ListProduct = () => {
               </div>
             </Col>
           </Row>
-          
+
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <Spin size="large" />
@@ -256,73 +255,40 @@ const ListProduct = () => {
             <div className='py-2 px-4 w-full relative'>
               <h3 className='text-lg font-medium text-black'>Danh mục sản phẩm</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <ul className='mt-3'>
-                {categoryActive.map((item) => (
-                  <li
-                    key={item.id}
-                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.categoryId === item.id ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
-                    onClick={() => handleCategoryChange(item.id)}
-                  >
-                    {item.label}
-                  </li>
-                ))}
-              </ul>
+              <Select
+                placeholder="Chọn danh mục"
+                options={categories}
+                value={params.categoryId}
+                onChange={handleCategoryChange}
+                className="w-full"
+              />
             </div>
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Nhà sản xuất</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <ul className='mt-3'>
-                {uniqueSuppliers.map((item) => (
-                  <li
-                    key={item.id}
-                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.supplier === item.label ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
-                    onClick={() => handleSupplierChange(item.label)}
-                  >
-                    {item.label}
-                  </li>
-                ))}
-              </ul>
+              <Select
+                placeholder="Chọn nhà sản xuất"
+                options={uniqueSuppliers}
+                value={params.supplier}
+                onChange={handleSupplierChange}
+                className="w-full"
+              />
             </div>
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Tình trạng</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <div className='mt-3 flex flex-col gap-2'>
-                {checkList.map((item) => (
-                  <Checkbox
-                    key={item.id}
-                    className={`text-[14px] py-1 cursor-pointer ${
-                      (item.label === "Khuyến mãi" && params.isSale) || 
-                      (item.label === "Còn hàng" && params.status === "ACTIVE") || 
-                      (item.label === "Tất cả" && !params.status && !params.isSale) 
-                        ? 'text-[#29aae1] font-medium' 
-                        : 'text-[#747474]'
-                    }`}
-                    checked={
-                      (item.label === "Khuyến mãi" && params.isSale) || 
-                      (item.label === "Còn hàng" && params.status === "ACTIVE") || 
-                      (item.label === "Tất cả" && !params.status && !params.isSale)
-                    }
-                    onChange={() => handleStatusChange(item.label)}
-                  >
+              <Select
+                placeholder="Chọn tình trạng"
+                value={params.status || params.isSale}
+                onChange={handleStatusChange}
+                className="w-full"
+              >
+                {checkList.map(item => (
+                  <Select.Option key={item.id} value={item.label}>
                     {item.label}
-                  </Checkbox>
+                  </Select.Option>
                 ))}
-              </div>
-            </div>
-            <div className='py-2 px-4 w-full relative mt-2'>
-              <h3 className='text-lg font-medium text-black'>Đánh giá</h3>
-              <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <div className='mt-3 flex flex-col gap-2'>
-                {rating.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`flex items-center text-[14px] px-2 py-1 cursor-pointer hover:text-[#29aae1] ${params.rating === parseInt(item.label.split(" ")[0]) ? 'text-[#29aae1] font-bold' : 'text-[#747474]'}`}
-                    onClick={() => handleRatingChange(item.label)}
-                  >
-                    {item.label}
-                  </div>
-                ))}
-              </div>
+              </Select>
             </div>
           </div>
         </Col>

@@ -19,7 +19,7 @@ export const getByIdPromotionService = async (id) => {
         if (res?.data) {
             return res;
         }
-        return res?.message;
+        return res?.message;a
     } catch (error) {
         console.log("Error", error);
     }

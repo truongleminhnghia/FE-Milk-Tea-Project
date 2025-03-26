@@ -18,8 +18,10 @@ import { SaveOutlined, ArrowLeftOutlined, PlusOutlined, MinusCircleOutlined } fr
 import { useNavigate } from 'react-router-dom';
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
 import { createPromotionService } from '../../../services/promotion.service';
+import moment from 'moment';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
+const { TextArea } = Input;
 
 const BREADCRUMB_ITEMS = [
   { title: 'Trang chủ', href: '/staff-page' },
@@ -31,31 +33,59 @@ const CreatePromotion = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [promotionDetails, setPromotionDetails] = useState([]);
 
-  const [statusOptions] = useState([
-    { label: 'Đang hoạt động', value: 'ACTIVE' },
-    { label: 'Không hoạt động', value: 'NO_ACTIVE' },
-  ]);
+  const statusOptions = [
+    { label: 'Đang hoạt động', value: true },
+    { label: 'Không hoạt động', value: false },
+  ];
 
   // Hàm tạo khuyến mãi
   const onFinish = async (values) => {
+    // Validate promotion details
+    if (promotionDetails.length === 0) {
+      message.error("Vui lòng thêm ít nhất một chi tiết khuyến mãi!");
+      return;
+    }
+
+    // Check if all promotion details are valid
+    const isDetailsValid = promotionDetails.every(detail => 
+      detail.promotionName && 
+      detail.discountValue !== null && 
+      detail.discountValue !== undefined
+    );
+
+    if (!isDetailsValid) {
+      message.error("Vui lòng điền đầy đủ thông tin chi tiết khuyến mãi!");
+      return;
+    }
+
     try {
       setLoading(true);
 
       const payload = {
-        isActive: values.status === 'ACTIVE', 
-        startDate: values.startDate, 
-        endDate: values.endDate, 
-        promotionType: 'PROMOTION_PRODUCT', 
-        
+        isActive: values.status,
+        startDate: values.startDate.toISOString(),
+        endDate: values.endDate.toISOString(),
+        promotionCode: values.promotionCode,
+        promotionType: 'PROMOTION_PRODUCT',
+        promotionDetailList: promotionDetails.map(detail => ({
+          promotionName: detail.promotionName,
+          description: detail.description || '',
+          discountValue: detail.discountValue,
+          miniValue: detail.miniValue || 0,
+          maxValue: detail.maxValue || 0
+        }))
       };
 
-      const result = await createPromotionService(payload);  // Gọi API tạo khuyến mãi
-      if (result?.success) {
+      const result = await createPromotionService(payload);
+      
+      if (result?.data) {
         message.success("Tạo khuyến mãi thành công!");
         navigate('/staff-page/promotions');  
       } else {
-        throw new Error(result?.message || "Tạo khuyến mãi thất bại");
+        // Handle potential error messages from the service
+        message.error(result || "Tạo khuyến mãi thất bại");
       }
     } catch (error) {
       console.error("Error creating promotion:", error);
@@ -63,6 +93,40 @@ const CreatePromotion = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const addPromotionDetail = () => {
+    setPromotionDetails([
+      ...promotionDetails, 
+      { 
+        promotionName: '', 
+        description: '', 
+        discountValue: null, 
+        miniValue: null, 
+        maxValue: null 
+      }
+    ]);
+  };
+
+  const removePromotionDetail = (index) => {
+    const updatedDetails = [...promotionDetails];
+    updatedDetails.splice(index, 1);
+    setPromotionDetails(updatedDetails);
+  };
+
+  const updatePromotionDetail = (index, field, value) => {
+    const updatedDetails = [...promotionDetails];
+    updatedDetails[index][field] = value;
+    setPromotionDetails(updatedDetails);
+  };
+
+  // Custom validator to ensure start date is before end date
+  const validateDateRange = (_, values) => {
+    const { startDate, endDate } = values;
+    if (startDate && endDate && startDate.isAfter(endDate)) {
+      return Promise.reject(new Error('Ngày bắt đầu phải trước ngày kết thúc'));
+    }
+    return Promise.resolve();
   };
 
   return (
@@ -83,8 +147,12 @@ const CreatePromotion = () => {
         </div>
         <Divider />
 
-        <Form layout="vertical" form={form} onFinish={onFinish}>
-          {}
+        <Form 
+          layout="vertical" 
+          form={form} 
+          onFinish={onFinish}
+          onValuesChange={() => form.validateFields()}
+        >
           <Card title="Thông tin cơ bản" className="mb-4">
             <Row gutter={24}>
               <Col xs={24} md={12}>
@@ -112,29 +180,139 @@ const CreatePromotion = () => {
                 <Form.Item
                   label="Ngày bắt đầu"
                   name="startDate"
-                  rules={[{ required: true, message: "Vui lòng chọn ngày bắt đầu!" }]}
+                  rules={[
+                    { required: true, message: "Vui lòng chọn ngày bắt đầu!" },
+                    { validator: validateDateRange }
+                  ]}
                 >
                   <DatePicker
                     style={{ width: '100%' }}
                     format="DD-MM-YYYY"
                     placeholder="Chọn ngày bắt đầu"
+                    disabledDate={(current) => current && current < moment().startOf('day')}
                   />
                 </Form.Item>
 
                 <Form.Item
                   label="Ngày kết thúc"
                   name="endDate"
-                  rules={[{ required: true, message: "Vui lòng chọn ngày kết thúc!" }]}
+                  rules={[
+                    { required: true, message: "Vui lòng chọn ngày kết thúc!" },
+                    { validator: validateDateRange }
+                  ]}
                 >
                   <DatePicker
                     style={{ width: '100%' }}
                     format="DD-MM-YYYY"
                     placeholder="Chọn ngày kết thúc"
+                    disabledDate={(current) => current && current < moment().startOf('day')}
                   />
                 </Form.Item>
               </Col>
             </Row>
           </Card>
+
+          <Card 
+            title="Chi tiết khuyến mãi" 
+            className="mb-4" 
+            extra={
+              <Button 
+                type="dashed" 
+                onClick={addPromotionDetail} 
+                icon={<PlusOutlined />}
+              >
+                Thêm chi tiết khuyến mãi
+              </Button>
+            }
+          >
+            {promotionDetails.map((detail, index) => (
+              <Card 
+                key={index} 
+                className="mb-4"
+                extra={
+                  <Button 
+                    type="text" 
+                    danger 
+                    icon={<MinusCircleOutlined />} 
+                    onClick={() => removePromotionDetail(index)}
+                  >
+                    Xóa
+                  </Button>
+                }
+              >
+                <Row gutter={24}>
+                  <Col xs={24} md={12}>
+                    <Form.Item 
+                      label="Tên khuyến mãi"
+                      validateStatus={!detail.promotionName ? 'error' : ''}
+                      help={!detail.promotionName ? 'Vui lòng nhập tên khuyến mãi' : ''}
+                    >
+                      <Input 
+                        placeholder="Nhập tên khuyến mãi"
+                        value={detail.promotionName}
+                        onChange={(e) => updatePromotionDetail(index, 'promotionName', e.target.value)}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item 
+                      label="Giá trị giảm giá"
+                      validateStatus={detail.discountValue === null ? 'error' : ''}
+                      help={detail.discountValue === null ? 'Vui lòng nhập giá trị giảm giá' : ''}
+                    >
+                      <InputNumber 
+                        style={{ width: '100%' }}
+                        placeholder="Nhập giá trị giảm giá"
+                        min={0}
+                        value={detail.discountValue}
+                        onChange={(value) => updatePromotionDetail(index, 'discountValue', value)}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24}>
+                    <Form.Item label="Mô tả">
+                      <TextArea 
+                        placeholder="Nhập mô tả khuyến mãi"
+                        value={detail.description}
+                        onChange={(e) => updatePromotionDetail(index, 'description', e.target.value)}
+                        rows={3}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item label="Giá trị tối thiểu">
+                      <InputNumber 
+                        style={{ width: '100%' }}
+                        placeholder="Nhập giá trị tối thiểu"
+                        min={0}
+                        value={detail.miniValue}
+                        onChange={(value) => updatePromotionDetail(index, 'miniValue', value)}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <Form.Item label="Giá trị tối đa">
+                      <InputNumber 
+                        style={{ width: '100%' }}
+                        placeholder="Nhập giá trị tối đa"
+                        min={0}
+                        value={detail.maxValue}
+                        onChange={(value) => updatePromotionDetail(index, 'maxValue', value)}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+            ))}
+            {promotionDetails.length === 0 && (
+              <div className="text-center">
+                <Text type="secondary">
+                  Chưa có chi tiết khuyến mãi. Nhấn "Thêm chi tiết khuyến mãi" để bắt đầu.
+                </Text>
+              </div>
+            )}
+          </Card>
+
           <div className="flex justify-end">
             <Space>
               <Button

@@ -130,18 +130,6 @@ const ListAllPromotion = () => {
             render: (isActive) => (isActive ? 'Có' : 'Không'),
         },
         {
-            key: 'createdAt',
-            title: 'Ngày tạo',
-            dataIndex: 'createdAt',
-            render: (createdAt) => <span>{formatISODate(createdAt)}</span>,
-        },
-        {
-            key: 'updatedAt',
-            title: 'Ngày cập nhật',
-            dataIndex: 'updatedAt',
-            render: (updatedAt) => <span>{formatISODate(updatedAt)}</span>,
-        },
-        {
             title: 'Hành động',
             key: 'operation',
             render: (item) => (
