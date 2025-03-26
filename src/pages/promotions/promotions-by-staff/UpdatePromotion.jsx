@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form,
   Input,
@@ -11,17 +11,18 @@ import {
   message
 } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
-import axios from 'axios';
+import { getByIdPromotionService, updatePromotionService } from '../../../services/promotion.service';
 
 const { RangePicker } = DatePicker;
 
 const UpdatePromotion = () => {
-  const { id } = useParams();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [promotionId, setPromotionId] = useState(null); // Lưu trữ mã khuyến mãi
+  const [promotionData, setPromotionData] = useState(null); // Dữ liệu khuyến mãi
   const navigate = useNavigate();
 
   const breadcrumbItems = [
@@ -30,39 +31,59 @@ const UpdatePromotion = () => {
     { title: 'Cập nhật khuyến mãi' }
   ];
 
+  // Lấy dữ liệu khuyến mãi khi promotionId thay đổi
   useEffect(() => {
-    fetchPromotion();
-  }, []);
+    if (promotionId) {
+      fetchPromotion(promotionId);
+    }
+  }, [promotionId]);
 
-  const fetchPromotion = async () => {
+  const fetchPromotion = async (id) => {
     try {
-      const res = await axios.get(`/api/promotions/${id}`);
-      const { startDate, endDate, promotionType } = res.data;
+      // Gọi API để lấy dữ liệu khuyến mãi
+      const res = await getByIdPromotionService(id);
+      if (res?.data) {
+        const { startDate, endDate, promotionType } = res.data;
 
-      form.setFieldsValue({
-        dateRange: [dayjs(startDate), dayjs(endDate)],
-        promotionType
-      });
+        // Cập nhật dữ liệu vào form
+        form.setFieldsValue({
+          dateRange: [dayjs(startDate), dayjs(endDate)],
+          promotionType
+        });
+        setPromotionData(res.data);
+      } else {
+        message.error('Không tìm thấy khuyến mãi với mã này.');
+      }
     } catch (err) {
-      message.error('Không thể tải thông tin khuyến mãi.');
+      message.error('Lỗi khi tải thông tin khuyến mãi.');
     }
   };
 
+  // Xử lý khi người dùng nhập mã khuyến mãi
+  const handlePromotionIdChange = (e) => {
+    setPromotionId(e.target.value); // Cập nhật mã khuyến mãi
+  };
+
+  // Xử lý khi người dùng submit form
   const onFinish = async (values) => {
     setLoading(true);
     try {
       const [startDate, endDate] = values.dateRange || [];
 
       const payload = {
-        isActive: true,
+        isActive: true, // Giả sử khuyến mãi luôn ở trạng thái "hoạt động"
         startDate: startDate?.toISOString(),
         endDate: endDate?.toISOString(),
-        promotionType: values.promotionType
+        promotionType: values.promotionType // Loại khuyến mãi được chọn
       };
 
-      await axios.put(`/api/promotions/${id}`, payload);
-      message.success('Cập nhật khuyến mãi thành công!');
-      navigate('/staff-page/promotions');
+      const result = await updatePromotionService(promotionId, payload); // Gọi service cập nhật khuyến mãi
+      if (result?.data) {
+        message.success('Cập nhật khuyến mãi thành công!');
+        navigate('/staff-page/promotions');
+      } else {
+        message.error('Lỗi khi cập nhật khuyến mãi!');
+      }
     } catch (error) {
       console.error(error);
       message.error('Lỗi khi cập nhật khuyến mãi!');
@@ -81,37 +102,49 @@ const UpdatePromotion = () => {
         <Form layout="vertical" form={form} onFinish={onFinish}>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item label="Mã khuyến mãi">
-                <Input value={id} disabled />
-              </Form.Item>
-
+              {/* Trường nhập mã khuyến mãi */}
               <Form.Item
-                label="Thời gian áp dụng"
-                name="dateRange"
-                rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}
-              >
-                <RangePicker
-                  showTime
-                  format="DD-MM-YYYY HH:mm"
-                  style={{ width: '100%' }}
-                  placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+                label="Mã khuyến mãi"
+                name="promotionId"
+                rules={[{ required: true, message: 'Vui lòng nhập mã khuyến mãi!' }]}>
+                <Input
+                  placeholder="Nhập mã khuyến mãi"
+                  value={promotionId}
+                  onChange={handlePromotionIdChange} // Khi thay đổi mã khuyến mãi, cập nhật trạng thái
                 />
               </Form.Item>
 
-              <Form.Item
-                label="Loại khuyến mãi"
-                name="promotionType"
-                rules={[{ required: true, message: 'Vui lòng chọn loại khuyến mãi!' }]}
-              >
-                <Select
-                  placeholder="Chọn loại khuyến mãi"
-                  options={[
-                    { label: 'Khuyến mãi sản phẩm', value: 'PROMOTION_PRODUCT' },
-                    { label: 'Khuyến mãi đơn hàng', value: 'PROMOTION_ORDER' }
-                  ]}
-                />
-              </Form.Item>
+              {/* Hiển thị các thông tin khuyến mãi nếu có dữ liệu */}
+              {promotionData && (
+                <>
+                  <Form.Item
+                    label="Thời gian áp dụng"
+                    name="dateRange"
+                    rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}>
+                    <RangePicker
+                      showTime
+                      format="DD-MM-YYYY HH:mm"
+                      style={{ width: '100%' }}
+                      placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+                    />
+                  </Form.Item>
 
+                  <Form.Item
+                    label="Loại khuyến mãi"
+                    name="promotionType"
+                    rules={[{ required: true, message: 'Vui lòng chọn loại khuyến mãi!' }]}>
+                    <Select
+                      placeholder="Chọn loại khuyến mãi"
+                      options={[
+                        { label: 'Khuyến mãi sản phẩm', value: 'PROMOTION_PRODUCT' },
+                        { label: 'Khuyến mãi đơn hàng', value: 'PROMOTION_ORDER' }
+                      ]}
+                    />
+                  </Form.Item>
+                </>
+              )}
+
+              {/* Nút Lưu */}
               <Form.Item className="text-right">
                 <Button
                   type="primary"
