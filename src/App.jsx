@@ -44,6 +44,7 @@ import CreatePromotion from "./pages/promotions/promotions-by-staff/CreatePromot
 import UpdatePromotion from "./pages/promotions/promotions-by-staff/UpdatePromotion";
 import ListAllPromotion from "./pages/promotions/promotions-by-staff/ListAllPromotion";
 import DeletePromotion from "./pages/promotions/promotions-by-staff/DeletePromotion";
+import Payment from "./pages/orders/Payment";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
       {
         path: '/check-out',
         element: <Checkout />
+      },
+      {
+        path: '/payment',
+        element: <Payment />
       },
       {
         path: '/gioi-thieu',
