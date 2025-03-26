@@ -4,11 +4,13 @@ import { Button, Checkbox, Col, Input, Pagination, Row, Select, Spin, Empty } fr
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import { getByListSerivce } from '../../services/product.service';
+import { getByListSerivce as getCategoryService } from '../../services/category.service'; // Make sure to import this
 import { handleKeyDown } from '../../utils/utils'
 
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
   const [listIngredient, setListIngredient] = useState([]);
+  const [categories, setCategories] = useState([]); // State for categories
   const [receivedMessage, setReceivedMessage] = useState("");
   const [params, setParams] = useState({
     categoryId: null,
@@ -26,6 +28,32 @@ const ListProduct = () => {
       total: 0,
     }
   });
+
+  // Fetch categories from the API
+  const fetchCategories = async () => {
+    try {
+      const params = {
+        _field: "Id,CategoryName",
+        categoryStatus: "ACTIVE",
+        categoryType: "CATEGORY_PRODUCT"
+      };
+      const res = await getCategoryService(params);
+      if (res?.data) {
+        const formatCategories = res.data.map((item) => ({
+          label: item.CategoryName,
+          value: item.Id
+        }));
+        setCategories(formatCategories);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); // Call the fetchCategories function
+    fetchIngredient(params); // Existing fetchIngredient function call
+  }, [JSON.stringify(params)]);
 
   const fetchIngredient = async (params) => {
     try {
@@ -62,10 +90,11 @@ const ListProduct = () => {
       setisLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchIngredient(params);
-  }, [JSON.stringify(params)]);
+  const checkList = [
+    { id: "1", label: "Tất cả" },
+    { id: "2", label: "Còn hàng" },
+    { id: "3", label: "Khuyến mãi" },
+  ];
 
   const handleCategoryChange = (id) => {
     setParams((prev) => ({ ...prev, categoryId: id }));
@@ -115,8 +144,7 @@ const ListProduct = () => {
 
   // Extract unique suppliers from listIngredient
   const uniqueSuppliers = listIngredient.length > 0 
-    ? [...new Set(listIngredient.map(item => item.supplier))]
-      .map(supplier => ({ id: supplier, label: supplier }))
+    ? [...new Set(listIngredient.map(item => item.supplier))].map(supplier => ({ id: supplier, label: supplier }))
     : [
         { id: "1", label: "Wonderful" },
         { id: "2", label: "Gia Uy" },
@@ -124,23 +152,11 @@ const ListProduct = () => {
         { id: "4", label: "KING" },
       ];
 
-  const categoryActive = [
-    { id: "08dd6357-a14b-42c2-8239-2daa426656b7", label: "Bột pha trà sữa" },
-    { id: "08dd6380-59bc-412b-8df1-3f3babe81a68", label: "Topping" },
-    { id: "08dd6380-d15a-4ae1-8ee5-60c1ff5169dc", label: "Trà" },
-  ];
-
-  const checkList = [
-    { id: "1", label: "Tất cả" },
-    { id: "2", label: "Còn hàng" },
-    { id: "3", label: "Khuyến mãi" },
-  ];
-
   const price = [
     { id: "1", label: "Tăng dần" },
     { id: "2", label: "Giảm dần" }
   ]
-  
+
   const rangePrice = [
     { id: "1", label: "Từ 0 đến 100,000đ", minVaule: 0, maxValue: 100000 },
     { id: "2", label: "Từ 100,000đ đến 500,000đ", minVaule: 100000, maxValue: 500000 },
@@ -151,10 +167,7 @@ const ListProduct = () => {
   return (
     <div className="container">
       <Row className='py-2 w-full !mx-0'>
-        <BreadcrumbItem items={[
-          { title: 'Trang chủ', href: '/' },
-          { title: 'Tất cả sản phẩm' }
-        ]} />
+        <BreadcrumbItem items={[ { title: 'Trang chủ', href: '/' }, { title: 'Tất cả sản phẩm' }]} />
         <img className='w-full h-[180px] object-cover rounded-lg' src="/images/baners/collection_main_banner.webp" alt="Nguyên liệu pha chế đồ uống" />
       </Row>
       <Row className='rounded-lg w-full mt-4'>
@@ -198,7 +211,7 @@ const ListProduct = () => {
               </div>
             </Col>
           </Row>
-          
+
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <Spin size="large" />
@@ -240,21 +253,24 @@ const ListProduct = () => {
         </Col>
         <Col span={6} pull={18} className='w-full sticky top-20 max-h-[calc(100vh-140px)] overflow-auto pr-4'>
           <div className='bg-white w-full rounded-lg shadow-sm py-4'>
+            {/* Category filter */}
             <div className='py-2 px-4 w-full relative'>
               <h3 className='text-lg font-medium text-black'>Danh mục sản phẩm</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
               <ul className='mt-3'>
-                {categoryActive.map((item) => (
+                {categories.map((item) => (
                   <li
-                    key={item.id}
-                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.categoryId === item.id ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
-                    onClick={() => handleCategoryChange(item.id)}
+                    key={item.value}
+                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.categoryId === item.value ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
+                    onClick={() => handleCategoryChange(item.value)}
                   >
                     {item.label}
                   </li>
                 ))}
               </ul>
             </div>
+
+            {/* Supplier filter */}
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Nhà sản xuất</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
@@ -270,6 +286,8 @@ const ListProduct = () => {
                 ))}
               </ul>
             </div>
+
+            {/* Status filter */}
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Tình trạng</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
@@ -284,10 +302,10 @@ const ListProduct = () => {
                         ? 'text-[#29aae1] font-medium' 
                         : 'text-[#747474]'
                     }`}
-                    checked={
+                    checked={ 
                       (item.label === "Khuyến mãi" && params.isSale) || 
                       (item.label === "Còn hàng" && params.status === "ACTIVE") || 
-                      (item.label === "Tất cả" && !params.status && !params.isSale)
+                      (item.label === "Tất cả" && !params.status && !params.isSale) 
                     }
                     onChange={() => handleStatusChange(item.label)}
                   >
