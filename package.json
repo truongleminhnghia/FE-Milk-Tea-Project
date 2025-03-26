@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^2.5.1",
     "antd": "^5.23.2",
     "antd-img-crop": "^4.24.0",
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "firebase": "^11.4.0",
     "grapesjs": "^0.22.6",
     "grapesjs-blocks-basic": "^1.0.2",

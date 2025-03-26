@@ -11,7 +11,7 @@ export const createRecipeService = async (reqBody) => {
         console.log("Error: ", error);
         return error.message;
     }
-}
+};
 
 export const getByIdService = async (id) => {
     try {
@@ -23,7 +23,25 @@ export const getByIdService = async (id) => {
     } catch (error) {
         console.log("Error", error);
     }
-}
+};
+
+export const getAllRecipesService = async (params) => {
+    try {
+     
+      const res = await getAll({
+        ...params,
+        recipeLevel: 'PUBLIC'  
+      });  
+      if (res?.data) {  
+        return res.data; 
+      }
+      return res?.message || "Không có dữ liệu";  
+    } catch (error) {
+      console.log('Error: ', error);  
+      return error.message;  
+    }
+};
+
 
 export const getByListSerivce = async (params) => {
     try {
@@ -35,7 +53,7 @@ export const getByListSerivce = async (params) => {
     } catch (error) {
         console.log('Error: ', error);
     }
-}
+};
 
 export const updateByIdService = async (id, req) => {
     try {
@@ -47,7 +65,7 @@ export const updateByIdService = async (id, req) => {
     } catch (error) {
         console.log("Error: ", error);
     }
-}
+};
 
 export const deleteByIdservice = async (id) => {
     try {
@@ -59,4 +77,4 @@ export const deleteByIdservice = async (id) => {
     } catch (error) {
         console.log("Error: ", error);
     }
-}
+};
