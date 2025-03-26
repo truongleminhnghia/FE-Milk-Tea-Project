@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   InputNumber,
   Space,
@@ -12,63 +12,222 @@ import {
   Select,
   Typography,
   message,
+  Avatar,
 } from 'antd';
-import { MinusCircleOutlined, PlusOutlined, SaveOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  SaveOutlined,
+  ArrowLeftOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import BreadcrumbComponent from '../../../components/navigations/BreadcrumbComponent';
-import { createRecipeService } from '../../../services/recipe.service'; // Import the service
+import { createRecipeService } from '../../../services/recipe.service';
+import { getByListSerivce as getProductList } from '../../../services/product.service';
+import { getByListSerivce } from '../../../services/category.service';
+import { toastConfig } from '../../../utils/utils';
+import ProfileImageUploader from '../../../components/uploads/ProfileImageUploader';
+import GrapesEditor from '../../../components/editor/GrapesEditor';
 
 const { Title } = Typography;
 
-const ingredientOptions = [
-  { label: 'Đường', value: '3fa85f64-5717-4562-b3fc-2c963f66afa6' },
-  { label: 'Muối', value: '1ab23c45-2345-4567-8901-abcd12345678' },
-  { label: 'Bột mì', value: '9xy12abc-9999-8888-7777-abcdef987654' },
+const RECIPE_LEVELS = [
+  { label: 'Public', value: 'PUBLIC' },
+  { label: 'Normal', value: 'NORMAL' },
+  { label: 'VIP', value: 'VIP' },
+];
+
+const BREADCRUMB_ITEMS = [
+  { title: 'Trang chủ', href: '/staff-page' },
+  { title: 'Công thức', href: '/staff-page/products' },
+  { title: 'Tạo mới công thức' },
 ];
 
 const CreateNewRecipe = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  
   const [loading, setLoading] = useState(false);
+  const [fileList, setFileList] = useState([]);
+  const [editorContent, setEditorContent] = useState('');
+  
+  const [categories, setCategories] = useState([]);
+  const [fetchingCategories, setFetchingCategories] = useState(false);
+  
+  const [ingredients, setIngredients] = useState([]);
+  const [fetchingIngredients, setFetchingIngredients] = useState(false);
 
-  const breadcrumbItems = [
-    { title: 'Trang chủ', href: '/staff-page' },
-    { title: 'Công thức', href: '/staff-page/products' },
-    { title: 'Tạo mới công thức' },
-  ];
+  useEffect(() => {
+    fetchCategories();
+    fetchIngredients();
+  }, []);
+
+  const fetchIngredients = async () => {
+    try {
+      setFetchingIngredients(true);
+      const params = { status: "ACTIVE" };
+      const response = await getProductList(params);
+      
+      if (response?.data?.data) {
+        const formattedIngredients = response.data.data.map(ingredient => ({
+          label: ingredient.ingredientName,
+          value: ingredient.id,
+          image: ingredient.images?.[0]?.imageUrl || null
+        }));
+        setIngredients(formattedIngredients);
+      }
+    } catch (error) {
+      console.error("Error fetching ingredients:", error);
+      toastConfig("error", "Không thể tải danh sách nguyên liệu");
+    } finally {
+      setFetchingIngredients(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      setFetchingCategories(true);
+      const params = {
+        _field: "Id,CategoryName",
+        categoryStatus: "ACTIVE",
+        categoryType: "CATEGORY_RECIPE"
+      };
+      const response = await getByListSerivce(params);
+      
+      if (response?.data) {
+        const formattedCategories = response.data.map(item => ({
+          label: item.CategoryName,
+          value: item.Id
+        }));
+        setCategories(formattedCategories);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      toastConfig("error", "Không thể tải danh mục sản phẩm");
+    } finally {
+      setFetchingCategories(false);
+    }
+  };
+
+  const handleEditorChange = (content) => {
+    setEditorContent(content);
+  };
+
+  const validateForm = (values) => {
+    if (fileList.length === 0) {
+      message.error("Vui lòng tải lên hình ảnh công thức!");
+      return false;
+    }
+
+    if (!editorContent) {
+      message.error("Vui lòng nhập nội dung công thức!");
+      return false;
+    }
+
+    return true;
+  };
 
   const onFinish = async (values) => {
+    if (!validateForm(values)) return;
+
     setLoading(true);
     try {
-      // Prepare payload for the API request
+      const imageFile = fileList[0].originFileObj;
+      // TODO: Add your Firebase image upload logic here
+      // const imageUrl = await uploadImageToFirebase(imageFile);
+      
       const payload = {
         recipeTitle: values.recipeTitle,
-        content: values.content,
+        content: editorContent,
         categoryId: values.categoryId,
-        imageUrl: values.imageUrl,
-        ingredients: values.ingredients,
+        recipeLevel: values.recipeLevel,
+        imageUrl: "imageUrl", // Replace with actual uploaded image URL
+        ingredients: values.ingredients?.map(ing => ({
+          ingredientId: ing.ingredientId,
+          weightOfIngredient: ing.weightOfIngredient
+        })) || [],
       };
-
-      // Use the service function to create the recipe
+      console.log("Payload:", payload); 
       const result = await createRecipeService(payload);
-      
-      if (result.success) {
+
+      if (result?.success) {
         message.success("Tạo công thức thành công!");
         navigate('/staff-page/products');
       } else {
-        message.error(result.message || "Đã xảy ra lỗi khi tạo công thức!");
+        throw new Error(result?.message || "Tạo công thức thất bại");
       }
     } catch (error) {
-      console.error(error);
-      message.error("Đã xảy ra lỗi khi tạo công thức!");
+      console.error("Error creating recipe:", error);
+      message.error(error?.message || "Đã xảy ra lỗi khi tạo công thức!");
     } finally {
       setLoading(false);
     }
   };
 
+  const renderIngredientsList = () => (
+    <Form.List name="ingredients">
+      {(fields, { add, remove }) => (
+        <>
+          {fields.map(({ key, name, ...restField }) => (
+            <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+              <Form.Item
+                {...restField}
+                name={[name, 'ingredientId']}
+                rules={[{ required: true, message: 'Chọn nguyên liệu!' }]}
+              >
+                <Select
+                  placeholder="Chọn nguyên liệu"
+                  style={{ width: 200 }}
+                  loading={fetchingIngredients}
+                  options={ingredients}
+                  showSearch
+                  filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  }
+                  optionRender={(option) => (
+                    <Space>
+                      {option.data.image && (
+                        <Avatar size="small" src={option.data.image} />
+                      )}
+                      {option.label}
+                    </Space>
+                  )}
+                />
+              </Form.Item>
+
+              <Form.Item
+                {...restField}
+                name={[name, 'weightOfIngredient']}
+                rules={[{ required: true, message: 'Nhập khối lượng!' }]}
+              >
+                <InputNumber 
+                  placeholder="Khối lượng (kg)" 
+                  min={0.01} 
+                  step={0.01} 
+                />
+              </Form.Item>
+
+              <MinusCircleOutlined onClick={() => remove(name)} />
+            </Space>
+          ))}
+          <Form.Item>
+            <Button 
+              type="dashed" 
+              onClick={() => add()} 
+              block 
+              icon={<PlusOutlined />}
+            >
+              Thêm nguyên liệu
+            </Button>
+          </Form.Item>
+        </>
+      )}
+    </Form.List>
+  );
+
   return (
     <div className="new-product-container">
-      <BreadcrumbComponent items={breadcrumbItems} />
+      <BreadcrumbComponent items={BREADCRUMB_ITEMS} />
 
       <Card className="mt-4 shadow-sm">
         <div className="flex flex-wrap justify-between items-center mb-4">
@@ -85,10 +244,18 @@ const CreateNewRecipe = () => {
         </div>
         <Divider />
 
-        <Form layout="vertical" form={form} onFinish={onFinish}>
-          <Row gutter={24}>
-            <Col xs={24} md={12}>
-              <Card title="Thông tin cơ bản" className="mb-4">
+        <Form 
+          layout="vertical" 
+          form={form} 
+          onFinish={onFinish}
+          initialValues={{
+            recipeLevel: 'PUBLIC'
+          }}
+        >
+          {/* Basic Information Section */}
+          <Card title="Thông tin cơ bản" className="mb-4">
+            <Row gutter={24}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Tên công thức"
                   name="recipeTitle"
@@ -98,74 +265,72 @@ const CreateNewRecipe = () => {
                 </Form.Item>
 
                 <Form.Item
-                  label="URL Hình ảnh"
-                  name="imageUrl"
-                  rules={[{ required: true, message: "Vui lòng nhập đường dẫn hình ảnh!" }]}
+                  label="Hình ảnh công thức"
+                  required
+                  tooltip="Hình ảnh công thức sẽ được hiển thị cho người dùng"
                 >
-                  <Input placeholder="Nhập URL hình ảnh" />
+                  <ProfileImageUploader
+                    currentImageUrl=""
+                    fileList={fileList}
+                    setFileList={setFileList}
+                  />
                 </Form.Item>
-
+              </Col>
+              
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Danh mục"
                   name="categoryId"
-                  rules={[{ required: true, message: "Vui lòng nhập danh mục!" }]}
+                  rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
                 >
-                  <Input placeholder="Nhập ID danh mục" />
-                </Form.Item>
-
-                <Form.List name="ingredients">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'ingredientId']}
-                            rules={[{ required: true, message: 'Chọn nguyên liệu!' }]}
-                          >
-                            <Select
-                              placeholder="Chọn nguyên liệu"
-                              style={{ width: 200 }}
-                              options={ingredientOptions}
-                            />
-                          </Form.Item>
-
-                          <Form.Item
-                            {...restField}
-                            name={[name, 'weightOfIngredient']}
-                            rules={[{ required: true, message: 'Nhập khối lượng!' }]}
-                          >
-                            <InputNumber placeholder="Khối lượng (kg)" min={0.01} step={0.01} />
-                          </Form.Item>
-
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </Space>
-                      ))}
-                      <Form.Item>
-                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                          Thêm nguyên liệu
-                        </Button>
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </Card>
-            </Col>
-
-            <Col xs={24} md={12}>
-              <Card title="Thông tin chi tiết" className="mb-4">
-                <Form.Item
-                  label="Nội dung"
-                  name="content"
-                >
-                  <Input.TextArea
-                    rows={4}
-                    placeholder="Nhập mô tả chi tiết về công thức"
+                  <Select
+                    placeholder="Chọn danh mục"
+                    options={categories}
+                    loading={fetchingCategories}
+                    allowClear
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
                   />
                 </Form.Item>
-              </Card>
-            </Col>
-          </Row>
+
+                <Form.Item
+                  label="Loại công thức"
+                  name="recipeLevel"
+                  rules={[{ required: true, message: "Vui lòng chọn loại công thức" }]}
+                >
+                  <Select
+                    placeholder="Chọn loại công thức"
+                    options={RECIPE_LEVELS}
+                    allowClear
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                  />
+                </Form.Item>
+
+                {renderIngredientsList()}
+              </Col>
+            </Row>
+          </Card>
+
+          {/* Detailed Information Section */}
+          <Card title="Thông tin chi tiết" className="mb-4">
+            <Form.Item
+              label="Nội dung công thức"
+              required
+              tooltip="Sử dụng trình soạn thảo để tạo nội dung công thức"
+            >
+              <div style={{ border: '1px solid #d9d9d9', borderRadius: '6px', padding: '1px'}}>
+                <GrapesEditor
+                  value={editorContent}
+                  onChange={handleEditorChange}
+                />
+              </div>
+            </Form.Item>
+          </Card>
 
           <div className="flex justify-end">
             <Space>
@@ -182,7 +347,7 @@ const CreateNewRecipe = () => {
                 icon={<SaveOutlined />}
                 className="bg-[#29aae1]"
               >
-                Tạo sản phẩm
+                Tạo công thức
               </Button>
             </Space>
           </div>

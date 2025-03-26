@@ -4,6 +4,10 @@ import TableGenerComponent from '../../../components/tables/TableGenerComponent'
 import { useNavigate } from 'react-router-dom';
 import { Button, DatePicker, Input, Row, Select } from 'antd';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import {getByListSerivce} from '../../../services/recipe.service'
+import StatusAvitceComponent  from '../../../components/ui/status/StatusActiveComponent'
+import { formatISODate } from '../../../utils/utils';
+import ButtonActionComponent from '../../../components/ui/actions/ButtonActionComponent'
 
 const ListRecipe = () => {
     const breadcrumbItems = [
@@ -101,7 +105,7 @@ const ListRecipe = () => {
         console.log("item", item);
         const id = item.id;
         console.log("id", id);
-        navigate(`/staff-page/products/${id}`);
+        navigate(`/staff-page/recipes/${id}`);
     }
 
     useEffect(() => {
@@ -139,37 +143,15 @@ const ListRecipe = () => {
             ),
         },
         {
-            key: 'createAt',
-            title: 'Ngày Tạo',
-            dataIndex: 'createAt',
-            render: (date) => formatISODate(date),
-        },
-        {
-            key: 'expiredDate',
-            title: 'Ngày hết hạn',
-            dataIndex: 'expiredDate',
-            render: (date) => formatISODate(date),
-        },
-        {
-            key: 'supplier',
-            title: 'Nhà cung cấp',
-            dataIndex: 'supplier',
-        },
-        {
             key: 'type',
-            title: 'Loại nguyên liệu',
-            dataIndex: 'ingredientType',
+            title: 'Loại công thức',
+            dataIndex: 'recipeLevel',
         },
         {
             title: 'Trạng thái',
-            dataIndex: "ingredientStatus",
-            key: "ingredientStatus",
+            dataIndex: "recipeStatus",
+            key: "recipeStatus",
             render: (status) => <StatusAvitceComponent status={status} />,
-        },
-        {
-            key: "priceOrigin",
-            title: 'Giá',
-            dataIndex: 'priceOrigin',
         },
         {
             key: "category",

@@ -1,4 +1,4 @@
-import { create, getById, getAll, updateById, deleteById } from "../apis/product.api";
+import { create, getById, getAll, updateById, deleteById } from "../apis/recipe.api";
 
 export const createRecipeService = async (reqBody) => {
     try {

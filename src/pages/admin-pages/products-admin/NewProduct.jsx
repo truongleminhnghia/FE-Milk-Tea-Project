@@ -31,7 +31,8 @@ const NewProduct = () => {
       setFetchingCategories(true);
       const params = {
         _field: "Id,CategoryName",
-        categoryStatus: "ACTIVE"
+        categoryStatus: "ACTIVE",
+        categoryType: "CATEGORY_PRODUCT"
       }
       const res = await getByListSerivce(params);
       if (res?.data) {
