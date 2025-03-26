@@ -25,22 +25,23 @@ export const getByIdService = async (id) => {
     }
 };
 
-export const getAllRecipesService = async (params) => {
+// services/recipe.service.js
+export const getAllRecipesService = async () => {
     try {
+        const response = await fetch('/api/recipes'); 
+        const data = await response.json();
+
      
-      const res = await getAll({
-        ...params,
-        recipeLevel: 'PUBLIC'  
-      });  
-      if (res?.data) {  
-        return res.data; 
-      }
-      return res?.message || "Không có dữ liệu";  
+        if (data && data.recipes) {
+            return data.recipes;  
+        }
+        throw new Error('No recipes found');
     } catch (error) {
-      console.log('Error: ', error);  
-      return error.message;  
+        console.error('Error fetching recipes:', error);
+        return [];
     }
 };
+
 
 
 export const getByListSerivce = async (params) => {
