@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import CardProductComponent from '../../components/ui/carts/CardProductComponent'
 import { Button, Checkbox, Col, Input, Pagination, Row, Select, Spin, Empty } from 'antd'
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import { getByListSerivce } from '../../services/product.service';
 import { getByListSerivce as getCategoryService } from '../../services/category.service'; // Make sure to import this
 import { handleKeyDown } from '../../utils/utils'
+import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
@@ -29,7 +29,6 @@ const ListProduct = () => {
     }
   });
 
-  // Fetch categories from the API
   const fetchCategories = async () => {
     try {
       const params = {
@@ -51,8 +50,8 @@ const ListProduct = () => {
   };
 
   useEffect(() => {
-    fetchCategories(); // Call the fetchCategories function
-    fetchIngredient(params); // Existing fetchIngredient function call
+    fetchCategories(); 
+    fetchIngredient(params); 
   }, [JSON.stringify(params)]);
 
   const fetchIngredient = async (params) => {
@@ -90,6 +89,7 @@ const ListProduct = () => {
       setisLoading(false);
     }
   };
+
   const checkList = [
     { id: "1", label: "Tất cả" },
     { id: "2", label: "Còn hàng" },
@@ -142,7 +142,6 @@ const ListProduct = () => {
     }
   };
 
-  // Extract unique suppliers from listIngredient
   const uniqueSuppliers = listIngredient.length > 0 
     ? [...new Set(listIngredient.map(item => item.supplier))].map(supplier => ({ id: supplier, label: supplier }))
     : [
@@ -155,14 +154,14 @@ const ListProduct = () => {
   const price = [
     { id: "1", label: "Tăng dần" },
     { id: "2", label: "Giảm dần" }
-  ]
+  ];
 
   const rangePrice = [
     { id: "1", label: "Từ 0 đến 100,000đ", minVaule: 0, maxValue: 100000 },
     { id: "2", label: "Từ 100,000đ đến 500,000đ", minVaule: 100000, maxValue: 500000 },
     { id: "3", label: "Từ 500,000đ đến 1,000,000đ", minVaule: 500000, maxValue: 1000000 },
     { id: "4", label: "Từ 1,000,000đ trở lên", minVaule: 1000000, maxValue: null },
-  ]
+  ];
 
   return (
     <div className="container">
@@ -253,66 +252,43 @@ const ListProduct = () => {
         </Col>
         <Col span={6} pull={18} className='w-full sticky top-20 max-h-[calc(100vh-140px)] overflow-auto pr-4'>
           <div className='bg-white w-full rounded-lg shadow-sm py-4'>
-            {/* Category filter */}
             <div className='py-2 px-4 w-full relative'>
               <h3 className='text-lg font-medium text-black'>Danh mục sản phẩm</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <ul className='mt-3'>
-                {categories.map((item) => (
-                  <li
-                    key={item.value}
-                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.categoryId === item.value ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
-                    onClick={() => handleCategoryChange(item.value)}
-                  >
-                    {item.label}
-                  </li>
-                ))}
-              </ul>
+              <Select
+                placeholder="Chọn danh mục"
+                options={categories}
+                value={params.categoryId}
+                onChange={handleCategoryChange}
+                className="w-full"
+              />
             </div>
-
-            {/* Supplier filter */}
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Nhà sản xuất</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <ul className='mt-3'>
-                {uniqueSuppliers.map((item) => (
-                  <li
-                    key={item.id}
-                    className={`text-[14px] px-2 py-2 cursor-pointer hover:text-[#29aae1] transition-colors ${params.supplier === item.label ? 'text-[#29aae1] font-bold bg-blue-50 rounded' : 'text-[#747474]'}`}
-                    onClick={() => handleSupplierChange(item.label)}
-                  >
-                    {item.label}
-                  </li>
-                ))}
-              </ul>
+              <Select
+                placeholder="Chọn nhà sản xuất"
+                options={uniqueSuppliers}
+                value={params.supplier}
+                onChange={handleSupplierChange}
+                className="w-full"
+              />
             </div>
-
-            {/* Status filter */}
             <div className='py-2 px-4 w-full relative mt-2'>
               <h3 className='text-lg font-medium text-black'>Tình trạng</h3>
               <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <div className='mt-3 flex flex-col gap-2'>
-                {checkList.map((item) => (
-                  <Checkbox
-                    key={item.id}
-                    className={`text-[14px] py-1 cursor-pointer ${
-                      (item.label === "Khuyến mãi" && params.isSale) || 
-                      (item.label === "Còn hàng" && params.status === "ACTIVE") || 
-                      (item.label === "Tất cả" && !params.status && !params.isSale) 
-                        ? 'text-[#29aae1] font-medium' 
-                        : 'text-[#747474]'
-                    }`}
-                    checked={ 
-                      (item.label === "Khuyến mãi" && params.isSale) || 
-                      (item.label === "Còn hàng" && params.status === "ACTIVE") || 
-                      (item.label === "Tất cả" && !params.status && !params.isSale) 
-                    }
-                    onChange={() => handleStatusChange(item.label)}
-                  >
+              <Select
+                placeholder="Chọn tình trạng"
+                value={params.status || params.isSale}
+                onChange={handleStatusChange}
+                className="w-full"
+              >
+                {checkList.map(item => (
+                  <Select.Option key={item.id} value={item.label}>
                     {item.label}
-                  </Checkbox>
+                  </Select.Option>
                 ))}
-              </div>
+              </Select>
             </div>
           </div>
         </Col>
