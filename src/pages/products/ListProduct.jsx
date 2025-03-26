@@ -15,7 +15,6 @@ const ListProduct = () => {
     supplier: null,
     status: null,
     isSale: null,
-    rating: null,
     search: null,
     startDate: null,
     endDate: null,
@@ -43,7 +42,6 @@ const ListProduct = () => {
         maxPrice: params.maxPrice,
         isSale: params.isSale,
         supplier: params.supplier,
-        rating: params.rating,
         sortBy: params.sortBy,
         isDescending: params.isDescending
       };
@@ -85,11 +83,6 @@ const ListProduct = () => {
     } else {
       setParams((prev) => ({ ...prev, status: null, isSale: null }));
     }
-  };
-
-  const handleRatingChange = (label) => {
-    const ratingValue = parseInt(label.split(" ")[0]);
-    setParams((prev) => ({ ...prev, rating: prev.rating === ratingValue ? null : ratingValue }));
   };
 
   const handleSearch = (e) => {
@@ -141,12 +134,6 @@ const ListProduct = () => {
     { id: "1", label: "Tất cả" },
     { id: "2", label: "Còn hàng" },
     { id: "3", label: "Khuyến mãi" },
-  ];
-
-  const rating = [
-    { id: "1", label: "3 sao" },
-    { id: "2", label: "4 sao" },
-    { id: "3", label: "5 sao" },
   ];
 
   const price = [
@@ -306,21 +293,6 @@ const ListProduct = () => {
                   >
                     {item.label}
                   </Checkbox>
-                ))}
-              </div>
-            </div>
-            <div className='py-2 px-4 w-full relative mt-2'>
-              <h3 className='text-lg font-medium text-black'>Đánh giá</h3>
-              <div className='w-full border-[#e0e0e0] border-[1px] mt-2 mb-2'></div>
-              <div className='mt-3 flex flex-col gap-2'>
-                {rating.map((item) => (
-                  <div
-                    key={item.id}
-                    className={`flex items-center text-[14px] px-2 py-1 cursor-pointer hover:text-[#29aae1] ${params.rating === parseInt(item.label.split(" ")[0]) ? 'text-[#29aae1] font-bold' : 'text-[#747474]'}`}
-                    onClick={() => handleRatingChange(item.label)}
-                  >
-                    {item.label}
-                  </div>
                 ))}
               </div>
             </div>
