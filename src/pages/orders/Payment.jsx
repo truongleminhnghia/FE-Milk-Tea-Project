@@ -30,6 +30,7 @@ const Payment = () => {
         navigate('/cart');
         return;
       }
+      console.log("orderId", orderId)
 
       try {
         setIsFetching(true);
@@ -211,13 +212,13 @@ const Payment = () => {
           <Card>
             <Title level={4}>Chi tiết đơn hàng</Title>
             <Descriptions column={1}>
-              <Descriptions.Item label="Mã đơn hàng">{orderData.id}</Descriptions.Item>
+              <Descriptions.Item label="Mã đơn hàng">{orderData.orderCode}</Descriptions.Item>
               <Descriptions.Item label="Người nhận">{orderData.fullNameShipping}</Descriptions.Item>
               <Descriptions.Item label="Số điện thoại">{orderData.phoneShipping}</Descriptions.Item>
               <Descriptions.Item label="Địa chỉ">{orderData.addressShipping}</Descriptions.Item>
             </Descriptions>
             <div className="mt-4 border-t pt-4">
-              {orderData.orderDetails?.map((item, index) => (
+              {/* {orderData.orderDetails?.map((item, index) => (
                 <div key={index} className="mb-2">
                   <Text>{item.ingredient?.ingredientName}</Text>
                   <div className="flex justify-between">
@@ -227,12 +228,12 @@ const Payment = () => {
                     <Text>{formatCurrencyVND(item.totalPrice)}</Text>
                   </div>
                 </div>
-              ))}
+              ))} */}
               <div className="border-t mt-4 pt-4">
                 <div className="flex justify-between">
                   <Text strong>Tổng thanh toán</Text>
                   <Text strong type="danger">
-                    {formatCurrencyVND(orderData.totalAmount)}
+                    {formatCurrencyVND(orderData.totalPrice)}
                   </Text>
                 </div>
               </div>
