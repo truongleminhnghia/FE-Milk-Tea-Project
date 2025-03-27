@@ -33,8 +33,8 @@ const ListCategory = () => {
         categoryStatus: null,
         categoryType: null,
         search: null,
-        startDate: null,
-        endDate: null,
+        startDate: '',
+        endDate: '',
         paging: {
             pageCurrent: 1,
             pageSize: 10,
@@ -86,6 +86,7 @@ const ListCategory = () => {
 
     useEffect(() => {
         fetchAllCatetegories(params);
+        console.log('params', params)
     }, [JSON.stringify(params)]);
 
     const onSubmit = async (value) => {
@@ -263,8 +264,8 @@ const ListCategory = () => {
             categoryStatus: null,
             categoryType: null,
             search: null,
-            startDate: null,
-            endDate: null,
+            startDate: '',
+            endDate: '',
             paging: {
                 pageCurrent: 1,
                 pageSize: 10,
@@ -323,7 +324,7 @@ const ListCategory = () => {
                                 onChange={(date) => handleDateChange("startDate", date)}
                                 allowClear
                                 format="DD-MM-YYYY"
-                                value={params.startDate ? dayjs(params.startDate, "YYYY-MM-DD") : null}
+                                value={params.startDate ? dayjs(params.startDate, "YYYY-MM-DD") : ''}
                                 disabled={filterLoading}
                             />
                         </div>

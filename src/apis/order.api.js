@@ -12,8 +12,8 @@ export const create = async (model) => {
     }
 }
 
-export const getById = async (id) => {
-    const res = await ApiCustomer.get(`/orders/${id}`);
+export const getById = async (orderId) => {
+    const res = await ApiCustomer.get(`/orders?orderId=${orderId}`);
     if (res?.data) {
         return res;
     }
