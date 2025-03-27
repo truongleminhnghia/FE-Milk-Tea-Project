@@ -3,14 +3,14 @@ import { Button, Checkbox, Col, Input, Pagination, Row, Select, Spin, Empty } fr
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import { getByListSerivce } from '../../services/product.service';
-import { getByListSerivce as getCategoryService } from '../../services/category.service'; 
+import { getByListSerivce as getCategoryService } from '../../services/category.service';
 import { handleKeyDown } from '../../utils/utils'
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
   const [listIngredient, setListIngredient] = useState([]);
-  const [categories, setCategories] = useState([]); 
+  const [categories, setCategories] = useState([]);
   const [receivedMessage, setReceivedMessage] = useState("");
   const [params, setParams] = useState({
     categoryId: null,
@@ -50,8 +50,8 @@ const ListProduct = () => {
   };
 
   useEffect(() => {
-    fetchCategories(); 
-    fetchIngredient(params); 
+    fetchCategories();
+    fetchIngredient(params);
   }, [JSON.stringify(params)]);
 
   const fetchIngredient = async (params) => {
@@ -65,12 +65,12 @@ const ListProduct = () => {
         search: params.search,
         startDate: params.startDate,
         endDate: params.endDate,
-        minPrice: params.minPrice,
-        maxPrice: params.maxPrice,
+        minPrice: params.minPrice, // Truyền minPrice vào API
+        maxPrice: params.maxPrice, // Truyền maxPrice vào API
         isSale: params.isSale,
         supplier: params.supplier,
         sortBy: params.sortBy,
-        isDescending: params.isDescending
+        isDescending: params.isDescending,
       };
       const res = await getByListSerivce(param);
       if (res?.data) {
@@ -80,7 +80,7 @@ const ListProduct = () => {
           paging: {
             ...prev.paging,
             total: res.data.total || 0,
-          }
+          },
         }));
       }
     } catch (error) {
@@ -89,6 +89,8 @@ const ListProduct = () => {
       setisLoading(false);
     }
   };
+  
+
 
   const checkList = [
     { id: "1", label: "Tất cả" },
@@ -124,49 +126,52 @@ const ListProduct = () => {
   };
 
   const handlePriceRangeChange = (value) => {
-    const selectedRange = rangePrice.find(item => item.id === value);
+    const selectedRange = rangePrice.find(item => item.value === value); // Tìm đối tượng có value tương ứng
     if (selectedRange) {
-      setParams((prev) => ({ 
-        ...prev, 
-        minPrice: selectedRange.minVaule || null, 
-        maxPrice: selectedRange.maxValue || null 
+      setParams((prev) => ({
+        ...prev,
+        minPrice: selectedRange.minVaule || null, // Cập nhật minPrice nếu có
+        maxPrice: selectedRange.maxValue || null   // Cập nhật maxPrice nếu có
       }));
     }
   };
 
+
   const handleSortChange = (value) => {
-    if (value === "1") { // Tăng dần
-      setParams((prev) => ({ ...prev, sortBy: "priceOrigin", isDescending: false }));
-    } else if (value === "2") { // Giảm dần
-      setParams((prev) => ({ ...prev, sortBy: "priceOrigin", isDescending: true }));
+    if (value === "1") {
+      setParams((prev) => ({ ...prev, sortBy: "Tăng dần", isDescending: false }));
+    } else if (value === "2") {
+      setParams((prev) => ({ ...prev, sortBy: "Giảm dần", isDescending: true }));
     }
   };
 
-  const uniqueSuppliers = listIngredient.length > 0 
+
+  const uniqueSuppliers = listIngredient.length > 0
     ? [...new Set(listIngredient.map(item => item.supplier))].map(supplier => ({ id: supplier, label: supplier }))
     : [
-        { id: "1", label: "Wonderful" },
-        { id: "2", label: "Gia Uy" },
-        { id: "3", label: "Wings" },
-        { id: "4", label: "KING" },
-      ];
+      { id: "1", label: "Wonderful" },
+      { id: "2", label: "Gia Uy" },
+      { id: "3", label: "Wings" },
+      { id: "4", label: "KING" },
+    ];
 
   const price = [
-    { id: "1", label: "Tăng dần" },
-    { id: "2", label: "Giảm dần" }
+    { id: "1", label: "Tăng dần", value: "1" },
+    { id: "2", label: "Giảm dần", value: "2" }
   ];
 
   const rangePrice = [
-    { id: "1", label: "Từ 0 đến 100,000đ", minVaule: 0, maxValue: 100000 },
-    { id: "2", label: "Từ 100,000đ đến 500,000đ", minVaule: 100000, maxValue: 500000 },
-    { id: "3", label: "Từ 500,000đ đến 1,000,000đ", minVaule: 500000, maxValue: 1000000 },
-    { id: "4", label: "Từ 1,000,000đ trở lên", minVaule: 1000000, maxValue: null },
+    { id: "1", label: "Từ 0 đến 100,000đ", value: "1", minVaule: 0, maxValue: 100000 },
+    { id: "2", label: "Từ 100,000đ đến 500,000đ", value: "2", minVaule: 100000, maxValue: 500000 },
+    { id: "3", label: "Từ 500,000đ đến 1,000,000đ", value: "3", minVaule: 500000, maxValue: 1000000 },
+    { id: "4", label: "Từ 1,000,000đ trở lên", value: "4", minVaule: 1000000, maxValue: null },
   ];
+
 
   return (
     <div className="container">
       <Row className='py-2 w-full !mx-0'>
-        <BreadcrumbItem items={[ { title: 'Trang chủ', href: '/' }, { title: 'Tất cả sản phẩm' }]} />
+        <BreadcrumbItem items={[{ title: 'Trang chủ', href: '/' }, { title: 'Tất cả sản phẩm' }]} />
         <img className='w-full h-[180px] object-cover rounded-lg' src="/images/baners/collection_main_banner.webp" alt="Nguyên liệu pha chế đồ uống" />
       </Row>
       <Row className='rounded-lg w-full mt-4'>
@@ -174,31 +179,34 @@ const ListProduct = () => {
           <Row className='w-full h-auto mb-6 bg-slate-100 py-3 px-3 rounded-md'>
             <Col span={12}>
               <div className='flex gap-3'>
-                <Button type={!params.sortBy ? "primary" : "default"} onClick={() => setParams(prev => ({...prev, sortBy: null}))}>Phổ biến</Button>
-                <Button type={params.sortBy === "createAt" ? "primary" : "default"} 
-                  onClick={() => setParams(prev => ({...prev, sortBy: "createAt", isDescending: true}))}>
+                <Button type={!params.sortBy ? "primary" : "default"} onClick={() => setParams(prev => ({ ...prev, sortBy: null }))}>Phổ biến</Button>
+                <Button type={params.sortBy === "createAt" ? "primary" : "default"}
+                  onClick={() => setParams(prev => ({ ...prev, sortBy: "createAt", isDescending: true }))}>
                   Mới nhất
                 </Button>
                 <Select
-                  className='w-[120px]'
+                  className="w-[120px]"
                   placeholder="Sắp xếp giá"
-                  options={price}
-                  onChange={handleSortChange}
+                  value={params.sortBy} // Đảm bảo giá trị được đồng bộ với `params.sortBy`
+                  onChange={handleSortChange} // Gọi hàm xử lý khi thay đổi giá trị
+                  options={price} // Sử dụng options từ price
                 />
               </div>
             </Col>
             <Col span={12}>
               <div className='flex gap-2 justify-end'>
                 <Select
-                  className='w-[200px]'
+                  className="w-[200px]"
                   placeholder="Khoảng giá"
-                  options={rangePrice}
-                  onChange={handlePriceRangeChange}
+                  value={params.minPrice} // Đảm bảo giá trị `value` đồng bộ với `minPrice` trong `params`
+                  onChange={handlePriceRangeChange} // Gọi hàm khi thay đổi giá trị
+                  options={rangePrice.map(item => ({ label: item.label, value: item.value }))} // Dùng value và label cho options
                 />
+
                 <form onSubmit={handleSearchSubmit} className='flex'>
-                  <Input 
-                    placeholder="Tìm kiếm sản phẩm" 
-                    value={params.search || ""} 
+                  <Input
+                    placeholder="Tìm kiếm sản phẩm"
+                    value={params.search || ""}
                     onChange={handleSearch}
                     prefix={<SearchOutlined />}
                     className="rounded-r-none"
@@ -229,7 +237,7 @@ const ListProduct = () => {
           ) : (
             <Empty description="Không tìm thấy sản phẩm nào" className="py-10" />
           )}
-          
+
           {!isLoading && listIngredient.length > 0 && (
             <div className='py-4 mt-4'>
               <Pagination

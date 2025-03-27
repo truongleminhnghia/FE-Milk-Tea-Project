@@ -3,6 +3,8 @@ import { Row, Col, Input, Select, Button, Pagination, Empty, Skeleton, Tag, Divi
 import { Icon } from '@iconify/react';
 import CardRecipeComponent from '../../components/ui/carts/CardRecipeComponent';
 import { getByListSerivce } from '../../services/recipe.service'; 
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/features/authSlice';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -31,15 +33,27 @@ const ListRecipeLayout01 = () => {
       total: 0
     }
   });
-
+  const currentUser = useSelector(selectUser);
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortBy, setSortBy] = useState('newest');
 
   
-  const fetchRecipes = async () => {
+  const fetchRecipes = async (params) => {
     setLoading(true);
     try {
-      const res = await getByListSerivce(params); 
+      const param = {
+        
+        userId: currentUser.id,
+        page: params.paging.pageCurrent,
+        pageSize: params.paging.pageSize,
+        recipeStatus: params.status,
+        categoryId: params.categoryId,
+        search: params.search,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        isDescending: params.isDescending
+      };
+      const res = await getByListSerivce(param); 
       if (res) {
         setRecipes(res?.data?.data || []); 
         console.log(res?.data?.data);
@@ -59,8 +73,8 @@ const ListRecipeLayout01 = () => {
   };
 
   useEffect(() => {
-    fetchRecipes();
-  }, [params.paging.pageCurrent, params.paging.pageSize, params.search, params.categoryId, sortBy, selectedTags]);
+    fetchRecipes(params);
+  }, [JSON.stringify(params)]);
 
   const handleSearch = (value) => {
     setParams(prev => ({
