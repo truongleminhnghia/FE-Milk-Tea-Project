@@ -25,25 +25,6 @@ export const getByIdService = async (id) => {
     }
 };
 
-// services/recipe.service.js
-export const getAllRecipesService = async () => {
-    try {
-        const response = await fetch('/api/recipes'); 
-        const data = await response.json();
-
-     
-        if (data && data.recipes) {
-            return data.recipes;  
-        }
-        throw new Error('No recipes found');
-    } catch (error) {
-        console.error('Error fetching recipes:', error);
-        return [];
-    }
-};
-
-
-
 export const getByListSerivce = async (params) => {
     try {
         const res = await getAll(params);
