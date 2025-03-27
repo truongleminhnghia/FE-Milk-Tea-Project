@@ -11,7 +11,7 @@ export const createRecipeService = async (reqBody) => {
         console.log("Error: ", error);
         return error.message;
     }
-}
+};
 
 export const getByIdService = async (id) => {
     try {
@@ -23,7 +23,26 @@ export const getByIdService = async (id) => {
     } catch (error) {
         console.log("Error", error);
     }
-}
+};
+
+// services/recipe.service.js
+export const getAllRecipesService = async () => {
+    try {
+        const response = await fetch('/api/recipes'); 
+        const data = await response.json();
+
+     
+        if (data && data.recipes) {
+            return data.recipes;  
+        }
+        throw new Error('No recipes found');
+    } catch (error) {
+        console.error('Error fetching recipes:', error);
+        return [];
+    }
+};
+
+
 
 export const getByListSerivce = async (params) => {
     try {
@@ -35,7 +54,7 @@ export const getByListSerivce = async (params) => {
     } catch (error) {
         console.log('Error: ', error);
     }
-}
+};
 
 export const updateByIdService = async (id, req) => {
     try {
@@ -47,7 +66,7 @@ export const updateByIdService = async (id, req) => {
     } catch (error) {
         console.log("Error: ", error);
     }
-}
+};
 
 export const deleteByIdservice = async (id) => {
     try {
@@ -59,4 +78,4 @@ export const deleteByIdservice = async (id) => {
     } catch (error) {
         console.log("Error: ", error);
     }
-}
+};

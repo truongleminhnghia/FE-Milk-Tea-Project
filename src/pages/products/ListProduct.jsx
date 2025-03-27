@@ -3,14 +3,14 @@ import { Button, Checkbox, Col, Input, Pagination, Row, Select, Spin, Empty } fr
 import BreadcrumbItem from '../../components/navigations/BreadcrumbComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import { getByListSerivce } from '../../services/product.service';
-import { getByListSerivce as getCategoryService } from '../../services/category.service'; // Make sure to import this
+import { getByListSerivce as getCategoryService } from '../../services/category.service'; 
 import { handleKeyDown } from '../../utils/utils'
 import CardProductComponent from '../../components/ui/carts/CardProductComponent';
 
 const ListProduct = () => {
   const [isLoading, setisLoading] = useState(false);
   const [listIngredient, setListIngredient] = useState([]);
-  const [categories, setCategories] = useState([]); // State for categories
+  const [categories, setCategories] = useState([]); 
   const [receivedMessage, setReceivedMessage] = useState("");
   const [params, setParams] = useState({
     categoryId: null,
