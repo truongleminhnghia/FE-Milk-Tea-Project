@@ -65,8 +65,8 @@ const ListProduct = () => {
         search: params.search,
         startDate: params.startDate,
         endDate: params.endDate,
-        minPrice: params.minPrice, // Truyền minPrice vào API
-        maxPrice: params.maxPrice, // Truyền maxPrice vào API
+        minPrice: params.minPrice, 
+        maxPrice: params.maxPrice, 
         isSale: params.isSale,
         supplier: params.supplier,
         sortBy: params.sortBy,
@@ -126,12 +126,12 @@ const ListProduct = () => {
   };
 
   const handlePriceRangeChange = (value) => {
-    const selectedRange = rangePrice.find(item => item.value === value); // Tìm đối tượng có value tương ứng
+    const selectedRange = rangePrice.find(item => item.value === value); 
     if (selectedRange) {
       setParams((prev) => ({
         ...prev,
-        minPrice: selectedRange.minVaule || null, // Cập nhật minPrice nếu có
-        maxPrice: selectedRange.maxValue || null   // Cập nhật maxPrice nếu có
+        minPrice: selectedRange.minVaule || null, 
+        maxPrice: selectedRange.maxValue || null   
       }));
     }
   };
@@ -187,9 +187,9 @@ const ListProduct = () => {
                 <Select
                   className="w-[120px]"
                   placeholder="Sắp xếp giá"
-                  value={params.sortBy} // Đảm bảo giá trị được đồng bộ với `params.sortBy`
-                  onChange={handleSortChange} // Gọi hàm xử lý khi thay đổi giá trị
-                  options={price} // Sử dụng options từ price
+                  value={params.sortBy} 
+                  onChange={handleSortChange} 
+                  options={price} 
                 />
               </div>
             </Col>
@@ -198,9 +198,9 @@ const ListProduct = () => {
                 <Select
                   className="w-[200px]"
                   placeholder="Khoảng giá"
-                  value={params.minPrice} // Đảm bảo giá trị `value` đồng bộ với `minPrice` trong `params`
-                  onChange={handlePriceRangeChange} // Gọi hàm khi thay đổi giá trị
-                  options={rangePrice.map(item => ({ label: item.label, value: item.value }))} // Dùng value và label cho options
+                  value={params.minPrice} 
+                  onChange={handlePriceRangeChange} 
+                  options={rangePrice.map(item => ({ label: item.label, value: item.value }))} 
                 />
 
                 <form onSubmit={handleSearchSubmit} className='flex'>
