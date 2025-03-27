@@ -68,22 +68,10 @@ const Payment = () => {
       description: 'Thanh toán bằng tiền mặt khi nhận hàng'
     },
     {
-      value: 'MOMO',
-      label: 'Ví MoMo',
-      icon: <WalletOutlined />,
-      description: 'Thanh toán qua ví điện tử MoMo'
-    },
-    {
       value: 'VNPAY',
       label: 'VNPay',
       icon: <CreditCardOutlined />,
       description: 'Thanh toán qua cổng VNPay'
-    },
-    {
-      value: 'BANK',
-      label: 'Chuyển khoản ngân hàng',
-      icon: <BankOutlined />,
-      description: 'Chuyển khoản qua tài khoản ngân hàng'
     }
   ];
 
