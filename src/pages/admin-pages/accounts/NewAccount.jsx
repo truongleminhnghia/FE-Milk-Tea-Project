@@ -4,6 +4,7 @@ import { Button, Card, Col, Form, Input, Row, Select, Space, notification, Spin,
 import { useNavigate } from 'react-router-dom';
 import { UserOutlined, MailOutlined, LockOutlined, SaveOutlined, RollbackOutlined, LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { createService } from '../../../services/user.service';
+import { toastConfig } from '../../../utils/utils';
 
 const NewAccount = () => {
   const [form] = Form.useForm();
@@ -11,7 +12,7 @@ const NewAccount = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-  
+
   const breadcrumbItems = [
     { title: 'Trang chủ', href: '/admin-page' },
     { title: 'Tài khoản', href: '/admin-page/accounts' },
@@ -36,9 +37,9 @@ const NewAccount = () => {
         password: values.password,
         roleName: values.roleName
       }
-      
+
       const res = await createService(createAccountRequest);
-      
+
       if (res?.success) {
         setSuccess(true);
         notification.success({
@@ -46,18 +47,16 @@ const NewAccount = () => {
           description: 'Tạo tài khoản thành công!',
         });
         form.resetFields();
-        
-        // Redirect after a short delay to show success state
         setTimeout(() => {
           navigate('/admin-page/accounts');
         }, 1500);
       }
+      setSubmitting(false);
+      toastConfig('error', res)
+      navigate('/admin-page/accounts');
     } catch (error) {
       console.error("Create account failed:", error);
-      notification.error({
-        message: 'Lỗi',
-        description: error.response?.data?.message || 'Lỗi khi tạo tài khoản!',
-      });
+      toastConfig('error', error.message)
       setSubmitting(false);
     } finally {
       setLoading(false);
@@ -65,7 +64,7 @@ const NewAccount = () => {
   };
 
   const handleCancel = () => {
-    if (submitting) return; // Prevent navigation during submission
+    if (submitting) return;
     navigate('/admin-page/accounts');
   };
 
@@ -103,9 +102,9 @@ const NewAccount = () => {
             title="Tạo tài khoản thành công!"
             subTitle="Đang chuyển hướng đến trang danh sách tài khoản..."
             extra={[
-              <Button 
-                type="primary" 
-                key="console" 
+              <Button
+                type="primary"
+                key="console"
                 onClick={() => navigate('/admin-page/accounts')}
                 className="bg-[#29aae1]"
               >
@@ -138,25 +137,25 @@ const NewAccount = () => {
           >
             <Row gutter={16}>
               <Col xs={24} md={12}>
-                <Form.Item 
-                  label="Họ" 
-                  name="lastName" 
+                <Form.Item
+                  label="Họ"
+                  name="lastName"
                   rules={[{ required: true, message: "Vui lòng nhập họ" }]}
                 >
-                  <Input 
-                    prefix={<UserOutlined className="site-form-item-icon" />} 
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Nhập họ"
                   />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item 
-                  label="Tên" 
-                  name="firstName" 
+                <Form.Item
+                  label="Tên"
+                  name="firstName"
                   rules={[{ required: true, message: "Vui lòng nhập tên" }]}
                 >
-                  <Input 
-                    prefix={<UserOutlined className="site-form-item-icon" />} 
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Nhập tên"
                   />
                 </Form.Item>
@@ -165,9 +164,9 @@ const NewAccount = () => {
 
             <Row gutter={16}>
               <Col xs={24} md={12}>
-                <Form.Item 
-                  label="Email" 
-                  name="email" 
+                <Form.Item
+                  label="Email"
+                  name="email"
                   rules={[{ validator: validateEmail }]}
                 >
                   <Input
@@ -177,9 +176,9 @@ const NewAccount = () => {
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
-                <Form.Item 
-                  label="Mật khẩu" 
-                  name="password" 
+                <Form.Item
+                  label="Mật khẩu"
+                  name="password"
                   rules={[{ validator: validatePassword }]}
                 >
                   <Input.Password
@@ -190,9 +189,9 @@ const NewAccount = () => {
               </Col>
             </Row>
 
-            <Form.Item 
-              label="Vai trò" 
-              name="roleName" 
+            <Form.Item
+              label="Vai trò"
+              name="roleName"
               rules={[{ required: true, message: "Vui lòng chọn vai trò" }]}
             >
               <Select
@@ -204,9 +203,9 @@ const NewAccount = () => {
 
             <Form.Item className="mt-6">
               <Space>
-                <Button 
-                  type="primary" 
-                  htmlType="submit" 
+                <Button
+                  type="primary"
+                  htmlType="submit"
                   loading={loading}
                   disabled={submitting}
                   icon={<SaveOutlined />}
@@ -214,7 +213,7 @@ const NewAccount = () => {
                 >
                   Tạo tài khoản
                 </Button>
-                <Button 
+                <Button
                   onClick={handleCancel}
                   icon={<RollbackOutlined />}
                   disabled={submitting}

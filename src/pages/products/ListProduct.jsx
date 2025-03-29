@@ -139,9 +139,9 @@ const ListProduct = () => {
 
   const handleSortChange = (value) => {
     if (value === "1") {
-      setParams((prev) => ({ ...prev, sortBy: "Tăng dần", isDescending: false }));
+      setParams((prev) => ({ ...prev, sortBy: "PriceOrigin", isDescending: false }));
     } else if (value === "2") {
-      setParams((prev) => ({ ...prev, sortBy: "Giảm dần", isDescending: true }));
+      setParams((prev) => ({ ...prev, sortBy: "PriceOrigin", isDescending: true }));
     }
   };
 

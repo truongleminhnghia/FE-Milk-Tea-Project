@@ -24,7 +24,7 @@ const ListAccount = () => {
         search: null,
         paging: {
             pageCurrent: 1,
-            pageSize: 10,
+            pageSize: 12,
             total: 0,
         }
     })
@@ -34,7 +34,7 @@ const ListAccount = () => {
             ...prev,
             paging: {
                 pageCurrent: pagination.current || 1,
-                pageSize: pagination.pageSize || 10,
+                pageSize: pagination.pageSize || 12,
                 total: pagination.total || 0,
             }
         }));
@@ -66,7 +66,7 @@ const ListAccount = () => {
             search: null,
             paging: {
                 pageCurrent: 1,
-                pageSize: 10,
+                pageSize: 12,
                 total: 0,
             }
         });
@@ -76,7 +76,7 @@ const ListAccount = () => {
         try {
             setIsLoading(true);  // Bắt đầu tải dữ liệu
             const param = {
-                pageCurrent: params.paging.pageCurrent,
+                page: params.paging.pageCurrent,
                 pageSize: params.paging.pageSize,
                 search: params.search,
                 accountStatus: params.accountStatus,
@@ -126,11 +126,9 @@ const ListAccount = () => {
         navigate(`/admin-page/accounts/${id}`);
     }
 
-    const handleUpdate = (item) => {
-        console.log("item", item);
+    const handleDelete = (item) => {
         const id = item.id;
         console.log("id", id);
-        navigate(`/admin-page/accounts/${id}?edit=true`);
     }
 
     const columns = [
@@ -139,18 +137,18 @@ const ListAccount = () => {
             title: 'Họ và Tên',
             dataIndex: 'firstName',
             render: (_, record) => (
-                <span>{record.firstName} {record.lastName}</span>
+                <span>{record.lastName} {record.firstName}</span>
             )
         },
         {
             key: 'action',
             title: 'Actions',
+            width: 100,
             render: (item) => (
                 <ButtonActionComponent
                     record={item}
                     onView={handleView}
-                    onUpdate={handleUpdate}
-                // onDelete={handleDelete}
+                    onDelete={handleDelete}
                 />
             ),
         },
@@ -249,7 +247,7 @@ const ListAccount = () => {
                     </Button>
                 </div>
 
-                <div className="bg-white py-4 px-4 rounded-lg border border-gray-200 mb-4">
+                <div className="bg-white py-4 px-4 rounded-lg border border-gray-200 mb-4 flex items-center justify-between">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <Input
@@ -282,7 +280,7 @@ const ListAccount = () => {
                             />
                         </div>
                     </div>
-                    <div className="flex justify-end mt-4 space-x-2">
+                    <div className="flex justify-end space-x-2">
                         <Button
                             onClick={handleResetFilters}
                             icon={<ReloadOutlined />}

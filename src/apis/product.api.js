@@ -13,14 +13,14 @@ export const create = async (model) => {
 }
 
 export const getById = async (id) => {
-    const res = await ApiCustomer.get(`/ingredients/${id}`);
+    const res = await ApiCustomer.get(`/ingredients?id=${id}`);
     if (res?.data || res?.code === 200) {
         return res;
     }
 }
 
 export const getAll = async (params) => {
-    const res = await ApiCustomer.get('/ingredients', {
+    const res = await ApiCustomer.get('/ingredients/search', {
         params
     });
     if (res?.data || res?.code === 200) {
