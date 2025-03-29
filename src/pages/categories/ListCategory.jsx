@@ -37,7 +37,7 @@ const ListCategory = () => {
         endDate: '',
         paging: {
             pageCurrent: 1,
-            pageSize: 10,
+            pageSize: 12,
             total: 0,
         }
     })
@@ -72,9 +72,11 @@ const ListCategory = () => {
                     ...prev,
                     paging: {
                         ...prev.paging,
-                        total: res.data.total || 100,
+                        total: res.data.total || 0,
                     }
                 }));
+            } else {
+                setCategories([]);
             }
         } catch (error) {
             console.error("Error: ", error.message);
@@ -185,6 +187,22 @@ const ListCategory = () => {
             key: 'categoryName',
             title: 'Tên Danh mục',
             dataIndex: 'categoryName',
+            width: 450
+        },
+        {
+            title: 'Thao tác',
+            key: 'operation',
+            fixed: 'right',
+            width: 250,
+            render: (item) => (
+                <ButtonActionComponent
+                    record={item}
+                    onView={handleView}
+                    onUpdate={currentUser.roleName !== "ROLE_ADMIN" ? handleUpdate : undefined}
+                    onDelete={handleDelete}
+                    loading={deletingId === item.id}
+                />
+            ),
         },
         {
             key: 'createAt',
@@ -211,21 +229,6 @@ const ListCategory = () => {
             dataIndex: 'categoryType',
             render: (type) => categoryType(type)
         },
-        {
-            title: 'Thao tác',
-            key: 'operation',
-            fixed: 'right',
-            width: 150,
-            render: (item) => (
-                <ButtonActionComponent
-                    record={item}
-                    onView={handleView}
-                    onUpdate={currentUser.roleName !== "ROLE_ADMIN" ? handleUpdate : undefined}
-                    onDelete={handleDelete}
-                    loading={deletingId === item.id}
-                />
-            ),
-        }
     ]
 
     const handleTableChange = (pagination) => {

@@ -28,10 +28,10 @@ export const getByIdService = async (id) => {
 export const getByListSerivce = async (params) => {
     try {
         const res = await getAll(params);
-        if (res.success || res.data) {
+        if (res?.success || res?.data) {
             return res;
         }
-        return res.message;
+        return res?.message;
     } catch (error) {
         console.log('Error: ', error);
     }

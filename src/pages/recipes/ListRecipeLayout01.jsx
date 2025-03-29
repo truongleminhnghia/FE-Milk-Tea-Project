@@ -43,7 +43,7 @@ const ListRecipeLayout01 = () => {
     try {
       const param = {
         
-        userId: currentUser.id,
+        userId: currentUser?.id,
         page: params.paging.pageCurrent,
         pageSize: params.paging.pageSize,
         recipeStatus: params.status,
