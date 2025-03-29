@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout01 from "./components/layouts/Layout01";
 import Home from "./pages/home/Home";
 import LoginPage from "./pages/authentication/LoginPage";
@@ -33,9 +33,9 @@ import ListAccount from "./pages/admin-pages/accounts/ListAccount";
 import NewAccount from "./pages/admin-pages/accounts/NewAccount";
 import UpdateAccount from "./pages/admin-pages/accounts/UpdateAccount";
 import AccountDetail from "./pages/admin-pages/accounts/AccountDetail";
-import Dashboard from "./pages/admin-pages/dashboard/Dashboard"
+import Dashboard from "./pages/admin-pages/dashboard/Dashboard";
 import Layout03 from "./components/layouts/Layout03";
-import EditProduct from "./pages/admin-pages/products-admin/EditProduct"
+import EditProduct from "./pages/admin-pages/products-admin/EditProduct";
 import ListNewOrder from "./pages/orders/order-by-staff/ListNewOrder";
 import ListAllOrder from "./pages/orders/order-by-staff/ListAllOrder";
 import ListRecipe from "./pages/recipes/recipes-by-staff/ListRecipe";
@@ -45,6 +45,9 @@ import UpdatePromotion from "./pages/promotions/promotions-by-staff/UpdatePromot
 import ListAllPromotion from "./pages/promotions/promotions-by-staff/ListAllPromotion";
 import DeletePromotion from "./pages/promotions/promotions-by-staff/DeletePromotion";
 import Payment from "./pages/orders/Payment";
+
+// IMPORT RECIPE DETAIL COMPONENT
+import RecipeDetail from "./pages/recipes/RecipeDetail"; // Import RecipeDetail
 
 const router = createBrowserRouter([
   {
@@ -80,8 +83,8 @@ const router = createBrowserRouter([
         element: <ListRecipeLayout01 />
       },
       {
-        path: '/cong-thuc/:id',
-        element: <ViewDetail />
+        path: '/cong-thuc/:id', 
+        element: <RecipeDetail /> 
       },
       {
         path: '/khuyen-mai',
@@ -119,7 +122,6 @@ const router = createBrowserRouter([
         path: 'profile/:id',
         element: <ViewAccount />
       },
-
       {
         path: 'gio-hang',
         element: <ListCart />
@@ -180,10 +182,6 @@ const router = createBrowserRouter([
         path: 'new-order',
         element: <NewOrder />
       },
-      // {
-      //   path: 'recipes',
-      //   element: <ListRecipes />
-      // },
       {
         path: 'create-recipe',
         element: <CreateNewRecipe />
@@ -195,8 +193,7 @@ const router = createBrowserRouter([
       {
         path: 'create-user',
         element: <CreateNewUser />
-      },
-      
+      }
     ]
   },
   {
@@ -220,7 +217,6 @@ const router = createBrowserRouter([
       {
         path: 'products',
         element: <ListProductsAdmin />
-        
       },
       {
         path: 'recipes',
@@ -261,7 +257,6 @@ const router = createBrowserRouter([
       {
         path: 'update-promotions',
         element: <UpdatePromotion />
-       
       },
       {
         path: 'delete-promotions',
@@ -273,12 +268,10 @@ const router = createBrowserRouter([
       }
     ]
   }
-])
-
+]);
 
 function App() {
   return <RouterProvider router={router} />;
-
 }
 
-export default App
+export default App;
