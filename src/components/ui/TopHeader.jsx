@@ -16,7 +16,7 @@ const TopHeader = () => {
                     <div className="flex items-center">
                         <Icon icon="mdi:store" className="text-white mr-2" width="18" height="18" />
                         <Link className="text-sm text-white font-medium hover:text-blue-100 transition-colors">
-                            Chào mừng đến với Tobee Food!
+                            Chào mừng đến với BaboStation!
                         </Link>
                     </div>
                     

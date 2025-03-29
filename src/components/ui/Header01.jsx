@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Logo from "/images/logo/babo.png";
+import Logo from "/images/logo/baboo.png";
 import { Button, Col, Input, Row, Space, Badge, Dropdown, Avatar, Menu } from "antd";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate } from "react-router-dom";

@@ -17,7 +17,7 @@ const CardRecipeComponent = ({ recipe }) => {
             <div className="relative overflow-hidden rounded-t-lg">
                 <img
                     className='w-full h-[180px] object-cover transition-transform duration-500 hover:scale-105'
-                    src={recipe?.imageUrl}
+                    src={recipe?.imageUrl }
                     alt={recipe?.recipeTitle}
                     onError={(e) => {
                         e.target.src = "/images/recipes/image.png"; // Fallback image
