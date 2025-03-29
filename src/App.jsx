@@ -172,7 +172,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'recipes',
-        element: <ListRecipesAdmin />
+        element: <ListRecipe />
       },
       {
         path: 'orders',
@@ -199,7 +199,7 @@ const router = createBrowserRouter([
   {
     path: '/staff-page',
     element: (
-      <ProtectedRoute element={<Layout03 />} />
+      <ProtectedRoute element={<Layout03 />} allowedRoles={["ROLE_STAFF"]} />
     ),
     children: [
       {

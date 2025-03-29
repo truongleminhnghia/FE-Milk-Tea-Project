@@ -86,7 +86,7 @@ const CardProductComponent = ({ isNew, item }) => {
                         </span>
                     )}
                     
-                    {isSale && pricePromotion > 0 && (
+                    {pricePromotion > 0 && (
                         <span className="bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
                             -{pricePromotion}%
                         </span>
